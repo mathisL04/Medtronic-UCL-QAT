@@ -1,0 +1,18 @@
+{
+  "name": "tensorrt-dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "runArgs": [
+    "--gpus=all"
+  ],
+      "containerEnv": {
+        "DISPLAY": "${localEnv:DISPLAY}",
+        "XAUTHORITY": "${localEnv:XAUTHORITY}",
+        "INSIDE_CONTAINER": "1",
+        "PYTHONPATH": "/workspace:{localEnv:PYTHONPATH}",
+        "NVIDIA_DRIVER_CAPABILITIES": "graphics,video,compute,utility,display"
+    },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace",
+}
