@@ -138,3 +138,43 @@ bus.jpg
 utenn_explore/
 yolo_openh_smoke/
 datasets/utenn_yolo/debug/
+
+# Hugging Face and dataset caches
+openh_api_cache/
+sanoscience_cache/
+
+# Generated datasets
+datasets/sanoscience_yolo_tool_sample/
+datasets/sanoscience_yolo_full_nonexpert_stereo/
+datasets/*/debug/
+datasets/*/_tmp_frames/
+
+# Training / prediction outputs
+runs/
+runs_utenn/
+runs_sanoscience/
+yolo_openh_smoke/
+utenn_explore/
+sanoscience_explore/
+
+# Model weights and exports
+*.pt
+*.pth
+*.onnx
+*.engine
+*.trt
+*.torchscript
+
+# Video artifacts
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Python/cache files
+*.cache
+__pycache__/
+*.pyc
+
+# Generated UTenn YOLO dataset
+datasets/utenn_yolo/

@@ -36,7 +36,7 @@ checks = {
     "All videos": [".mp4"],
     "Color / RGB videos": ["color", "rgb"],
     "Segmentation videos": ["segmentation", "seg"],
-    "Depth videos": ["depth"],
+    "Depth videos": ["depth"], t
     "Normals videos": ["normal"],
     "Optical flow videos": ["flow"],
 }
