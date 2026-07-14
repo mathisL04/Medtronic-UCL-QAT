@@ -7,9 +7,7 @@ import numpy as np
 import yaml
 import imageio_ffmpeg
 
-# --------------------------------------------------
 # Configuration
-# --------------------------------------------------
 REPO_ID = "nvidia/PhysicalAI-Robotics-Open-H-Embodiment"
 
 ROOT = (
