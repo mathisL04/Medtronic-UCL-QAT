@@ -4,9 +4,7 @@ import cv2
 import numpy as np
 import pandas as pd
 
-# --------------------------------------------------
 # Configuration
-# --------------------------------------------------
 MODEL_PATH = "/workspace/runs_sanoscience/yolo26n_sanoscience_tool_sample/weights/best.pt"
 
 VAL_IMAGES_DIR = Path("/workspace/datasets/sanoscience_yolo_tool_sample/images/val")
