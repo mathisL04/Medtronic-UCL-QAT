@@ -2,9 +2,7 @@ from pathlib import Path
 import torch
 from ultralytics import YOLO
 
-# --------------------------------------------------
 # Cork / UCL configuration
-# --------------------------------------------------
 DATA_YAML = "/home/zcemml1/medtronic_qat_data/datasets/sanoscience_yolo_full_nonexpert_stereo/sanoscience_yolo.yaml"
 
 # Clean pretrained YOLO26n weights
