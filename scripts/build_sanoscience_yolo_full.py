@@ -5,9 +5,7 @@ import cv2
 import numpy as np
 import yaml
 
-# --------------------------------------------------
 # Configuration
-# --------------------------------------------------
 REPO_ID = "nvidia/PhysicalAI-Robotics-Open-H-Embodiment"
 
 ROOT = (
