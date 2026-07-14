@@ -2,9 +2,7 @@ from ultralytics import YOLO
 from pathlib import Path
 import torch
 
-# --------------------------------------------------
 # Configuration
-# --------------------------------------------------
 DATA_YAML = "/workspace/datasets/sanoscience_yolo_full_nonexpert_stereo/sanoscience_yolo.yaml"
 
 # Important: start from clean pretrained YOLO26n, not UTenn best.pt
