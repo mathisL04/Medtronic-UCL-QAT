@@ -48,6 +48,7 @@ OUT_DIR = Path("/home/zcemml1/medtronic_qat_data/runs_sanoscience")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 HOST = socket.gethostname()
+OWN_PID = os.getpid()
 
 
 def clean_runtime():
@@ -176,6 +177,28 @@ def gate_gpu_or_exit(physical_index):
         print("Gate passed: GPU is idle.")
         print()
 
+    finally:
+        pynvml.nvmlShutdown()
+
+
+def gpu_snapshot(physical_index, own_pid):
+    """
+    Point-in-time GPU state for the target device. Compute processes matching
+    our own PID are excluded, so a non-zero 'compute_procs_other' count means
+    another job is sharing the GPU -- i.e. this repeat was contended.
+    """
+    pynvml.nvmlInit()
+    try:
+        handle = pynvml.nvmlDeviceGetHandleByIndex(physical_index)
+        util = pynvml.nvmlDeviceGetUtilizationRates(handle)
+        mem = pynvml.nvmlDeviceGetMemoryInfo(handle)
+        procs = pynvml.nvmlDeviceGetComputeRunningProcesses(handle)
+        others = [p.pid for p in procs if p.pid != own_pid]
+        return {
+            "gpu_util_pct": int(util.gpu),
+            "mem_used_mib": int(round(mem.used / (1024 ** 2))),
+            "compute_procs_other": len(others),
+        }
     finally:
         pynvml.nvmlShutdown()
 
@@ -313,15 +336,25 @@ pool = {
     "total_ms": [],
 }
 
+# Per-repeat GPU snapshots, sampled inside the timed loop, to expose any
+# contention that appears after the one-time start gate has already passed.
+per_repeat = []
+snapshot_at = {
+    len(ram_images) // 4,
+    len(ram_images) // 2,
+    (3 * len(ram_images)) // 4,
+}
+
 for run_idx in range(1, BENCHMARK_REPEATS + 1):
     print(f"\nRun {run_idx}/{BENCHMARK_REPEATS}")
 
     clean_runtime()
 
     rows = []
+    snaps = []
 
     with torch.inference_mode():
-        for image_name, img in ram_images:
+        for i, (image_name, img) in enumerate(ram_images):
             result = model.predict(
                 source=img,
                 imgsz=IMG_SIZE,
@@ -352,12 +385,36 @@ for run_idx in range(1, BENCHMARK_REPEATS + 1):
             pool["postprocess_ms"].append(post)
             pool["total_ms"].append(total)
 
+            # Sample GPU state at a few points inside the timed loop so a job
+            # that lands mid-repeat still shows up.
+            if i in snapshot_at:
+                snaps.append(gpu_snapshot(PHYSICAL_INDEX, OWN_PID))
+
     if torch.cuda.is_available():
         torch.cuda.synchronize()
 
     run_total = np.asarray([r["total_ms"] for r in rows], dtype=float)
+
+    # Worst-case GPU state seen during this repeat.
+    util_peak = max((s["gpu_util_pct"] for s in snaps), default=-1)
+    mem_peak = max((s["mem_used_mib"] for s in snaps), default=-1)
+    others_peak = max((s["compute_procs_other"] for s in snaps), default=0)
+
+    per_repeat.append({
+        "run": run_idx,
+        "mean_total_ms": float(run_total.mean()),
+        "min_total_ms": float(run_total.min()),
+        "max_total_ms": float(run_total.max()),
+        "gpu_util_peak_pct": util_peak,
+        "mem_used_peak_mib": mem_peak,
+        "compute_procs_other_peak": others_peak,
+    })
+
+    flag = "" if others_peak == 0 else f"  <-- CONTENDED ({others_peak} other proc)"
     print(f"  images: {len(rows)}   mean total: {run_total.mean():.3f} ms   "
           f"min: {run_total.min():.3f}   max: {run_total.max():.3f}")
+    print(f"  gpu snapshot: util_peak={util_peak}%  mem_peak={mem_peak} MiB  "
+          f"other_compute_procs={others_peak}{flag}")
 
     out_csv = OUT_DIR / f"benchmark_latency_seed{SEED}_run{run_idx}.csv"
 
@@ -415,4 +472,38 @@ for row in summary_rows:
           f"{row['p99_ms']:>9.3f} {row['max_ms']:>9.3f}")
 print("-" * len(header))
 print(f"Approx FPS (from pooled Total mean): {fps:.2f}")
+
+
+# -----------------------------
+# Per-repeat table (contention check)
+# -----------------------------
+repeats_csv = OUT_DIR / f"benchmark_latency_seed{SEED}_per_repeat.csv"
+
+with open(repeats_csv, "w", newline="") as f:
+    writer = csv.DictWriter(f, fieldnames=per_repeat[0].keys())
+    writer.writeheader()
+    writer.writerows(per_repeat)
+
+print("\n============================================================")
+print("Per-repeat summary and GPU snapshot")
+print("============================================================")
+print("CSV:", repeats_csv)
+print()
+
+rh = (f"{'Run':>4} {'MeanTot':>9} {'MinTot':>9} {'MaxTot':>9} "
+      f"{'GPU%pk':>7} {'MemMiBpk':>9} {'OtherProc':>10}")
+print(rh)
+print("-" * len(rh))
+for r in per_repeat:
+    print(f"{r['run']:>4} {r['mean_total_ms']:>9.3f} {r['min_total_ms']:>9.3f} "
+          f"{r['max_total_ms']:>9.3f} {r['gpu_util_peak_pct']:>7} "
+          f"{r['mem_used_peak_mib']:>9} {r['compute_procs_other_peak']:>10}")
+print("-" * len(rh))
+
+contended = [r["run"] for r in per_repeat if r["compute_procs_other_peak"] > 0]
+if contended:
+    print(f"WARNING: contention detected on repeat(s): {contended}")
+else:
+    print("No other compute processes seen on any repeat: all clean.")
+
 print("Done.")
