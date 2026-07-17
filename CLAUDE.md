@@ -22,7 +22,7 @@ Every script in `scripts/` is a flat top-to-bottom program with a `# Settings` b
 Beyond that, the benchmark, evaluation, dataset-build, and subset scripts read a handful of **run-time knobs from environment variables**, each with a hardcoded default so a bare `python scripts/<name>.py` still runs. Override inline, e.g. `DEVICE=3 BENCHMARK_REPEATS=10 python scripts/benchmark_latency.py`. These set the device, run parameters, and workload partitioning — never the dataset or model paths, which stay hardcoded:
 
 - `build_sanoscience_yolo_full_cork.py` — `START_EPISODE_INDEX`, `END_EPISODE_INDEX`, `SHARD_NAME`: partition the labelling workload across shards (`SHARD_NAME` also names the shard's temp-frames directory).
-- `benchmark_latency.py`, `benchmark_fp32_geneva_ram_stable.py` — `DEVICE`, `SEED`, `IMG_SIZE`, `CONF`, `BENCHMARK_REPEATS`, `WARMUP_IMAGES` (plus `GATE_UTIL_THRESHOLD` / `GATE_SAMPLES` / `GATE_INTERVAL_S` in `benchmark_latency.py`).
+- `benchmark_latency.py` — `DEVICE`, `SEED`, `IMG_SIZE`, `CONF`, `BENCHMARK_REPEATS`, `WARMUP_IMAGES`, plus the `GATE_UTIL_THRESHOLD` / `GATE_SAMPLES` / `GATE_INTERVAL_S` gating thresholds.
 - `evaluate_100_random_accuracy.py` — `DEVICE`.
 - `make_val100_subset.py` — `N_IMAGES`, `SEED`, `OVERWRITE`.
 
