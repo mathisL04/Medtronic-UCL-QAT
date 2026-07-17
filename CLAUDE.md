@@ -13,9 +13,18 @@ Open-H Sanoscience videos → segmentation-based auto-labelling → YOLO26n trai
 
 Stages 1–2 are done (baseline `models/yolo26n_sanoscience_full_left/best.pt`, mAP50 0.934 / mAP50-95 0.782). Everything from ONNX export onward is unwritten — `docs/02`–`docs/05` are placeholders listing planned content, not records of work done. Do not describe those stages as complete.
 
-## Scripts are configured by editing constants, not by CLI flags
+## Scripts are configured by editing constants, with env-var overrides for run-time knobs
 
-Every script in `scripts/` is a flat top-to-bottom program with a `# Configuration` block of hardcoded constants (absolute paths, epochs, batch size, device) and no argparse. To change behaviour you edit the constants. The one exception is `build_sanoscience_yolo_full_cork.py`, which reads `START_EPISODE_INDEX`, `END_EPISODE_INDEX`, and `SHARD_NAME` from the environment for sharding.
+Every script in `scripts/` is a flat top-to-bottom program with a `# Settings` block of hardcoded constants and no argparse. **Structural** configuration — absolute paths, model/dataset locations, epochs, batch size — is hardcoded; to change it you edit the constants.
+
+`benchmark_latency.py` is the exception that matters: **`DEVICE` has no default and the script aborts if it is unset.** This is deliberate. The earlier benchmark `benchmark_fp32_geneva_ram_stable.py` defaults `DEVICE` to `0`, so any run outside the exact runbook silently used a different physical GPU than the one reported — which is how a headline latency number became unattributable. Making `DEVICE` strict removes that failure mode: no GPU specified, no run.
+
+Beyond that, the benchmark, evaluation, dataset-build, and subset scripts read a handful of **run-time knobs from environment variables**, each with a hardcoded default so a bare `python scripts/<name>.py` still runs. Override inline, e.g. `DEVICE=3 BENCHMARK_REPEATS=10 python scripts/benchmark_latency.py`. These set the device, run parameters, and workload partitioning — never the dataset or model paths, which stay hardcoded:
+
+- `build_sanoscience_yolo_full_cork.py` — `START_EPISODE_INDEX`, `END_EPISODE_INDEX`, `SHARD_NAME`: partition the labelling workload across shards (`SHARD_NAME` also names the shard's temp-frames directory).
+- `benchmark_latency.py` — `DEVICE`, `SEED`, `IMG_SIZE`, `CONF`, `BENCHMARK_REPEATS`, `WARMUP_IMAGES`, plus the `GATE_UTIL_THRESHOLD` / `GATE_SAMPLES` / `GATE_INTERVAL_S` gating thresholds.
+- `evaluate_100_random_accuracy.py` — `DEVICE`.
+- `make_val100_subset.py` — `N_IMAGES`, `SEED`, `OVERWRITE`.
 
 There are no tests, no linter config, and no packaging files (`requirements.txt`, `pyproject.toml`). Dependencies are installed ad hoc into a venv: `ultralytics`, `torch`, `opencv-python`, `huggingface_hub`, `numpy`, `pyyaml`, `pandas`, `imageio_ffmpeg`.
 
