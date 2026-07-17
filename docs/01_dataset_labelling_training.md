@@ -341,7 +341,7 @@ mAP50:     0.934
 mAP50-95:  0.782
 ```
 
-Ultralytics validation speed on V100:
+**Validation throughput (batched, Cork V100).** Ultralytics' own `model.val()` speed printout from the baseline validation pass — per-image time amortised over the validation batch, from Ultralytics' internal speed counter, on the Cork V100:
 
 ```text
 0.1 ms preprocess
@@ -349,6 +349,29 @@ Ultralytics validation speed on V100:
 0.1 ms postprocess
 per image
 ```
+
+This is a **throughput** number, **not** the deployment latency, and is not comparable to the single-frame figures below. For the reported latency baseline see **Latency benchmarking**.
+
+---
+
+## Latency benchmarking
+
+**Deployment latency (batch=1, Geneva A100) — reported baseline.** Single-frame inference timed with `scripts/benchmark_latency.py`: one image per `model.predict()` call (batch=1), wall-clock around each call, the 100-frame validation subset preloaded to RAM, warmup, then pooled per-stage **medians** over 10 repeats × 100 frames (1000 samples) on a verified-idle A100.
+
+```text
+preprocess    1.552 ms   (median)
+inference     6.844 ms   (median)
+postprocess   0.238 ms   (median)
+total         8.642 ms   (median)  ->  115.7 FPS
+```
+
+(Stage figures are each the median of their own column, so they need not sum exactly to the median total.)
+
+Batch=1 is the right unit for this project: surgical frames arrive one at a time, so the cost that matters is what a single live frame takes end to end — not throughput amortised over a batch. That is also why this total is ~8× the *Validation throughput* figure above: that one batches, this one does not. Hardware rules out the alternative explanation — the throughput figure was measured on the **slower V100 yet reads lower**, so the gap is batch size, not the GPU.
+
+**The idle-GPU gate.** Before claiming the GPU, the benchmark refuses to run unless the target device is idle for *compute* — checked via `nvmlDeviceGetComputeRunningProcesses`, ignoring graphics contexts such as Xorg — and it samples per-repeat GPU state to flag mid-run contention.
+
+Why the gate matters. The 14 July FP32 baseline measured 16.928 ms median total; re-run on a verified-idle GPU it measured 8.642 ms — a 49% correction. Both runs used identical timing methodology (RAM preload, warmup, single-thread, `cudnn.benchmark`), so this correction is entirely environmental: the machine changed, not the code. (Caveat: the box became idle and the NVIDIA driver was reinstalled the same afternoon, so idle-versus-driver cannot be separated from the available data.) The code contribution is a separate, far smaller effect — adding warmup, single-threading, and `cudnn.benchmark` to the earlier un-instrumented benchmark moved median total by only −0.92 ms, against the −8.29 ms environmental swing. That such contention is routine rather than exceptional was confirmed on 2026-07-17, when a re-run was refused by the gate: another user's 4-GPU DDP training run held ~47 GB and 100% util across all four A100s. A latency figure is only comparable when measured on a verified-idle GPU.
 
 ---
 
