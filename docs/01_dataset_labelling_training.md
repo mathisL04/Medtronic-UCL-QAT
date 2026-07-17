@@ -352,6 +352,14 @@ per image
 
 ---
 
+## Latency benchmarking
+
+FP32 PyTorch latency is measured with `scripts/benchmark_latency.py`: a pinned GPU (strict `DEVICE`, no default), the 100-frame validation subset preloaded to RAM, warmup, and pooled per-stage percentiles over repeated clean runs. Before claiming the GPU it gates on the target device being idle for *compute* — via `nvmlDeviceGetComputeRunningProcesses`, ignoring graphics contexts such as Xorg — and samples per-repeat GPU state to flag mid-run contention.
+
+Why the gate matters. The 14 July FP32 baseline measured 16.928 ms median total; re-run on a verified-idle GPU it measured 8.642 ms — a 49% correction. Both runs used identical timing methodology (RAM preload, warmup, single-thread, `cudnn.benchmark`), so this correction is entirely environmental: the machine changed, not the code. (Caveat: the box became idle and the NVIDIA driver was reinstalled the same afternoon, so idle-versus-driver cannot be separated from the available data.) The code contribution is a separate, far smaller effect — adding warmup, single-threading, and `cudnn.benchmark` to the earlier un-instrumented benchmark moved median total by only −0.92 ms, against the −8.29 ms environmental swing. That such contention is routine rather than exceptional was confirmed on 2026-07-17, when a re-run was refused by the gate: another user's 4-GPU DDP training run held ~47 GB and 100% util across all four A100s. A latency figure is only comparable when measured on a verified-idle GPU.
+
+---
+
 ## Next Steps
 
 This trained YOLO26n model is the baseline for optimisation.
