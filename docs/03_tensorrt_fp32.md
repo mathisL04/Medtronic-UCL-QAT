@@ -60,7 +60,14 @@ best_fp32.engine   (GPU-specific plan; NOT committed)
 
 ## Tooling (committed)
 
-Three scripts, all following the repo convention (flat, `# Settings` block, env-var run-time knobs, `DEVICE` strict):
+**These three scripts are the general TensorRT tooling for the whole project — they are NOT FP32-specific.** Precision is a run-time knob, not a different program: FP16 and INT8 reuse the exact same scripts, no code change, by passing a different `PRECISION` value at the command line (INT8 additionally adds a calibration step in a later stage). For example the same build script produces either engine:
+
+```bash
+PRECISION=fp32 DEVICE=2 python scripts/build_tensorrt_engine.py   # -> best_fp32.engine
+PRECISION=fp16 DEVICE=2 python scripts/build_tensorrt_engine.py   # -> best_fp16.engine
+```
+
+All three follow the repo convention (flat, `# Settings` block, env-var run-time knobs, `DEVICE` strict):
 
 ```text
 scripts/build_tensorrt_engine.py    ONNX -> .engine. PRECISION knob (fp32 | fp16),

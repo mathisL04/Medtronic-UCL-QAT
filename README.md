@@ -13,6 +13,8 @@ YOLO26n baseline training
         ↓
 ONNX export
         ↓
+TensorRT FP32 inference (V2 baseline)
+        ↓
 TensorRT FP16 inference
         ↓
 TensorRT INT8 / PTQ
@@ -32,6 +34,7 @@ Completed:
 - FP32 latency benchmark on verified-idle GPU
 - FP32 ONNX export with PyTorch↔ONNX parity gate
 - ONNX accuracy validated against the PyTorch baseline
+- TensorRT FP32 engine (V2 baseline): built, parity-validated, benchmarked
 
 Current baseline:
 
@@ -58,6 +61,16 @@ Accuracy (val100 subset, conf 0.001):
   ONNX  mAP50 0.9394   mAP50-95 0.7595
 ```
 
+TensorRT FP32 engine "V2 baseline" (validated, see docs/03):
+
+```text
+File: models/yolo26n_sanoscience_full_left/best_fp32.engine  (GPU-specific, gitignored)
+Build: TensorRT 11.1.0.106, A100, true FP32 (TF32 disabled)
+Parity vs ONNX (val100): 100/100 PASS, max coord diff 1.5e-04 px
+Accuracy: inherits mAP50 0.9394 / mAP50-95 0.7595
+Latency (batch=1, idle A100): 3.986 ms median (250.9 FPS)  vs  PyTorch 8.642 ms  ->  2.17x faster
+```
+
 ## Repository Structure
 
 ```text
@@ -72,10 +85,11 @@ docs/         detailed project documentation
 
 ```text
 docs/01_dataset_labelling_training.md   dataset creation and YOLO26n training
-docs/02_onnx_export.md                  ONNX export notes
-docs/03_tensorrt_fp16.md                TensorRT FP16 notes
-docs/04_tensorrt_int8_ptq.md            INT8 post-training quantisation notes
-docs/05_qat.md                          quantisation-aware training notes
+docs/02_onnx_export.md                  ONNX export + PyTorch/ONNX parity
+docs/03_tensorrt_fp32.md                TensorRT FP32 engine (V2 baseline)
+docs/04_tensorrt_fp16.md                TensorRT FP16 notes
+docs/05_tensorrt_int8_ptq.md            INT8 post-training quantisation notes
+docs/06_qat.md                          quantisation-aware training notes
 ```
 
 ## Current Important Files
@@ -84,6 +98,9 @@ docs/05_qat.md                          quantisation-aware training notes
 scripts/build_sanoscience_yolo_full_cork.py
 scripts/train_sanoscience_yolo_full_cork.py
 scripts/export_onnx.py
+scripts/build_tensorrt_engine.py
+scripts/validate_engine_parity.py
+scripts/benchmark_latency_trt.py
 configs/sanoscience_yolo_cork.yaml
 models/yolo26n_sanoscience_full_left/best.pt
 models/yolo26n_sanoscience_full_left/best.onnx
@@ -94,6 +111,24 @@ reports/yolo26n_sanoscience_full_left/results.png
 reports/yolo26n_sanoscience_full_left/confusion_matrix.png
 ```
 
+## TensorRT tooling (general, all precisions)
+
+The three `*_tensorrt_*` / `*_engine_*` scripts above are **not** FP32-specific — they are the shared TensorRT tooling for every precision stage (FP32, FP16, INT8). Precision is a run-time knob passed at the command line, never a code change:
+
+```text
+scripts/build_tensorrt_engine.py     ONNX -> .engine.  PRECISION={fp32|fp16} selects precision.
+scripts/validate_engine_parity.py    engine vs ONNX detection parity.  ENGINE_PATH selects engine.
+scripts/benchmark_latency_trt.py     batch=1 idle-gated latency.        ENGINE_PATH selects engine.
+```
+
+```bash
+# FP32 (V2 baseline)                      # FP16 (same scripts, one knob changed)
+PRECISION=fp32 DEVICE=<idle> \            PRECISION=fp16 DEVICE=<idle> \
+  python scripts/build_tensorrt_engine.py   python scripts/build_tensorrt_engine.py
+```
+
+INT8 reuses these too, plus a calibration step added in its own stage.
+
 ## Next Steps
 
 Done:
@@ -103,13 +138,14 @@ Done:
 2. PyTorch latency benchmark
 3. ONNX export
 4. ONNX validation
+5. TensorRT FP32 engine (V2 baseline): build + parity + latency
 ```
 
 Remaining:
 
 ```text
-5. TensorRT FP16 engine
-6. TensorRT INT8 post-training quantisation
-7. Quantisation-aware training
-8. Accuracy / latency / memory comparison
+6. TensorRT FP16 engine
+7. TensorRT INT8 post-training quantisation
+8. Quantisation-aware training
+9. Accuracy / latency / memory comparison
 ```
