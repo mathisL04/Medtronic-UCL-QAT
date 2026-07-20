@@ -34,7 +34,7 @@ Install:
 ```bash
 python3 -m venv ~/venvs/medtronic-trt
 source ~/venvs/medtronic-trt/bin/activate
-pip install tensorrt==11.1.0.106       # CUDA-13 build, matches the driver
+pip install tensorrt==10.16.1.11       # CUDA-13 build, matches the driver
 pip install cuda-python onnxruntime opencv-python-headless numpy pynvml
 ```
 
@@ -82,7 +82,14 @@ scripts/validate_engine_parity.py   Runs the engine (TensorRT) and the ONNX
 scripts/benchmark_latency_trt.py    Single-frame (batch=1) latency, mirroring
                                     benchmark_latency.py: idle-GPU gate, RAM preload,
                                     warmup, pooled per-stage medians, per-repeat
-                                    contention snapshots.
+                                    contention snapshots. Output filenames derive
+                                    from the engine, so one precision cannot
+                                    overwrite another's results.
+
+scripts/evaluate_engine_map.py      mAP on val100 via pycocotools at conf 0.001.
+                                    MODE=onnx | engine runs both through identical
+                                    metric code, so a precision delta is never
+                                    confounded with a metric-implementation change.
 ```
 
 `DEVICE` has no default in all three — a mis-attributed GPU is how a latency (or a build) number becomes unusable. For the build, idle also matters because TensorRT **times candidate kernels on the live GPU** to pick the fastest; a contended GPU can bias that choice.
@@ -101,6 +108,8 @@ engine vs ONNX parity, val100:
 
 The V2 engine is therefore built with **TF32 disabled** (`config.clear_flag(trt.BuilderFlag.TF32)`) so it is true FP32 — the same precision as the PyTorch/ONNX baseline. (A faster TF32 build is available via `ALLOW_TF32=1`, but it is a different precision and not the baseline.)
 
+The flag is cleared for **every** precision, not just fp32. TF32 governs how layers running in FP32 are computed, which in a mixed-precision FP16 engine includes the FP32 fallback layers — so leaving it at its default there would have made an FP32-vs-FP16 comparison measure two changes at once. See docs/04 for the version of this script that had it scoped to fp32 only, and what that would have contaminated.
+
 ---
 
 ## Results
@@ -108,30 +117,45 @@ The V2 engine is therefore built with **TF32 disabled** (`config.clear_flag(trt.
 ### Build
 
 ```text
-engine:        models/yolo26n_sanoscience_full_left/best_fp32.engine   (13.7 MB)
-tensorrt:      11.1.0.106
-built on:      A100-SXM4-80GB (GPU 2, idle), TF32 disabled (true FP32)
+engine:        models/yolo26n_sanoscience_full_left/best_fp32.engine   (12.8 MB)
+sha256:        5909ffcb37249c5e...
+tensorrt:      10.16.1.11
+built on:      A100-SXM4-80GB (GPU 0), TF32 disabled (true FP32)
 layers:        469
 input:         images   [1, 3, 640, 640]  FLOAT
 output:        output0  [1, 300, 6]        FLOAT   (end-to-end, NMS in-engine)
 ```
 
-The engine is **GPU-specific** (built for sm_80 / this TensorRT build) and is **gitignored** — never committed. It is rebuilt on whatever GPU deploys. The build writes a `best_fp32.engine.provenance.json` sidecar (TRT version, GPU, source-ONNX sha256, flags).
+The engine is **GPU-specific** (built for sm_80 / this TensorRT build) and is **gitignored** — never committed. It is rebuilt on whatever GPU deploys. The build writes a `best_fp32.engine.provenance.json` sidecar (TRT version, GPU, source-ONNX sha256, flags read back off the builder config).
 
-### Accuracy (parity → inherit)
+TensorRT autotunes kernels by **timing candidates on the live GPU**, so the build is not deterministic: rebuilding the same ONNX with identical flags can select different kernels and produce an engine of slightly different size. Engine bytes are therefore not a stable identifier across builds — the provenance sha256 is.
 
-The engine matches the FP32 ONNX to floating-point noise, so it inherits the accuracy validated in docs/02:
+### Accuracy (parity → inherit, and now also measured)
+
+The engine matches the FP32 ONNX to floating-point noise:
 
 ```text
-parity (engine vs ONNX, val100):  100/100 PASS
-  max coord diff:  1.5e-04 px
-  max conf diff:   3.3e-05
-inherited accuracy:  mAP50 0.9394   mAP50-95 0.7595
+parity (engine vs ONNX, val100, conf 0.25):  100/100 PASS
+  max coord diff:  1.831e-04 px
+  max conf diff:   3.809e-05
 ```
+
+At this level of agreement the engine inherits the ONNX accuracy validated in docs/02 (mAP50 0.9394 / mAP50-95 0.7595, Ultralytics protocol). Since docs/04 it is also **measured directly**, so V2 has a first-party accuracy number rather than an inherited one:
+
+```text
+measured (scripts/evaluate_engine_map.py, pycocotools, val100 @ conf 0.001):
+  ONNX          mAP50 0.9350   mAP50-95 0.7572
+  FP32 engine   mAP50 0.9350   mAP50-95 0.7572     (identical)
+```
+
+The gap to the docs/02 figures (0.0044 mAP50) is the **metric implementation** — Ultralytics vs pycocotools on the same ONNX — not an accuracy change. Downstream precisions are compared against the pycocotools row so the metric is held constant.
 
 ### Latency (batch=1, verified-idle A100, pooled 10x100 = 1000 samples)
 
+**Pending re-measurement.** The figures below were taken from an **earlier** FP32 engine that has since been rebuilt; they are retained for reference and must not be quoted as V2's latency.
+
 ```text
+SUPERSEDED -- belongs to a previous build, not the engine described above
 Stage         Median     P95      P99
 Preprocess    1.640 ms   2.522    2.941
 Inference     2.301 ms   2.506    2.969
@@ -139,17 +163,23 @@ Postprocess   0.024 ms   0.030    0.038
 Total         3.986 ms   5.027    6.604      ->  250.9 FPS
 ```
 
+Why superseded: the benchmark ran at 14:10 UTC and the engine on disk was rebuilt at 15:37 UTC — the record postdated by its own artifact. The parity record had the same problem. Neither record carried the engine's sha256, so neither could be checked against the file it described.
+
+Both the parity and latency records now embed `engine_sha256`, and the benchmark writes a `*_pooled_summary.provenance.json` sidecar, so a result can always be re-attached to the exact engine that produced it. Latency will be re-measured for V2 and V3 **together in one idle window on one card** (see docs/04).
+
 ### V1 vs V2 — TensorRT optimisation at zero precision cost
+
+Accuracy is final; the latency rows are **provisional**, carried over from the superseded run above and pending the paired re-measurement.
 
 ```text
                    V1 (PyTorch FP32)   V2 (TensorRT FP32)   change
-Total (median)        8.642 ms            3.986 ms          2.17x faster
-FPS                   115.7               250.9             2.17x
-Core inference        6.844 ms            2.301 ms          2.97x faster
-mAP50 / mAP50-95      0.934 / 0.782       0.9394 / 0.7595   unchanged
+Total (median)        8.642 ms          3.986 ms *          2.17x faster  *provisional
+FPS                   115.7             250.9 *             2.17x         *provisional
+Core inference        6.844 ms          2.301 ms *          2.97x faster  *provisional
+mAP50 / mAP50-95      0.934 / 0.782     0.9350 / 0.7572     unchanged
 ```
 
-TensorRT's optimisation alone gives ~2.2x end-to-end (nearly 3x on core inference) with no accuracy change.
+The accuracy conclusion holds regardless of the latency re-measurement: V2 was confirmed to match the ONNX both by parity (100/100) and by direct mAP measurement. The speed conclusion — roughly 2x end-to-end from TensorRT optimisation alone — is expected to survive, since the rebuild changed only kernel selection, but it is not yet backed by a record tied to the current engine.
 
 Caveats on the comparison:
 
@@ -167,7 +197,7 @@ Caveats on the comparison:
 ## Versions
 
 ```text
-tensorrt        11.1.0.106
+tensorrt        10.16.1.11
 cuda-python     13.0.3   (cuda-bindings 13.0.3)
 onnxruntime     1.19.2   (CPU, for the parity reference)
 opencv          5.0.0.93 (headless)
@@ -183,20 +213,25 @@ python          3.9.25
 ```bash
 source ~/venvs/medtronic-trt/bin/activate
 
-# build (true FP32, idle GPU)
-PRECISION=fp32 DEVICE=2 python scripts/build_tensorrt_engine.py
+ENG=models/yolo26n_sanoscience_full_left/best_fp32.engine
 
-# accuracy parity vs the ONNX baseline
-DEVICE=2 python scripts/validate_engine_parity.py
+# build (true FP32, idle GPU)
+PRECISION=fp32 DEVICE=<idle_gpu> python scripts/build_tensorrt_engine.py
+
+# faithfulness parity vs the ONNX baseline
+ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/validate_engine_parity.py
+
+# accuracy (measured, not inherited)
+MODE=engine ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/evaluate_engine_map.py
 
 # latency (idle-gated, 10 x 100 frames)
-DEVICE=2 BENCHMARK_REPEATS=10 python scripts/benchmark_latency_trt.py
+ENGINE_PATH=$ENG DEVICE=<idle_gpu> BENCHMARK_REPEATS=10 python scripts/benchmark_latency_trt.py
 ```
 
 ---
 
 ## Next stage
 
-The FP16 engine (`PRECISION=fp16` with the same build script), validated for accuracy against V2 and benchmarked on the same idle A100. Every downstream engine — FP16, INT8/PTQ, QAT — is compared against this V2 baseline (3.986 ms, mAP50 0.9394).
+The FP16 engine (`PRECISION=fp16` with the same build script), validated for accuracy against V2 and benchmarked on the same idle A100 — see docs/04. Every downstream engine — FP16, INT8/PTQ, QAT — is compared against this V2 baseline (mAP50 0.9350 / mAP50-95 0.7572 by pycocotools; latency pending re-measurement).
 
-Note on doc numbering: this FP32-engine stage was not in the original plan (which went ONNX → FP16 directly). The FP16 / INT8 / QAT stage docs may need renumbering to sit after this one.
+Note on doc numbering: this FP32-engine stage was not in the original plan (which went ONNX → FP16 directly). The FP16 / INT8 / QAT stage docs were renumbered to sit after it.
