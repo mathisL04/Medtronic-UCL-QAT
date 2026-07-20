@@ -29,6 +29,9 @@ Completed:
 - YOLO26n baseline training on UCL Cork GPU cluster
 - Baseline model checkpoint saved
 - Training metrics and plots saved
+- FP32 latency benchmark on verified-idle GPU
+- FP32 ONNX export with PyTorch↔ONNX parity gate
+- ONNX accuracy validated against the PyTorch baseline
 
 Current baseline:
 
@@ -42,6 +45,17 @@ Precision: 0.937
 Recall: 0.866
 mAP50: 0.934
 mAP50-95: 0.782
+```
+
+FP32 ONNX export (validated, see docs/02):
+
+```text
+File: models/yolo26n_sanoscience_full_left/best.onnx
+Format: ONNX opset 17, static [1, 3, 640, 640], FP32
+Parity vs PyTorch (16 frames, CPU): PASS, max coord diff 1.98e-04 px
+Accuracy (val100 subset, conf 0.001):
+  PT    mAP50 0.9408   mAP50-95 0.7673
+  ONNX  mAP50 0.9394   mAP50-95 0.7595
 ```
 
 ## Repository Structure
@@ -69,8 +83,11 @@ docs/05_qat.md                          quantisation-aware training notes
 ```text
 scripts/build_sanoscience_yolo_full_cork.py
 scripts/train_sanoscience_yolo_full_cork.py
+scripts/export_onnx.py
 configs/sanoscience_yolo_cork.yaml
 models/yolo26n_sanoscience_full_left/best.pt
+models/yolo26n_sanoscience_full_left/best.onnx
+models/yolo26n_sanoscience_full_left/best.onnx.provenance.json
 models/yolo26n_sanoscience_full_left/model_card.md
 reports/yolo26n_sanoscience_full_left/results.csv
 reports/yolo26n_sanoscience_full_left/results.png
@@ -79,11 +96,18 @@ reports/yolo26n_sanoscience_full_left/confusion_matrix.png
 
 ## Next Steps
 
+Done:
+
 ```text
 1. PyTorch baseline validation
 2. PyTorch latency benchmark
 3. ONNX export
 4. ONNX validation
+```
+
+Remaining:
+
+```text
 5. TensorRT FP16 engine
 6. TensorRT INT8 post-training quantisation
 7. Quantisation-aware training
