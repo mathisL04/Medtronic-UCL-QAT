@@ -1,0 +1,263 @@
+{
+  "timestamp_utc": "2026-07-20T10:13:11.357907+00:00",
+  "host": "geneva.ee.ucl.ac.uk",
+  "parity_device": "cpu",
+  "result": "PASS",
+  "versions": {
+    "python": "3.9.25",
+    "ultralytics": "8.4.90",
+    "torch": "2.8.0+cu128",
+    "onnx": "1.19.1",
+    "onnxruntime": "1.19.2",
+    "onnxslim": "0.1.94",
+    "numpy": "2.0.2",
+    "opencv": "5.0.0"
+  },
+  "export": {
+    "opset_requested": 17,
+    "opset_in_model": 17,
+    "imgsz": 640,
+    "batch": 1,
+    "dynamic": false,
+    "half": false,
+    "simplify_requested": true,
+    "simplify_ran": true,
+    "onnx_input_shape": [
+      1,
+      3,
+      640,
+      640
+    ]
+  },
+  "source_pt": {
+    "path": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/best.pt",
+    "sha256": "ee9c775c8ab27caf0abbaa23c3ac34dac9a1a9c7eb18745d6e3d4ab1f2a69fb7",
+    "bytes": 5390085
+  },
+  "output_onnx": {
+    "path": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/best.onnx",
+    "sha256": "ac188a00ce0b8c90f07985f93473ee1f61541ddfb3b5b219ada2d4fe7ed911f7",
+    "bytes": 9805067
+  },
+  "parity": {
+    "n_frames": 16,
+    "frames": [
+      "episode_001283_left_00078.jpg",
+      "episode_001291_left_00000.jpg",
+      "episode_001291_left_00078.jpg",
+      "episode_001292_left_00114.jpg",
+      "episode_001293_left_00084.jpg",
+      "episode_001298_left_00054.jpg",
+      "episode_001299_left_00048.jpg",
+      "episode_001308_left_00114.jpg",
+      "episode_001309_left_00084.jpg",
+      "episode_001312_left_00084.jpg",
+      "episode_001313_left_00006.jpg",
+      "episode_001316_left_00006.jpg",
+      "episode_001318_left_00036.jpg",
+      "episode_001318_left_00084.jpg",
+      "episode_001319_left_00108.jpg",
+      "episode_001321_left_00066.jpg"
+    ],
+    "conf": 0.25,
+    "box_iou_min": 0.98,
+    "coord_atol": 1.0,
+    "conf_atol": 0.001,
+    "max_coord_diff": 0.0001983642578125,
+    "max_conf_diff": 1.5139579772949219e-05,
+    "per_frame": [
+      {
+        "frame": "episode_001283_left_00078.jpg",
+        "max_coord_diff": 3.0517578125e-05,
+        "max_conf_diff": 9.5367431640625e-07,
+        "min_matched_iou": 0.9999985098838806,
+        "pt_boxes": 2,
+        "onnx_boxes": 2,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001291_left_00000.jpg",
+        "max_coord_diff": 0.0,
+        "max_conf_diff": 4.76837158203125e-07,
+        "min_matched_iou": 1.0,
+        "pt_boxes": 3,
+        "onnx_boxes": 3,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001291_left_00078.jpg",
+        "max_coord_diff": 3.0517578125e-05,
+        "max_conf_diff": 1.1920928955078125e-07,
+        "min_matched_iou": 0.9999991655349731,
+        "pt_boxes": 1,
+        "onnx_boxes": 1,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001292_left_00114.jpg",
+        "max_coord_diff": 3.0517578125e-05,
+        "max_conf_diff": 1.7881393432617188e-07,
+        "min_matched_iou": 0.9999975562095642,
+        "pt_boxes": 2,
+        "onnx_boxes": 2,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001293_left_00084.jpg",
+        "max_coord_diff": 0.0,
+        "max_conf_diff": 5.960464477539063e-08,
+        "min_matched_iou": 1.0,
+        "pt_boxes": 1,
+        "onnx_boxes": 1,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001298_left_00054.jpg",
+        "max_coord_diff": 3.0517578125e-05,
+        "max_conf_diff": 2.384185791015625e-07,
+        "min_matched_iou": 0.9999988675117493,
+        "pt_boxes": 4,
+        "onnx_boxes": 4,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001299_left_00048.jpg",
+        "max_coord_diff": 3.0517578125e-05,
+        "max_conf_diff": 0.0,
+        "min_matched_iou": 0.9999997019767761,
+        "pt_boxes": 1,
+        "onnx_boxes": 1,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001308_left_00114.jpg",
+        "max_coord_diff": 1.52587890625e-05,
+        "max_conf_diff": 1.245737075805664e-05,
+        "min_matched_iou": 0.9999995827674866,
+        "pt_boxes": 4,
+        "onnx_boxes": 4,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001309_left_00084.jpg",
+        "max_coord_diff": 3.0517578125e-05,
+        "max_conf_diff": 4.172325134277344e-07,
+        "min_matched_iou": 0.9999991655349731,
+        "pt_boxes": 4,
+        "onnx_boxes": 4,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001312_left_00084.jpg",
+        "max_coord_diff": 1.1444091796875e-05,
+        "max_conf_diff": 1.7881393432617188e-07,
+        "min_matched_iou": 0.9999996423721313,
+        "pt_boxes": 1,
+        "onnx_boxes": 1,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001313_left_00006.jpg",
+        "max_coord_diff": 0.0,
+        "max_conf_diff": 3.8743019104003906e-07,
+        "min_matched_iou": 1.0,
+        "pt_boxes": 3,
+        "onnx_boxes": 3,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001316_left_00006.jpg",
+        "max_coord_diff": 3.0517578125e-05,
+        "max_conf_diff": 1.5139579772949219e-05,
+        "min_matched_iou": 0.9999992847442627,
+        "pt_boxes": 5,
+        "onnx_boxes": 5,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001318_left_00036.jpg",
+        "max_coord_diff": 1.52587890625e-05,
+        "max_conf_diff": 0.0,
+        "min_matched_iou": 0.9999998211860657,
+        "pt_boxes": 1,
+        "onnx_boxes": 1,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001318_left_00084.jpg",
+        "max_coord_diff": 8.0108642578125e-05,
+        "max_conf_diff": 8.344650268554688e-07,
+        "min_matched_iou": 0.9999984502792358,
+        "pt_boxes": 2,
+        "onnx_boxes": 2,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001319_left_00108.jpg",
+        "max_coord_diff": 0.0001983642578125,
+        "max_conf_diff": 8.940696716308594e-07,
+        "min_matched_iou": 0.999998927116394,
+        "pt_boxes": 2,
+        "onnx_boxes": 2,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      },
+      {
+        "frame": "episode_001321_left_00066.jpg",
+        "max_coord_diff": 3.0517578125e-05,
+        "max_conf_diff": 2.980232238769531e-07,
+        "min_matched_iou": 0.9999997615814209,
+        "pt_boxes": 3,
+        "onnx_boxes": 3,
+        "det_ok": true,
+        "num_ok": true,
+        "det_note": "ok",
+        "pass": true
+      }
+    ]
+  }
+}
