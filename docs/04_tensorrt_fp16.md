@@ -89,9 +89,57 @@ Reading the numbers instead of the verdict:
 ```text
 - Boxes stay sub-2-pixel. Spatial agreement is intact.
 - Confidence is what FP16 perturbs (up to 0.113).
-- The 2 box-count changes are detections crossing the conf 0.25 filter, an
+- The box-count changes are detections crossing the conf 0.25 filter, an
   artefact of thresholding a perturbed score -- not a missed or invented object.
 ```
+
+#### Why the per-frame rate overstates it
+
+A frame fails if **any** detection in it exceeds tolerance, so the frame-level
+rate is a max over a *varying* number of detections — it partly measures how many
+tools happen to be in shot rather than how far the engine drifted:
+
+```text
+fail rate by detections in frame:
+  1 box:    1/24 fail    4%
+  2 boxes:  9/36 fail   25%
+  3 boxes:  4/25 fail   16%
+  4 boxes:  6/12 fail   50%
+  5 boxes:  3/ 3 fail  100%      (small buckets: 12 and 3 frames)
+```
+
+A 5-detection frame gets five chances to breach the line; a 1-detection frame gets
+one. The parity script therefore also reports the pooled per-detection distribution,
+which does not carry that bias:
+
+```text
+per-detection deltas, 226 matched pairs across 97 comparable frames
+                       median        p95        p99        max     over atol
+coord_diff (px)     8.636e-02  2.962e-01  9.283e-01  1.426e+00      3  (1.3%)
+conf_diff           2.959e-04  1.287e-02  3.470e-02  1.127e-01     25  (11.1%)
+matched IoU           0.99716    min 0.98052
+
+within tolerance:  201/226 detections (88.9%)   vs  77/100 frames (77.0%)
+```
+
+The typical detection is far more faithful than the frame verdict suggests: median
+confidence drift is 3e-04, roughly 17x *below* the 5e-03 tolerance, and median box
+drift is 0.09 px. What fails is a thin tail — p99 confidence drift is 3.5e-02.
+Spatially the engine barely moves at all (1.3% of detections over a 1 px bar).
+
+For comparison, V2 FP32 on the same measure:
+
+```text
+coord_diff (px)     7.629e-06  6.104e-05  1.425e-04  1.831e-04      0  (0.0%)
+conf_diff           1.192e-07  3.418e-06  1.681e-05  3.809e-05      0  (0.0%)
+matched IoU           1.00000    min 1.00000
+within tolerance:  234/234 detections (100.0%)
+```
+
+PASS/FAIL is still decided per frame — changing the gate's semantics is a separate
+decision from reporting a better statistic. The distribution is what should be read
+when interpreting a reduced-precision engine; it will matter more for INT8, where
+deviations are larger.
 
 **Parity therefore cannot carry the accuracy claim for reduced precision.** For V2 it could: the engine matched the ONNX to floating-point noise, so it inherited the ONNX's measured mAP. That inheritance argument breaks the moment precision changes. Accuracy for FP16 is **measured**, not inherited.
 
