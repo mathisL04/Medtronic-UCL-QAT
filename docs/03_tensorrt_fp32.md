@@ -152,16 +152,37 @@ The gap to the docs/02 figures (0.0044 mAP50) is the **metric implementation** �
 
 ### Latency (batch=1, verified-idle A100, pooled 10x100 = 1000 samples)
 
-**Pending re-measurement.** The figures below were taken from an **earlier** FP32 engine that has since been rebuilt; they are retained for reference and must not be quoted as V2's latency.
+```text
+Stage          Mean      Std   Median      Min      P95      P99      Max
+Preprocess    1.517    0.511    1.372    0.972    2.442    2.793    9.866
+Inference     2.350    0.140    2.318    2.298    2.502    2.705    5.505
+Postprocess   0.023    0.014    0.021    0.017    0.035    0.058    0.307
+Total         3.889    0.547    3.736    3.299    4.820    5.452   12.449
+                                                        ->  267.7 FPS
+```
+
+Measured on GPU 0 with `GATE_ALLOW_IDLE_MIB=600`. This run was **not exclusive**: two dormant `uceeesi` CUDA contexts (496 MiB each, 0% utilisation) were present and tolerated, and the record carries `exclusive_gpu: false`. See "Gate relaxation" below.
+
+An earlier benchmark of a **previous** FP32 build recorded Total 3.986 ms / Inference 2.301 ms. Inference agrees to within 0.7% (2.318 vs 2.301) with **lower** variance (std 0.140 vs 0.253) — which is the main evidence the tolerated contexts did not interfere. Total differs more (3.736 vs 3.986) because preprocess moved (1.372 vs 1.640 ms); preprocess is CPU-side and varies with host load, independent of GPU or precision.
+
+**Compare Inference across runs, not Total.** Total carries CPU-side variance that has nothing to do with the engine.
+
+### Gate relaxation (documented deviation)
+
+`benchmark_latency_trt.py` refuses to run if any other compute process is on the target GPU. On a shared server that rule can be unsatisfiable indefinitely: an abandoned interpreter holding a few hundred MiB at 0% utilisation blocks benchmarking forever while consuming no SM time and no meaningful bandwidth.
+
+`GATE_ALLOW_IDLE_MIB` (default **0**, i.e. the original strict rule) sets a per-process memory ceiling below which a foreign process is tolerated:
 
 ```text
-SUPERSEDED -- belongs to a previous build, not the engine described above
-Stage         Median     P95      P99
-Preprocess    1.640 ms   2.522    2.941
-Inference     2.301 ms   2.506    2.969
-Postprocess   0.024 ms   0.030    0.038
-Total         3.986 ms   5.027    6.604      ->  250.9 FPS
+- Tolerance is memory-based only; GATE_UTIL_THRESHOLD still gates utilisation.
+- Processes with unknown memory are always blocking -- never assumed small.
+- Every repeat records its own compute_procs_other / gpu_util_peak snapshot, so
+  a tolerated process waking mid-run shows up in the per-repeat table.
+- The provenance sidecar records exclusive_gpu and the tolerated PIDs, so a
+  non-exclusive run can never be silently compared against an exclusive one.
 ```
+
+V2 and V3 were measured back-to-back under identical tolerated conditions, so the precision comparison is internally consistent even though neither run was exclusive.
 
 Why superseded: the benchmark ran at 14:10 UTC and the engine on disk was rebuilt at 15:37 UTC — the record postdated by its own artifact. The parity record had the same problem. Neither record carried the engine's sha256, so neither could be checked against the file it described.
 
@@ -169,17 +190,30 @@ Both the parity and latency records now embed `engine_sha256`, and the benchmark
 
 ### V1 vs V2 — TensorRT optimisation at zero precision cost
 
-Accuracy is final; the latency rows are **provisional**, carried over from the superseded run above and pending the paired re-measurement.
-
 ```text
                    V1 (PyTorch FP32)   V2 (TensorRT FP32)   change
-Total (median)        8.642 ms          3.986 ms *          2.17x faster  *provisional
-FPS                   115.7             250.9 *             2.17x         *provisional
-Core inference        6.844 ms          2.301 ms *          2.97x faster  *provisional
-mAP50 / mAP50-95      0.934 / 0.782     0.9350 / 0.7572     unchanged
+Total (median)        8.642 ms            3.736 ms          2.31x faster
+FPS                   115.7               267.7             2.31x
+Core inference        6.844 ms            2.318 ms          2.95x faster
+mAP50 / mAP50-95      0.934 / 0.782       0.9350 / 0.7572   unchanged
 ```
 
-The accuracy conclusion holds regardless of the latency re-measurement: V2 was confirmed to match the ONNX both by parity (100/100) and by direct mAP measurement. The speed conclusion — roughly 2x end-to-end from TensorRT optimisation alone — is expected to survive, since the rebuild changed only kernel selection, but it is not yet backed by a record tied to the current engine.
+TensorRT's optimisation alone gives ~2.3x end-to-end (nearly 3x on core inference) with no accuracy change.
+
+Caveats on the comparison:
+
+```text
+- Compare TOTALS, not per-stage. V2's NMS is baked into the engine (counted under
+  Inference); V1 did NMS on CPU (counted under its Postprocess 0.238 ms).
+- Instrumentation differs slightly: V1 used Ultralytics' internal speed counters;
+  V2 uses wall-clock around each stage. This does not materially affect totals.
+- V1 and V2 accuracy are measured differently: V1 mAP is the full-set training
+  result (Ultralytics), V2 is val100 via pycocotools. "Unchanged" means neither
+  the export nor the engine cost accuracy -- it is not a like-for-like metric.
+- Preprocess (1.37 ms, CPU) is ~37% of the V2 total. As FP16/INT8 shrink
+  inference further, CPU preprocess becomes the bottleneck -- it is already 45%
+  of the V3 total (docs/04).
+```
 
 Caveats on the comparison:
 
@@ -232,6 +266,6 @@ ENGINE_PATH=$ENG DEVICE=<idle_gpu> BENCHMARK_REPEATS=10 python scripts/benchmark
 
 ## Next stage
 
-The FP16 engine (`PRECISION=fp16` with the same build script), validated for accuracy against V2 and benchmarked on the same idle A100 — see docs/04. Every downstream engine — FP16, INT8/PTQ, QAT — is compared against this V2 baseline (mAP50 0.9350 / mAP50-95 0.7572 by pycocotools; latency pending re-measurement).
+The FP16 engine (`PRECISION=fp16` with the same build script), validated for accuracy against V2 and benchmarked on the same idle A100 — see docs/04. Every downstream engine — FP16, INT8/PTQ, QAT — is compared against this V2 baseline (mAP50 0.9350 / mAP50-95 0.7572 by pycocotools; latency 3.736 ms median / 2.318 ms inference).
 
 Note on doc numbering: this FP32-engine stage was not in the original plan (which went ONNX → FP16 directly). The FP16 / INT8 / QAT stage docs were renumbered to sit after it.

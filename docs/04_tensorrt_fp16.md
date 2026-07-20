@@ -172,23 +172,39 @@ Measurement notes:
 - Detection cap is not binding: busiest image has 62 detections against a 300 cap.
 ```
 
-### Latency
+### Latency (batch=1, 10x100 = 1000 pooled samples, GPU 0)
 
-**Not yet measured.** Both engines are queued for a paired benchmark run.
-
-The benchmark refuses to run unless the target GPU has zero other compute processes, and at the time of writing all four A100s on Geneva carry other users' CUDA contexts. V2 and V3 will be benchmarked **back-to-back in a single idle window on the same card**, because separate windows would put a thermal/driver/load difference inside what is supposed to be a pure precision comparison.
-
-When it lands, expect the headline to be smaller than the inference-only gain:
+V2 and V3 were benchmarked **back-to-back on the same card under identical conditions** — same seed, repeats, warmup, image size, and the same two tolerated dormant contexts. Measuring them in separate windows would put thermal/driver/load drift inside a comparison meant to isolate precision.
 
 ```text
-V2 stage breakdown (superseded run, indicative only):
-  Preprocess    1.640 ms   ~41% of total, CPU, precision-invariant
-  Inference     2.301 ms   the only stage FP16 can accelerate
-  Postprocess   0.024 ms
-  Total         3.986 ms
+V3 FP16
+Stage          Mean      Std   Median      Min      P95      P99      Max
+Preprocess    1.453    0.466    1.326    0.998    2.263    2.538    8.386
+Inference     1.588    0.082    1.561    1.535    1.726    1.947    2.767
+Postprocess   0.022    0.005    0.021    0.019    0.028    0.042    0.105
+Total         3.063    0.491    2.922    2.580    3.889    4.175   10.331
+                                                        ->  342.2 FPS
 ```
 
-FP16 accelerates inference only. Report **both** total and inference-stage deltas — quoting total alone understates the precision effect, quoting inference alone overstates the deployment benefit.
+### V2 vs V3 — the precision effect
+
+```text
+stage              V2 FP32     V3 FP16    speedup
+Preprocess         1.372 ms    1.326 ms     1.03x    CPU, precision-invariant
+Inference          2.318 ms    1.561 ms     1.49x    <- the precision effect
+Postprocess        0.021 ms    0.021 ms     1.00x
+Total              3.736 ms    2.922 ms     1.28x
+FPS                   267.7       342.2     1.28x
+engine size         12.8 MB      7.0 MB     0.55x
+mAP50               0.9350      0.9348    -0.0002
+mAP50-95            0.7572      0.7572     0.0000
+```
+
+**Report both speedups.** FP16 accelerates inference only: 1.49x is the precision effect, 1.28x is what a deployment actually sees. Quoting total alone understates the precision work; quoting inference alone overstates the deployment benefit.
+
+Preprocess is now **45%** of the V3 total (1.326 of 2.922 ms) and is precision-invariant CPU work. It is already the largest single stage and will dominate further as INT8 shrinks inference — the next meaningful latency win is moving preprocess onto the GPU, not reducing precision further.
+
+Both runs record `exclusive_gpu: false`: two dormant `uceeesi` contexts (496 MiB, 0% util) were tolerated via `GATE_ALLOW_IDLE_MIB=600` (see docs/03). Evidence they did not interfere: V2's inference median landed within 0.7% of an earlier *exclusive* run with **lower** variance (std 0.140 vs 0.253 ms). Contention would raise both.
 
 ---
 

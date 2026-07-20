@@ -36,11 +36,8 @@ Completed:
 - ONNX accuracy validated against the PyTorch baseline
 - TensorRT FP32 engine (V2 baseline): built, parity-validated, mAP measured
 - TensorRT FP16 engine (V3): built, mAP measured (-0.0002 mAP50 vs V2)
+- Paired V2/V3 latency benchmark (1.49x inference, 1.28x end-to-end)
 - Engine mAP tooling (pycocotools, ONNX and engine through identical metric code)
-
-In progress:
-
-- Paired V2/V3 latency benchmark — blocked on a fully idle GPU on Geneva
 
 Current baseline:
 
@@ -74,7 +71,8 @@ File: models/yolo26n_sanoscience_full_left/best_fp32.engine  (GPU-specific, giti
 Build: TensorRT 10.16.1.11, A100, true FP32 (TF32 disabled)
 Parity vs ONNX (val100): 100/100 PASS, max coord diff 1.831e-04 px
 Accuracy (measured, pycocotools @ conf 0.001): mAP50 0.9350 / mAP50-95 0.7572
-Latency: pending re-measurement (see docs/03)
+Latency (batch=1, GPU 0): 3.736 ms median (267.7 FPS), inference 2.318 ms
+  vs PyTorch 8.642 ms -> 2.31x faster end-to-end
 ```
 
 TensorRT FP16 engine "V3" (validated, see docs/04):
@@ -88,7 +86,10 @@ Parity vs FP32 ONNX: 77/100 FAIL at FP32 tolerances -- expected for half precisi
        and NOT the accuracy claim (see docs/04)
 Accuracy (measured, pycocotools @ conf 0.001): mAP50 0.9348 / mAP50-95 0.7572
        -> vs V2: -0.0002 mAP50, 0.0000 mAP50-95
-Latency: pending re-measurement
+Latency (batch=1, GPU 0, same conditions as V2): 2.922 ms median (342.2 FPS)
+       inference 1.561 ms -> 1.49x vs V2 inference; 1.28x end-to-end
+Note: both latency runs are non-exclusive (2 dormant contexts tolerated,
+       exclusive_gpu: false). See docs/03 "Gate relaxation".
 ```
 
 Accuracy note: V2/V3 figures are measured with pycocotools, the docs/02 PT/ONNX
@@ -125,6 +126,7 @@ scripts/export_onnx.py
 scripts/build_tensorrt_engine.py
 scripts/validate_engine_parity.py
 scripts/benchmark_latency_trt.py
+scripts/evaluate_engine_map.py
 configs/sanoscience_yolo_cork.yaml
 models/yolo26n_sanoscience_full_left/best.pt
 models/yolo26n_sanoscience_full_left/best.onnx
@@ -179,15 +181,14 @@ Done:
 2. PyTorch latency benchmark
 3. ONNX export
 4. ONNX validation
-5. TensorRT FP32 engine (V2 baseline): build + parity + accuracy
-6. TensorRT FP16 engine (V3): build + parity + accuracy
+5. TensorRT FP32 engine (V2 baseline): build + parity + accuracy + latency
+6. TensorRT FP16 engine (V3): build + parity + accuracy + latency
 ```
 
 Remaining:
 
 ```text
-7. Paired V2/V3 latency benchmark (one idle window, one GPU)
-8. TensorRT INT8 post-training quantisation
-9. Quantisation-aware training
-10. Accuracy / latency / memory comparison
+7. TensorRT INT8 post-training quantisation
+8. Quantisation-aware training
+9. Accuracy / latency / memory comparison
 ```
