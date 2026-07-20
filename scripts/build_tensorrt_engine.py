@@ -21,9 +21,9 @@ ONNX_PATH = Path(
 # Precision baked into the engine. This is a BUILD-time choice -- the engine
 # cannot be re-precisioned afterwards. Each precision is a separate build/file.
 #   fp32 -> the V2 baseline (TensorRT optimisation, no precision change)
-#   fp16 -> half precision (BuilderFlag.FP16)
-# INT8 is deliberately NOT handled here: it needs a calibration pass, which
-# belongs in its own script (docs/04).
+#   fp16 -> half precision (BuilderFlag.FP16; mixed precision, TensorRT 10.x)
+# INT8 is deliberately NOT handled here: it needs a calibration pass / Q-DQ, which
+# belongs in its own script (docs/05).
 PRECISION = os.environ.get("PRECISION", "fp32").lower()
 
 # DEVICE is REQUIRED and has no default -- same discipline as benchmark_latency.py.
@@ -36,11 +36,13 @@ if DEVICE is None:
 # one we selected.
 os.environ["CUDA_VISIBLE_DEVICES"] = DEVICE
 
-# TF32 for the FP32 path. On Ampere+ TensorRT runs FP32 conv/matmul in TF32
-# (10-bit mantissa) BY DEFAULT -- a mild precision reduction. For a clean FP32
-# baseline that isolates TensorRT optimisation with zero precision change, we
-# turn it OFF (true FP32, matching PyTorch/ONNX). Set ALLOW_TF32=1 to keep the
-# faster default TF32 behaviour. Ignored for fp16.
+# TF32. On Ampere+ TensorRT runs FP32 conv/matmul in TF32 (10-bit mantissa) BY
+# DEFAULT -- a mild precision reduction. We turn it OFF for EVERY precision, not
+# just fp32: TF32 governs how layers that run in FP32 are computed, which in a
+# mixed-precision FP16 engine includes the FP32 fallback layers. Leaving it at
+# its default for fp16 would mean an FP32-vs-FP16 comparison measured two
+# changes at once. Set ALLOW_TF32=1 for the faster default behaviour -- that is
+# a different precision and a separate build, not the baseline.
 ALLOW_TF32 = os.environ.get("ALLOW_TF32", "0") == "1"
 
 # Builder workspace (scratch) memory ceiling, in GiB.
@@ -103,15 +105,22 @@ print(f"  parsed OK: {network.num_layers} layers")
 config = builder.create_builder_config()
 config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, int(WORKSPACE_GB * (1 << 30)))
 
-fp16_flag = False
-tf32_enabled = True
+# Precision is a builder flag (TensorRT 10.x). FP16 lets TensorRT run layers in
+# half precision where it is faster, keeping numerically sensitive layers in
+# higher precision automatically (mixed precision) -- so I/O stays FP32 and the
+# inference wrapper is unchanged across precisions.
 if PRECISION == "fp16":
     config.set_flag(trt.BuilderFlag.FP16)
-    fp16_flag = True
-elif PRECISION == "fp32" and not ALLOW_TF32:
-    # Force true FP32: disable the default-on TF32 tensor-core path.
+
+# Unconditional, not an elif on PRECISION -- see the ALLOW_TF32 note above.
+if not ALLOW_TF32:
     config.clear_flag(trt.BuilderFlag.TF32)
-    tf32_enabled = False
+
+# Read the flags back off the config instead of tracking them in variables:
+# provenance should record what the builder was actually configured with, not
+# what we assume we asked for.
+fp16_flag = config.get_flag(trt.BuilderFlag.FP16)
+tf32_enabled = config.get_flag(trt.BuilderFlag.TF32)
 print(f"  precision={PRECISION}  fp16_flag={fp16_flag}  tf32_enabled={tf32_enabled}")
 
 # The ONNX is static [1, 3, 640, 640], so no optimisation profile is needed.

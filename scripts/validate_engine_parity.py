@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import hashlib
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -46,6 +47,14 @@ os.environ["CUDA_VISIBLE_DEVICES"] = DEVICE
 import tensorrt as trt                         # noqa: E402
 from cuda.bindings import runtime as cudart    # noqa: E402
 import onnxruntime as ort                       # noqa: E402
+
+
+def sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 # -----------------------------
@@ -239,9 +248,13 @@ result = "PASS" if all_pass else "FAIL"
 print(f"{n_pass}/{len(frames)} frames pass   "
       f"max_coord_diff={max_coord_all:.3e}px  max_conf_diff={max_conf_all:.3e}   =>   {result}")
 
+# Content hashes, not just paths. A path-only record floats free of the file it
+# validated: rebuild the engine and the record silently describes something that
+# no longer exists. The sha256 makes "is this record about THIS engine?" checkable.
 prov = {
     "timestamp_utc": datetime.now(timezone.utc).isoformat(),
     "engine": str(ENGINE_PATH), "onnx": str(ONNX_PATH), "device": DEVICE,
+    "engine_sha256": sha256(ENGINE_PATH), "onnx_sha256": sha256(ONNX_PATH),
     "n_frames": len(frames), "conf": CONF, "box_iou_min": BOX_IOU_MIN,
     "coord_atol": COORD_ATOL, "conf_atol": CONF_ATOL,
     "max_coord_diff": max_coord_all, "max_conf_diff": max_conf_all,
@@ -253,5 +266,14 @@ print("Parity record:", out)
 
 if not all_pass:
     sys.exit("PARITY FAILED -- engine detections diverge from the ONNX baseline.")
-print("\nPARITY PASSED -- FP32 engine matches the ONNX baseline. It inherits the "
-      "validated FP32 accuracy (mAP50 0.9394 / mAP50-95 0.7595).")
+
+# Deliberately NOT an accuracy claim. Parity says "this engine agrees with the
+# FP32 ONNX on these frames at this threshold" -- for a true-FP32 engine that
+# agreement is exact enough to inherit the ONNX's measured mAP, but for a
+# reduced-precision engine (fp16/int8) it is only a smoke test. Accuracy for any
+# precision comes from scripts/evaluate_engine_map.py, which measures it.
+print(f"\nPARITY PASSED -- engine matches the FP32 ONNX baseline on {n_pass}/{len(frames)} "
+      f"frames at conf {CONF}.")
+print("This is a faithfulness check, not an accuracy measurement. For mAP run:")
+print(f"  MODE=engine ENGINE_PATH={ENGINE_PATH} DEVICE={DEVICE} "
+      f"python scripts/evaluate_engine_map.py")

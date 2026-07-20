@@ -1,11 +1,14 @@
 from pathlib import Path
 import csv
 import gc
+import hashlib
+import json
 import os
 import socket
 import sys
 import time
 from time import perf_counter
+from datetime import datetime, timezone
 
 import numpy as np
 import cv2
@@ -48,6 +51,19 @@ IMG_DIR = Path(
 
 OUT_DIR = Path("/home/zcemml1/medtronic_qat_data/runs_sanoscience")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Output filenames are derived from the engine, never hardcoded. An earlier
+# version baked "fp32" into these names, so benchmarking a different engine
+# silently overwrote the FP32 results with FP16 numbers under an fp32 filename.
+ENGINE_TAG = ENGINE_PATH.stem.replace("best_", "", 1)   # best_fp16.engine -> fp16
+
+
+def sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 HOST = socket.gethostname()
 OWN_PID = os.getpid()
@@ -340,7 +356,7 @@ for run_idx in range(1, BENCHMARK_REPEATS + 1):
     print(f"  gpu snapshot: util_peak={util_peak}%  mem_peak={mem_peak} MiB  "
           f"other_compute_procs={others_peak}{flag}")
 
-    out_csv = OUT_DIR / f"benchmark_latency_trt_fp32_seed{SEED}_run{run_idx}.csv"
+    out_csv = OUT_DIR / f"benchmark_latency_trt_{ENGINE_TAG}_seed{SEED}_run{run_idx}.csv"
     with open(out_csv, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=rows[0].keys())
         writer.writeheader()
@@ -361,14 +377,37 @@ for key, label in stage_order:
 
 fps_median = 1000.0 / summary_rows[-1]["median_ms"]
 
-summary_csv = OUT_DIR / f"benchmark_latency_trt_fp32_seed{SEED}_pooled_summary.csv"
+summary_csv = OUT_DIR / f"benchmark_latency_trt_{ENGINE_TAG}_seed{SEED}_pooled_summary.csv"
 with open(summary_csv, "w", newline="") as f:
     writer = csv.DictWriter(f, fieldnames=summary_rows[0].keys())
     writer.writeheader()
     writer.writerows(summary_rows)
 
+# Sidecar tying these numbers to the exact engine that produced them -- same
+# reasoning as the sha256 in the parity record: a latency figure with no engine
+# hash cannot be re-attached to its artifact once the engine is rebuilt.
+meta_path = summary_csv.with_suffix(".provenance.json")
+meta_path.write_text(json.dumps({
+    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+    "host": HOST,
+    "device": DEVICE,
+    "engine": str(ENGINE_PATH),
+    "engine_sha256": sha256(ENGINE_PATH),
+    "engine_bytes": ENGINE_PATH.stat().st_size,
+    "seed": SEED,
+    "repeats": BENCHMARK_REPEATS,
+    "images_per_run": len(ram_images),
+    "pooled_samples": n_pooled,
+    "warmup_images": WARMUP_IMAGES,
+    "conf": CONF,
+    "img_size": IMG_SIZE,
+    "summary": {r["stage"]: r for r in summary_rows},
+    "fps_median_total": fps_median,
+}, indent=2))
+print("Provenance:", meta_path)
+
 print("\n============================================================")
-print("Pooled latency summary (TensorRT FP32 engine)")
+print(f"Pooled latency summary (TensorRT {ENGINE_TAG.upper()} engine)")
 print("============================================================")
 print(f"Runs: {BENCHMARK_REPEATS}   Images/run: {len(ram_images)}   Pooled samples: {n_pooled}")
 print("CSV summary:", summary_csv)
@@ -387,7 +426,7 @@ print(f"Approx FPS (from pooled Total median): {fps_median:.2f}")
 # -----------------------------
 # Per-repeat contention table
 # -----------------------------
-repeats_csv = OUT_DIR / f"benchmark_latency_trt_fp32_seed{SEED}_per_repeat.csv"
+repeats_csv = OUT_DIR / f"benchmark_latency_trt_{ENGINE_TAG}_seed{SEED}_per_repeat.csv"
 with open(repeats_csv, "w", newline="") as f:
     writer = csv.DictWriter(f, fieldnames=per_repeat[0].keys())
     writer.writeheader()
