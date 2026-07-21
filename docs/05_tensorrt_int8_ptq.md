@@ -158,6 +158,31 @@ A paired re-benchmark of all three in one session was attempted and **could not 
 
 ---
 
+## Open items — must be closed before QAT is judged against V4
+
+These are not rhetorical caveats. QAT is measured against the numbers in this
+document, so both gaps below directly limit what any QAT result can claim.
+
+```text
+OPEN 1 -- FULL-6449 mAP ON V4 NEVER RAN.
+  The PTQ accuracy baseline is val100-only: 100 images, 237 boxes. A -0.0115
+  mAP50 delta is inside that set's noise floor, so the magnitude is an estimate,
+  not a measurement. Blocked by host commit-limit exhaustion (see Caveats).
+  ACTION: run MODE=engine on the full 6,449-image val split when the box frees,
+  so QAT compares against a resolved number rather than a 237-box estimate.
+  Until then, quote V4 accuracy as "val100-only".
+
+OPEN 2 -- MIN/MAX CALIBRATOR A/B NEVER RAN.
+  "Entropy clipping box-coordinate activation tails" is the best-supported
+  explanation for the localisation-dominated loss, INFERRED from the
+  mAP50-vs-mAP50-95 asymmetry and the parity IoU failures. It is NOT confirmed.
+  A min/max build would test it directly: min/max clips nothing, so if the
+  hypothesis holds it should recover much of the mAP50-95 gap.
+  ACTION: optional. If left unrun, this document must continue to describe the
+  mechanism as inferred rather than measured -- do not let it harden into a
+  stated cause through repetition.
+```
+
 ## Caveats
 
 ```text
