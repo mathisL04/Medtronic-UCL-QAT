@@ -1,5 +1,6 @@
 from pathlib import Path
 from datetime import datetime, timezone
+from time import perf_counter
 import hashlib
 import json
 import os
@@ -207,6 +208,9 @@ if SIMPLIFY and onnxslim_version is None:
 
 print("\nExporting...")
 model = YOLO(str(MODEL_PATH))
+# One-time offline export cost, recorded for the report -- not a per-inference
+# number. Times only the export call, not the parity/accuracy checks that follow.
+_export_t0 = perf_counter()
 onnx_out = model.export(
     format="onnx",
     imgsz=IMG_SIZE,
@@ -217,8 +221,9 @@ onnx_out = model.export(
     opset=OPSET,
     device=DEVICE,
 )
+export_seconds = perf_counter() - _export_t0
 onnx_path = Path(onnx_out)
-print("Exported:", onnx_path)
+print("Exported:", onnx_path, f"({export_seconds:.1f} s)")
 
 # Read back what the exporter actually baked in (do not trust our request alone).
 import onnx  # noqa: E402  -- imported here so the export error path is clearer
@@ -315,6 +320,7 @@ print(f"matched-pair max_coord_diff={max_coord_all:.3e}px  max_conf_diff={max_co
 # -----------------------------
 prov = {
     "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+    "export_seconds": round(export_seconds, 2),   # one-time offline export cost
     "host": platform.node(),
     "parity_device": DEVICE,
     "result": result,

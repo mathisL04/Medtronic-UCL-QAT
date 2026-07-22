@@ -6,6 +6,7 @@ import platform
 import subprocess
 from pathlib import Path
 from datetime import datetime, timezone
+from time import perf_counter
 
 
 # -----------------------------
@@ -183,9 +184,17 @@ print(f"  precision={PRECISION}  fp16_flag={fp16_flag}  int8_flag={int8_flag}  "
 
 # The ONNX is static [1, 3, 640, 640], so no optimisation profile is needed.
 print(f"\nBuilding {PRECISION.upper()} engine (kernel autotuning on GPU {DEVICE})...")
+# Time the actual build (kernel autotuning dominates). This is a ONE-TIME offline
+# cost, not a per-inference number, and it is non-deterministic (autotuning times
+# candidate kernels live) -- recorded for the report, not as a benchmark. For
+# INT8 this INCLUDES the calibration pass: the calibrator's get_batch runs inside
+# build_serialized_network (unless a calib cache is reused, which skips it).
+_build_t0 = perf_counter()
 serialized = builder.build_serialized_network(network, config)
+build_seconds = perf_counter() - _build_t0
 if serialized is None:
     sys.exit("Engine build failed (build_serialized_network returned None).")
+print(f"  build (autotune) took {build_seconds:.1f} s")
 
 
 # -----------------------------
@@ -268,6 +277,7 @@ for t in io:
 # -----------------------------
 prov = {
     "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+    "build_seconds": round(build_seconds, 2),   # one-time offline autotune cost
     "host": platform.node(),
     "device_index": DEVICE,
     "gpu_name": gpu_name(DEVICE),
