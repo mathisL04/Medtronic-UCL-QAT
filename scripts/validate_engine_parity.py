@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import hashlib
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -46,6 +47,14 @@ os.environ["CUDA_VISIBLE_DEVICES"] = DEVICE
 import tensorrt as trt                         # noqa: E402
 from cuda.bindings import runtime as cudart    # noqa: E402
 import onnxruntime as ort                       # noqa: E402
+
+
+def sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 # -----------------------------
@@ -168,6 +177,14 @@ def compare_detections(a_dets, b_dets, iou_min):
         "min_matched_iou": float(min(ious)),
         "max_coord_diff": float(max(coord_diffs)),
         "max_conf_diff": float(max(conf_diffs)),
+        # Per-matched-pair values, not just the frame maxima. A frame-level
+        # max is a max over a VARYING number of detections, so the per-frame
+        # failure rate partly measures how many objects each image happens to
+        # contain rather than how far the engine drifted: a 5-detection frame
+        # gets five chances to exceed tolerance, a 1-detection frame gets one.
+        # The distribution over pairs is the honest summary.
+        "pairs": [{"iou": float(i), "coord_diff": float(c), "conf_diff": float(f)}
+                  for i, c, f in zip(ious, coord_diffs, conf_diffs)],
     }
 
 
@@ -199,6 +216,7 @@ print("-" * 74)
 
 max_coord_all, max_conf_all = 0.0, 0.0
 per_frame, all_pass = [], True
+all_pairs = []          # every matched detection pair, pooled across frames
 
 for fp in frames:
     img = cv2.imread(str(fp))
@@ -221,6 +239,8 @@ for fp in frames:
     if ok:
         max_coord_all = max(max_coord_all, coord_d)
         max_conf_all = max(max_conf_all, conf_d)
+        for pair in m.get("pairs", []):
+            all_pairs.append(dict(pair, frame=fp.name))
 
     per_frame.append({
         "frame": fp.name, "eng_boxes": int(len(eng_dets)), "onnx_boxes": int(len(onnx_dets)),
@@ -239,13 +259,83 @@ result = "PASS" if all_pass else "FAIL"
 print(f"{n_pass}/{len(frames)} frames pass   "
       f"max_coord_diff={max_coord_all:.3e}px  max_conf_diff={max_conf_all:.3e}   =>   {result}")
 
+
+# -----------------------------
+# Per-detection distribution
+# -----------------------------
+# The frame-level rate above is a max over a varying number of detections, so it
+# conflates "how far did the engine drift" with "how many objects were in the
+# picture". These are the pooled per-pair deltas, which do not have that bias.
+def pctile(vals, q):
+    if not vals:
+        return float("nan")
+    s = sorted(vals)
+    k = (len(s) - 1) * q
+    lo, hi = int(k), min(int(k) + 1, len(s) - 1)
+    return s[lo] + (s[hi] - s[lo]) * (k - lo)
+
+
+def dist_row(label, vals, atol, unit=""):
+    over = sum(1 for v in vals if v > atol)
+    return (f"{label:<18}{pctile(vals, .5):>11.3e}{pctile(vals, .95):>11.3e}"
+            f"{pctile(vals, .99):>11.3e}{max(vals):>11.3e}"
+            f"{over:>7d}  ({100 * over / len(vals):.1f}%){unit}")
+
+
+coord_vals = [p["coord_diff"] for p in all_pairs]
+conf_vals = [p["conf_diff"] for p in all_pairs]
+iou_vals = [p["iou"] for p in all_pairs]
+
+pd_summary = {}
+if all_pairs:
+    n_over_coord = sum(1 for v in coord_vals if v > COORD_ATOL)
+    n_over_conf = sum(1 for v in conf_vals if v > CONF_ATOL)
+    n_over_any = sum(1 for p in all_pairs
+                     if p["coord_diff"] > COORD_ATOL or p["conf_diff"] > CONF_ATOL)
+
+    print()
+    print(f"Per-detection deltas over {len(all_pairs)} matched pairs "
+          f"in {sum(1 for r in per_frame if r['det_ok'])} comparable frames")
+    print("-" * 74)
+    print(f"{'':<18}{'median':>11}{'p95':>11}{'p99':>11}{'max':>11}{'over atol':>17}")
+    print(dist_row("coord_diff (px)", coord_vals, COORD_ATOL))
+    print(dist_row("conf_diff", conf_vals, CONF_ATOL))
+    print(f"{'matched IoU':<18}{pctile(iou_vals, .5):>11.5f}"
+          f"{'min':>11} {min(iou_vals):.5f}")
+    print("-" * 74)
+    print(f"detections within tolerance: {len(all_pairs) - n_over_any}/{len(all_pairs)} "
+          f"({100 * (len(all_pairs) - n_over_any) / len(all_pairs):.1f}%)   "
+          f"vs frames {n_pass}/{len(frames)} ({100 * n_pass / len(frames):.1f}%)")
+
+    pd_summary = {
+        "n_pairs": len(all_pairs),
+        "coord_diff": {"median": pctile(coord_vals, .5), "p95": pctile(coord_vals, .95),
+                       "p99": pctile(coord_vals, .99), "max": max(coord_vals),
+                       "n_over_atol": n_over_coord},
+        "conf_diff": {"median": pctile(conf_vals, .5), "p95": pctile(conf_vals, .95),
+                      "p99": pctile(conf_vals, .99), "max": max(conf_vals),
+                      "n_over_atol": n_over_conf},
+        "matched_iou": {"median": pctile(iou_vals, .5), "min": min(iou_vals)},
+        "n_within_tolerance": len(all_pairs) - n_over_any,
+    }
+
+# Content hashes, not just paths. A path-only record floats free of the file it
+# validated: rebuild the engine and the record silently describes something that
+# no longer exists. The sha256 makes "is this record about THIS engine?" checkable.
 prov = {
     "timestamp_utc": datetime.now(timezone.utc).isoformat(),
     "engine": str(ENGINE_PATH), "onnx": str(ONNX_PATH), "device": DEVICE,
+    "engine_sha256": sha256(ENGINE_PATH), "onnx_sha256": sha256(ONNX_PATH),
     "n_frames": len(frames), "conf": CONF, "box_iou_min": BOX_IOU_MIN,
     "coord_atol": COORD_ATOL, "conf_atol": CONF_ATOL,
     "max_coord_diff": max_coord_all, "max_conf_diff": max_conf_all,
-    "n_pass": n_pass, "result": result, "per_frame": per_frame,
+    "n_pass": n_pass, "result": result,
+    # PASS/FAIL is still decided per frame -- changing the gate's meaning is a
+    # separate decision from reporting a better statistic. per_detection is the
+    # distribution; per_frame is what the verdict is computed from.
+    "per_detection": pd_summary,
+    "per_detection_pairs": all_pairs,
+    "per_frame": per_frame,
 }
 out = ENGINE_PATH.with_name(ENGINE_PATH.name + ".parity.json")
 out.write_text(json.dumps(prov, indent=2))
@@ -253,5 +343,14 @@ print("Parity record:", out)
 
 if not all_pass:
     sys.exit("PARITY FAILED -- engine detections diverge from the ONNX baseline.")
-print("\nPARITY PASSED -- FP32 engine matches the ONNX baseline. It inherits the "
-      "validated FP32 accuracy (mAP50 0.9394 / mAP50-95 0.7595).")
+
+# Deliberately NOT an accuracy claim. Parity says "this engine agrees with the
+# FP32 ONNX on these frames at this threshold" -- for a true-FP32 engine that
+# agreement is exact enough to inherit the ONNX's measured mAP, but for a
+# reduced-precision engine (fp16/int8) it is only a smoke test. Accuracy for any
+# precision comes from scripts/evaluate_engine_map.py, which measures it.
+print(f"\nPARITY PASSED -- engine matches the FP32 ONNX baseline on {n_pass}/{len(frames)} "
+      f"frames at conf {CONF}.")
+print("This is a faithfulness check, not an accuracy measurement. For mAP run:")
+print(f"  MODE=engine ENGINE_PATH={ENGINE_PATH} DEVICE={DEVICE} "
+      f"python scripts/evaluate_engine_map.py")

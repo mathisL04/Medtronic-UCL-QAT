@@ -1,0 +1,31 @@
+{
+  "timestamp_utc": "2026-07-20T18:37:52.416489+00:00",
+  "mode": "engine",
+  "target": "models/yolo26n_sanoscience_full_left/best_fp32.engine",
+  "target_sha256": "5909ffcb37249c5e53b0bc37ebe6a4fb3f23370033337a1f6e15931ef069f67c",
+  "device": "1",
+  "img_dir": "/home/zcemml1/medtronic_qat_data/demo_val100_random_yolo/images/val",
+  "n_images": 100,
+  "n_gt_boxes": 237,
+  "n_detections": 986,
+  "conf": 0.001,
+  "img_size": 640,
+  "max_dets": 300,
+  "metric": "pycocotools COCOeval bbox",
+  "map50": 0.935039556547062,
+  "map50_95": 0.7572298700356193,
+  "coco_stats": [
+    -1.0,
+    0.935039556547062,
+    0.8393401340656979,
+    0.5214901507116948,
+    0.770711196769598,
+    0.80761693259687,
+    0.3485232067510548,
+    0.8189873417721518,
+    0.8232067510548523,
+    0.5961538461538461,
+    0.8234042553191487,
+    0.8735042735042734
+  ]
+}

@@ -1,11 +1,14 @@
 from pathlib import Path
 import csv
 import gc
+import hashlib
+import json
 import os
 import socket
 import sys
 import time
 from time import perf_counter
+from datetime import datetime, timezone
 
 import numpy as np
 import cv2
@@ -33,6 +36,14 @@ WARMUP_IMAGES = int(os.environ.get("WARMUP_IMAGES", 30))
 
 # Gate thresholds (identical semantics to benchmark_latency.py).
 GATE_UTIL_THRESHOLD = int(os.environ.get("GATE_UTIL_THRESHOLD", 10))
+
+# Per-process memory below which a foreign compute process is tolerated on the
+# target GPU. Default 0 = the strict original rule: any other process refuses.
+# Raise it only to get past DORMANT contexts (abandoned interpreters holding a
+# few hundred MiB at 0% util) that would otherwise make a shared server
+# permanently unbenchmarkable. A tolerated run is NOT an exclusive-GPU run and
+# is recorded as such in the provenance sidecar.
+GATE_ALLOW_IDLE_MIB = int(os.environ.get("GATE_ALLOW_IDLE_MIB", 0))
 GATE_SAMPLES = int(os.environ.get("GATE_SAMPLES", 5))
 GATE_INTERVAL_S = float(os.environ.get("GATE_INTERVAL_S", 0.2))
 
@@ -48,6 +59,19 @@ IMG_DIR = Path(
 
 OUT_DIR = Path("/home/zcemml1/medtronic_qat_data/runs_sanoscience")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Output filenames are derived from the engine, never hardcoded. An earlier
+# version baked "fp32" into these names, so benchmarking a different engine
+# silently overwrote the FP32 results with FP16 numbers under an fp32 filename.
+ENGINE_TAG = ENGINE_PATH.stem.replace("best_", "", 1)   # best_fp16.engine -> fp16
+
+
+def sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 HOST = socket.gethostname()
 OWN_PID = os.getpid()
@@ -77,6 +101,29 @@ def _print_procs(procs):
         print(f"  pid {pid}: {mib}")
 
 
+def _blocking_procs(procs):
+    """Compute processes that disqualify the GPU.
+
+    Default GATE_ALLOW_IDLE_MIB=0 means ANY other process blocks -- the original,
+    strictest rule. Raising it tolerates small DORMANT contexts: an abandoned
+    interpreter holding a few hundred MiB at 0% utilisation consumes no SM time
+    and no meaningful bandwidth, so it cannot distort a latency measurement,
+    but under the strict rule it makes a shared server unbenchmarkable forever.
+
+    This tolerance is deliberately memory-based only. Utilisation is still gated
+    separately by GATE_UTIL_THRESHOLD, and every repeat records its own
+    compute_procs_other / gpu_util_peak snapshot -- so if a tolerated process
+    wakes up mid-run it shows up in the per-repeat table and the run can be
+    discarded. Nothing is hidden by allowing it through the gate.
+    """
+    blocking = []
+    for pid, mem in procs:
+        # Unknown memory is treated as blocking -- never assume it is small.
+        if mem is None or mem / (1024 ** 2) > GATE_ALLOW_IDLE_MIB:
+            blocking.append((pid, mem))
+    return blocking
+
+
 def gate_gpu_or_exit(physical_index):
     pynvml.nvmlInit()
     try:
@@ -93,16 +140,21 @@ def gate_gpu_or_exit(physical_index):
         print("------------------------------------------------------------")
         print(f"Target physical GPU {physical_index}: {name}")
 
-        busy = _compute_pids(handle)
+        present = _compute_pids(handle)
+        busy = _blocking_procs(present)
         if busy:
             print("Refusing to run. Compute processes already on this GPU:")
             _print_procs(busy)
+            if GATE_ALLOW_IDLE_MIB:
+                print(f"(tolerance GATE_ALLOW_IDLE_MIB={GATE_ALLOW_IDLE_MIB} MiB "
+                      f"was not enough to clear these)")
             sys.exit(1)
+        tolerated = present            # everything here passed the size test
 
         util_samples = []
         for i in range(GATE_SAMPLES):
             util_samples.append(pynvml.nvmlDeviceGetUtilizationRates(handle).gpu)
-            busy = _compute_pids(handle)
+            busy = _blocking_procs(_compute_pids(handle))
             if busy:
                 print("Refusing to run. A compute process appeared during the gate:")
                 _print_procs(busy)
@@ -112,14 +164,27 @@ def gate_gpu_or_exit(physical_index):
 
         mem = pynvml.nvmlDeviceGetMemoryInfo(handle)
         peak_util = max(util_samples)
-        print("Compute processes: none")
+        if tolerated:
+            print(f"Compute processes: {len(tolerated)} tolerated "
+                  f"(each <= GATE_ALLOW_IDLE_MIB={GATE_ALLOW_IDLE_MIB} MiB, dormant)")
+            _print_procs(tolerated)
+            print("NOTE: this run did NOT have the GPU exclusively. Per-repeat "
+                  "contention snapshots below are the audit trail.")
+        else:
+            print("Compute processes: none")
         print(f"Utilisation samples (%): {util_samples}  peak={peak_util}")
         print(f"Memory used: {mem.used / (1024 ** 2):.0f} MiB "
               f"of {mem.total / (1024 ** 2):.0f} MiB")
         if peak_util > GATE_UTIL_THRESHOLD:
             sys.exit(f"Refusing to run. Peak utilisation {peak_util}% exceeds "
                      f"GATE_UTIL_THRESHOLD={GATE_UTIL_THRESHOLD}%.")
-        print("Gate passed: GPU is idle.\n")
+        print("Gate passed: GPU is idle"
+              f"{' (exclusive)' if not tolerated else ' apart from tolerated dormant contexts'}.\n")
+        return {"tolerated_procs": [{"pid": p, "mib": None if m is None
+                                     else int(round(m / (1024 ** 2)))}
+                                    for p, m in tolerated],
+                "gate_allow_idle_mib": GATE_ALLOW_IDLE_MIB,
+                "gate_util_peak": peak_util}
     finally:
         pynvml.nvmlShutdown()
 
@@ -156,7 +221,7 @@ def summarize(values):
 # Gate BEFORE creating any CUDA context
 # -----------------------------
 PHYSICAL_INDEX = resolve_physical_index(DEVICE)
-gate_gpu_or_exit(PHYSICAL_INDEX)
+gate_info = gate_gpu_or_exit(PHYSICAL_INDEX)
 
 
 # -----------------------------
@@ -340,7 +405,7 @@ for run_idx in range(1, BENCHMARK_REPEATS + 1):
     print(f"  gpu snapshot: util_peak={util_peak}%  mem_peak={mem_peak} MiB  "
           f"other_compute_procs={others_peak}{flag}")
 
-    out_csv = OUT_DIR / f"benchmark_latency_trt_fp32_seed{SEED}_run{run_idx}.csv"
+    out_csv = OUT_DIR / f"benchmark_latency_trt_{ENGINE_TAG}_seed{SEED}_run{run_idx}.csv"
     with open(out_csv, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=rows[0].keys())
         writer.writeheader()
@@ -361,14 +426,44 @@ for key, label in stage_order:
 
 fps_median = 1000.0 / summary_rows[-1]["median_ms"]
 
-summary_csv = OUT_DIR / f"benchmark_latency_trt_fp32_seed{SEED}_pooled_summary.csv"
+summary_csv = OUT_DIR / f"benchmark_latency_trt_{ENGINE_TAG}_seed{SEED}_pooled_summary.csv"
 with open(summary_csv, "w", newline="") as f:
     writer = csv.DictWriter(f, fieldnames=summary_rows[0].keys())
     writer.writeheader()
     writer.writerows(summary_rows)
 
+# Sidecar tying these numbers to the exact engine that produced them -- same
+# reasoning as the sha256 in the parity record: a latency figure with no engine
+# hash cannot be re-attached to its artifact once the engine is rebuilt.
+meta_path = summary_csv.with_suffix(".provenance.json")
+meta_path.write_text(json.dumps({
+    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+    "host": HOST,
+    "device": DEVICE,
+    "engine": str(ENGINE_PATH),
+    "engine_sha256": sha256(ENGINE_PATH),
+    "engine_bytes": ENGINE_PATH.stat().st_size,
+    "seed": SEED,
+    "repeats": BENCHMARK_REPEATS,
+    "images_per_run": len(ram_images),
+    "pooled_samples": n_pooled,
+    "warmup_images": WARMUP_IMAGES,
+    "conf": CONF,
+    "img_size": IMG_SIZE,
+    # Was the GPU exclusively ours? A run with tolerated dormant contexts is
+    # still a valid measurement but is NOT the same condition as an exclusive
+    # run, and must not be silently compared against one.
+    "gate": gate_info,
+    "exclusive_gpu": not gate_info["tolerated_procs"],
+    "max_compute_procs_other": max(r["compute_procs_other_peak"] for r in per_repeat),
+    "max_gpu_util_peak_pct": max(r["gpu_util_peak_pct"] for r in per_repeat),
+    "summary": {r["stage"]: r for r in summary_rows},
+    "fps_median_total": fps_median,
+}, indent=2))
+print("Provenance:", meta_path)
+
 print("\n============================================================")
-print("Pooled latency summary (TensorRT FP32 engine)")
+print(f"Pooled latency summary (TensorRT {ENGINE_TAG.upper()} engine)")
 print("============================================================")
 print(f"Runs: {BENCHMARK_REPEATS}   Images/run: {len(ram_images)}   Pooled samples: {n_pooled}")
 print("CSV summary:", summary_csv)
@@ -387,7 +482,7 @@ print(f"Approx FPS (from pooled Total median): {fps_median:.2f}")
 # -----------------------------
 # Per-repeat contention table
 # -----------------------------
-repeats_csv = OUT_DIR / f"benchmark_latency_trt_fp32_seed{SEED}_per_repeat.csv"
+repeats_csv = OUT_DIR / f"benchmark_latency_trt_{ENGINE_TAG}_seed{SEED}_per_repeat.csv"
 with open(repeats_csv, "w", newline="") as f:
     writer = csv.DictWriter(f, fieldnames=per_repeat[0].keys())
     writer.writeheader()
