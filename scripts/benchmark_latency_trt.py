@@ -211,6 +211,7 @@ def summarize(values):
         "std_ms": float(arr.std(ddof=1)) if arr.size > 1 else 0.0,
         "median_ms": float(np.median(arr)),
         "min_ms": float(arr.min()),
+        "p90_ms": float(np.percentile(arr, 90)),
         "p95_ms": float(np.percentile(arr, 95)),
         "p99_ms": float(np.percentile(arr, 99)),
         "max_ms": float(arr.max()),
@@ -267,15 +268,37 @@ class TRTEngine:
         self.stream = CHK(cudart.cudaStreamCreate())
         self.context.set_tensor_address(self.inp_name, int(self.d_in))
         self.context.set_tensor_address(self.out_name, int(self.d_out))
+        # CUDA events for GPU-side phase timing, all on the same stream. Each
+        # phase is bracketed by its own pair of events, so H2D, compute, and D2H
+        # are measured separately and in GPU time -- the same method (and the
+        # same three quantities) trtexec reports. Event timing is immune to CPU
+        # scheduling jitter, unlike wall-clock around cudaStreamSynchronize.
+        self.ev = {k: (CHK(cudart.cudaEventCreate()), CHK(cudart.cudaEventCreate()))
+                   for k in ("h2d", "compute", "d2h")}
 
     def infer(self, im):
+        """Returns (output, {h2d_ms, kernel_ms, d2h_ms}). All three are GPU-time
+        via CUDA events (trtexec-style). GPU latency = their sum."""
         im = np.ascontiguousarray(im, dtype=np.float32)
+        (h2d_s, h2d_e), (c_s, c_e), (d2h_s, d2h_e) = (
+            self.ev["h2d"], self.ev["compute"], self.ev["d2h"])
+        CHK(cudart.cudaEventRecord(h2d_s, self.stream))
         CHK(cudart.cudaMemcpyAsync(self.d_in, im.ctypes.data, im.nbytes, H2D, self.stream))
+        CHK(cudart.cudaEventRecord(h2d_e, self.stream))
+        # compute: nothing but execute_async_v3 sits between these two records
+        CHK(cudart.cudaEventRecord(c_s, self.stream))
         self.context.execute_async_v3(int(self.stream))
+        CHK(cudart.cudaEventRecord(c_e, self.stream))
+        CHK(cudart.cudaEventRecord(d2h_s, self.stream))
         CHK(cudart.cudaMemcpyAsync(self.out_host.ctypes.data, self.d_out,
                                    self.out_host.nbytes, D2H, self.stream))
+        CHK(cudart.cudaEventRecord(d2h_e, self.stream))
         CHK(cudart.cudaStreamSynchronize(self.stream))
-        return self.out_host
+        return self.out_host, {
+            "h2d_ms": CHK(cudart.cudaEventElapsedTime(h2d_s, h2d_e)),
+            "kernel_ms": CHK(cudart.cudaEventElapsedTime(c_s, c_e)),
+            "d2h_ms": CHK(cudart.cudaEventElapsedTime(d2h_s, d2h_e)),
+        }
 
 
 def letterbox(img, new_shape):
@@ -353,7 +376,9 @@ print("Warmup complete.")
 # -----------------------------
 # Benchmark repeats -- pool every per-image reading across all runs
 # -----------------------------
-pool = {"preprocess_ms": [], "inference_ms": [], "postprocess_ms": [], "total_ms": []}
+pool = {"preprocess_ms": [], "inference_ms": [], "postprocess_ms": [],
+        "h2d_ms": [], "kernel_ms": [], "d2h_ms": [], "gpu_latency_ms": [],
+        "total_ms": []}
 per_repeat = []
 snapshot_at = {len(ram_images) // 4, len(ram_images) // 2, (3 * len(ram_images)) // 4}
 
@@ -366,21 +391,31 @@ for run_idx in range(1, BENCHMARK_REPEATS + 1):
         t0 = perf_counter()
         im = preprocess(img, IMG_SIZE)          # CPU: letterbox + normalise
         t1 = perf_counter()
-        raw = eng.infer(im)                      # GPU: H2D + execute + D2H + sync
+        raw, gpu = eng.infer(im)                 # GPU phases event-timed inside
         t2 = perf_counter()
         dets = postprocess(raw, CONF)            # CPU: confidence filter (NMS is in-engine)
         t3 = perf_counter()
 
+        # A = total (pipeline, wall-clock). B = inference (memcpy-incl, wall-clock,
+        # t1->t2). GPU phases (h2d/kernel/d2h) are CUDA-event GPU time; their sum
+        # is the trtexec-style GPU latency, all immune to CPU scheduling jitter.
         pre, inf, post = (t1 - t0) * 1e3, (t2 - t1) * 1e3, (t3 - t2) * 1e3
         total = pre + inf + post
+        gpu_lat = gpu["h2d_ms"] + gpu["kernel_ms"] + gpu["d2h_ms"]
 
         rows.append({"run": run_idx, "image": image_name,
                      "preprocess_ms": pre, "inference_ms": inf,
-                     "postprocess_ms": post, "total_ms": total,
+                     "postprocess_ms": post, "h2d_ms": gpu["h2d_ms"],
+                     "kernel_ms": gpu["kernel_ms"], "d2h_ms": gpu["d2h_ms"],
+                     "gpu_latency_ms": gpu_lat, "total_ms": total,
                      "num_boxes": int(len(dets))})
         pool["preprocess_ms"].append(pre)
         pool["inference_ms"].append(inf)
         pool["postprocess_ms"].append(post)
+        pool["h2d_ms"].append(gpu["h2d_ms"])
+        pool["kernel_ms"].append(gpu["kernel_ms"])
+        pool["d2h_ms"].append(gpu["d2h_ms"])
+        pool["gpu_latency_ms"].append(gpu_lat)
         pool["total_ms"].append(total)
 
         if i in snapshot_at:
@@ -416,7 +451,11 @@ for run_idx in range(1, BENCHMARK_REPEATS + 1):
 # Pooled summary
 # -----------------------------
 n_pooled = len(pool["total_ms"])
+# GPU phases (H2D / Kernel / D2H, all CUDA-event) grouped, then the wall-clock
+# CPU stages and totals.
 stage_order = [("preprocess_ms", "Preprocess"), ("inference_ms", "Inference"),
+               ("h2d_ms", "H2D(GPU)"), ("kernel_ms", "Kernel(GPU)"),
+               ("d2h_ms", "D2H(GPU)"), ("gpu_latency_ms", "GPUlatency"),
                ("postprocess_ms", "Postprocess"), ("total_ms", "Total")]
 summary_rows = []
 for key, label in stage_order:
@@ -424,7 +463,11 @@ for key, label in stage_order:
     s.update(summarize(pool[key]))
     summary_rows.append(s)
 
-fps_median = 1000.0 / summary_rows[-1]["median_ms"]
+total_median = next(r["median_ms"] for r in summary_rows if r["stage"] == "Total")
+kernel_median = next(r["median_ms"] for r in summary_rows if r["stage"] == "Kernel(GPU)")
+fps_median = 1000.0 / total_median
+fps_kernel = 1000.0 / kernel_median
+noncompute_gap = total_median - kernel_median
 
 summary_csv = OUT_DIR / f"benchmark_latency_trt_{ENGINE_TAG}_seed{SEED}_pooled_summary.csv"
 with open(summary_csv, "w", newline="") as f:
@@ -459,6 +502,8 @@ meta_path.write_text(json.dumps({
     "max_gpu_util_peak_pct": max(r["gpu_util_peak_pct"] for r in per_repeat),
     "summary": {r["stage"]: r for r in summary_rows},
     "fps_median_total": fps_median,
+    "fps_median_kernel": fps_kernel,
+    "noncompute_gap_ms": noncompute_gap,   # total - kernel = CPU preprocess + memcpy
 }, indent=2))
 print("Provenance:", meta_path)
 
