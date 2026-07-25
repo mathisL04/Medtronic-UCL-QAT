@@ -16,7 +16,9 @@
 set -o pipefail
 
 REPO=/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT
-PY=/home/zcemml1/venvs/medtronic-qat/bin/python
+# Interpreter is overridable so the QAT stack can migrate venvs (e.g. the
+# Py3.11 + modelopt-0.33 export-capable venv) without editing this script.
+PY="${PY:-/home/zcemml1/venvs/medtronic-qat/bin/python}"
 
 RUN_NAME="${RUN_NAME:?RUN_NAME is required (e.g. qat_smoke)}"
 DEVICE="${DEVICE:?DEVICE is required -- no default, same discipline as the benchmarks}"
