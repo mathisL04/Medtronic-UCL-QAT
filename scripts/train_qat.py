@@ -270,6 +270,30 @@ def verify_reload(state_path):
 
 
 # -----------------------------
+# Best-epoch checkpoint (multi-epoch fine-tune)
+# -----------------------------
+# save_model() is disabled (it cannot pickle modelopt's dynamic QuantConv2d), so
+# Ultralytics keeps NO best.pt -- without this a multi-epoch run would retain only
+# the FINAL EMA. This callback snapshots the modelopt state whenever validation
+# fitness improves, giving a best-epoch artifact alongside the final one. For a
+# 1-epoch smoke the best IS the final, so nothing changes there.
+_best_fitness = float("-inf")
+
+
+def save_best_qat(trainer):
+    global _best_fitness
+    fit = getattr(trainer, "fitness", None)
+    if fit is None or fit <= _best_fitness:
+        return
+    _best_fitness = fit
+    model = trainer.ema.ema if getattr(trainer, "ema", None) else trainer.model
+    out = Path(PROJECT) / RUN_NAME / "qat_modelopt_state_best.pt"
+    mto.save(model, out)
+    print(f"[QAT] best fitness {fit:.5f} @ epoch {getattr(trainer, 'epoch', '?')} "
+          f"-> saved {out.name}", flush=True)
+
+
+# -----------------------------
 # Run
 # -----------------------------
 print("=" * 60)
@@ -319,10 +343,15 @@ overrides = dict(
     # mto.save() in the post-training block instead, which stores the modelopt
     # recipe + state_dict and is reloadable via mto.restore (NOT YOLO(path)).
     save=False,
+    # QAT fine-tune LR: the baseline is already converged, so start LOW (~1% of
+    # V1's lr0=0.01) and let Ultralytics' scheduler decay it (lrf = decay tail).
+    lr0=float(os.environ.get("LR0", 1e-3)),
+    lrf=float(os.environ.get("LRF", 0.01)),
 )
 
 print("\n[QAT] amp=False (deviation from V1 -- see docs/06)")
 trainer = QATTrainer(overrides=overrides)
+trainer.add_callback("on_fit_epoch_end", save_best_qat)
 trainer.train()
 
 # -----------------------------

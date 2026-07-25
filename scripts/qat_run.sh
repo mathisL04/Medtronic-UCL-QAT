@@ -66,7 +66,7 @@ copy_back() {
         # recipe + trained weights and is reloadable via mto.restore onto the
         # committed V1 baseline architecture. The .pt per-epoch churn never
         # existed, so nothing large is left on scratch.
-        for f in qat_modelopt_state.pt qat_provenance.json results.csv args.yaml; do
+        for f in qat_modelopt_state.pt qat_modelopt_state_best.pt qat_provenance.json results.csv args.yaml; do
             [ -f "$src/$f" ] && cp -p "$src/$f" "$NFS_OUT/" \
                 && echo "[$(stamp)]   saved $f ($(du -h "$src/$f" | cut -f1))"
         done
