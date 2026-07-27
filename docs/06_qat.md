@@ -120,24 +120,62 @@ with them. Only the deployment path (one2one + backbone) stays quantised.
 nodes. (Contrast the PTQ path in build_tensorrt_engine.py, which needs an
 IInt8Calibrator + calibration data.) Built cleanly on TRT 10.16.1.11.
 
-## Pipeline status -- structurally proven, accuracy NOT yet measured
+## Results (V5 -- first real fine-tune, 10 epochs)
 
-The full chain is validated end-to-end, but only on a **throwaway 1-epoch smoke**
-model whose scales are not converged. What this proves and does not:
+Run: 10 epochs, lr0 1e-3 / lrf 0.01, warmup 3, amp off, batch 16, ~1h41m on A100
+(GPU 1). State: `runs_qat/qat_v5/qat_modelopt_state_best.pt` (best epoch = 10).
+
+**Accuracy** (full 6,449-img val, pycocotools) vs the other precisions:
 
 ```text
-PROVEN (structure):  train (unchanged) -> mto.save/restore (reload gate 608/253)
-                     -> Q/DQ ONNX [1,3,640,640]->[1,300,6], 207 Q/DQ pairs
-                     -> TensorRT INT8 engine (4.2 MB, deserialises, single output)
-NOT YET MEASURED:    whether a REAL fine-tune preserves accuracy through this
-                     path. The smoke model's mAP is meaningless; no INT8 accuracy
-                     or latency number exists yet.
+                mAP50    mAP50-95
+V2 FP32         0.9325   0.7747
+V3 FP16         0.9327   0.7748
+V4 INT8 PTQ     0.9282   0.7571
+V5 INT8 QAT     0.9283   0.7437   <- this run
 ```
 
-## Planned content (remaining)
+QAT did **not** recover accuracy: mAP50-95 (0.7437) is BELOW both PTQ and FP32.
+Cause: **undertrained** -- still climbing at epoch 10 (mAP50-95 0.684 ep1 -> 0.743
+ep10, best = last epoch). NVIDIA's recipe is ~10% of the original schedule with an
+annealing LR; note the 30% warmup on 10 epochs also re-perturbs the converged
+model. Calibration is `MaxCalibrator`; histogram/percentile is NVIDIA-preferred
+and untried.
 
-- Two code changes before the real run: `lr0` ~1e-3 + `lrf` in the overrides
-  (currently inherits 0.01), and an mto-based best-epoch checkpoint callback (the
-  smoke keeps only the final EMA because save_model is disabled).
-- Real multi-epoch QAT fine-tune, then export (recipe above) + INT8 build.
-- TensorRT INT8 accuracy (mAP) + latency comparison vs V2 FP32 / V3 FP16 / V4 PTQ.
+**Latency** (batch=1, val100, CUDA-event; engine numbers idle-gated):
+
+```text
+                        kernel(GPU) median   total median   FPS(total)
+V2 FP32 engine              2.019 ms            3.736 ms       267.7
+V3 FP16 engine              1.137 ms            2.922 ms       342.2
+V5 INT8 QAT engine          1.429 ms            3.789 ms       263.9
+PyTorch QAT fake-quant     81.427 ms           83.958 ms        11.9   <- NOT deployable
+```
+
+## Latency analysis -- why INT8 is NOT faster than FP16 here
+
+INT8 kernel (1.429 ms) is **slower** than FP16 (1.137 ms). Investigated and settled:
+
+- **NOT FP32 fallback.** Rebuilding the same Q/DQ ONNX with INT8+FP16 moved 56
+  layers FP32->FP16 (`144 INT8 / 113 FP32` -> `144 INT8 / 56 FP16 / 40 FP32`) but
+  the kernel did **not** change (1.429 -> 1.440). Disproves the fallback theory.
+- **Explicit-quantization semantics** (NVIDIA): in a Q/DQ network TensorRT is
+  forbidden from swapping Q/DQ-dictated INT8 for faster FP16 -- so the INT8+FP16
+  flag *cannot* help, exactly the observed null result.
+- **Real cause: Q/DQ reformat overhead on a launch-bound tiny model.** YOLO26n is
+  2.5M params / 5.8 GFLOPs; on A100 each layer is memory/launch-bound, not
+  compute-bound, so INT8's arithmetic advantage is ~nil while the reformat kernels
+  at INT8<->other boundaries add cost. Uniform-precision FP16 has no reformats.
+
+**Deployment implication:** on A100, **FP16 is the right precision for this model**.
+INT8/QAT pays off on INT8-accelerated edge HW (Jetson/DLA) or larger compute-bound
+models. The PyTorch fake-quant 81 ms is the eager Q/DQ-in-FP32 simulation (~57x the
+deployed engine) -- it is *why* deployment runs on TensorRT, not a number to compare.
+
+## Open items
+
+- **Longer QAT fine-tune to plateau** -- accuracy is the real gap; best-epoch
+  checkpoint already keeps the best.
+- Try **histogram/percentile calibration** (vs the current MaxCalibrator); reduce warmup.
+- INT8+FP16 build engine kept in scratch (does not help latency; not shipped).
+- Two-venv ergonomics + the INT8-only build flag are documented on the conversion page.
