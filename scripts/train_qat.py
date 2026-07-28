@@ -59,6 +59,13 @@ if DEVICE is None:
     sys.exit("DEVICE is required (e.g. DEVICE=1). No GPU specified, no run.")
 
 EPOCHS = int(os.environ.get("EPOCHS", 1))
+# Early stopping (opt-in). 0 = OFF (default: run the full fixed EPOCHS -- unchanged,
+# backward-compatible). >0 = stop after PATIENCE epochs with no validation improvement.
+# In Ultralytics 8.4.90 the detection `fitness` weights are [0,0,0,1.0] = PURE mAP50-95
+# (DetMetrics.fitness -> Metric.fitness, verified in ultralytics/utils/metrics.py), so
+# BOTH this early-stopping and the save_best_qat checkpoint track mAP50-95 -- not the old
+# 0.1*mAP50+0.9*mAP50-95 blend, and not mAP50.
+PATIENCE = int(os.environ.get("PATIENCE", 0))
 RUN_NAME = os.environ.get("RUN_NAME", "qat_smoke")
 PROJECT = os.environ.get("PROJECT", "/tmp/zcemml1_qat")
 IMG_SIZE = int(os.environ.get("IMG_SIZE", 640))
@@ -325,6 +332,7 @@ overrides = dict(
     model=str(MODEL_PATH),
     data=str(DATA_YAML),
     epochs=EPOCHS,
+    patience=PATIENCE,    # 0 -> Ultralytics disables (patience or inf); >0 -> early-stop on mAP50-95 plateau
     imgsz=IMG_SIZE,
     batch=BATCH,
     workers=WORKERS,
