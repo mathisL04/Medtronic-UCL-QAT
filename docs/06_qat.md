@@ -152,6 +152,12 @@ V5 INT8 QAT engine          1.429 ms            3.789 ms       263.9
 PyTorch QAT fake-quant     81.427 ms           83.958 ms        11.9   <- NOT deployable
 ```
 
+Final same-session distribution run (GPU 2, idle/exclusive, N=1000), compute level:
+**INT8 kernel 1.386 ms** (mean 1.397, std 0.033, min 1.379, max 1.669, p95 1.453, p99 1.536);
+**PyTorch fake-quant forward 80.05 ms** (mean 80.11, std 0.48, min 79.30, max 86.03, p95 80.74,
+p99 81.81) -- ~57.7x the kernel. Run-to-run the kernel sits at ~1.39-1.43 ms (within the ~2.4%
+std). Full distributions + raw provenance: `reports/v5_latency/`.
+
 ## Latency analysis -- why INT8 is NOT faster than FP16 here
 
 INT8 kernel (1.429 ms) is **slower** than FP16 (1.137 ms). Investigated and settled:
