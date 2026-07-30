@@ -26,11 +26,11 @@ MODE = os.environ.get("MODE", "engine").lower()
 ENGINE_PATH = Path(os.environ.get(
     "ENGINE_PATH",
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/best_fp32.engine",
+    "models/yolo26n_sanoscience_full_left/baseline/fp32/best_fp32.engine",
 ))
 ONNX_PATH = Path(
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/best.onnx"
+    "models/yolo26n_sanoscience_full_left/baseline/best.onnx"
 )
 
 # Which evaluation set to score against. A NAMED selector, not a free path:

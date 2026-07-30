@@ -322,7 +322,7 @@ Final Cork checkpoints:
 The best checkpoint was copied into this repository:
 
 ```text
-models/yolo26n_sanoscience_full_left/best.pt
+models/yolo26n_sanoscience_full_left/baseline/best.pt
 ```
 
 Validation set:

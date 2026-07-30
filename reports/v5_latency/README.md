@@ -1,6 +1,6 @@
 # V5 latency — final distributions (compute level, CUDA-event)
 
-Same model (`runs_qat/qat_v5/qat_modelopt_state_best.pt`, 10-epoch QAT best state),
+Same model (`models/yolo26n_sanoscience_full_left/qat/v5_10ep/qat_modelopt_state_best.pt`, 10-epoch QAT best state),
 batch=1, val100, N=1000 (10x100), **GPU 2, idle/exclusive for the whole run**
 (`exclusive_gpu: true`). Both measured at the **pure-GPU compute level** (CUDA
 events, no H2D/D2H), so they are comparable as compute cost.

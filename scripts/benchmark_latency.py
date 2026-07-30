@@ -37,7 +37,7 @@ GATE_INTERVAL_S = float(os.environ.get("GATE_INTERVAL_S", 0.2))
 
 MODEL_PATH = Path(
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/best.pt"
+    "models/yolo26n_sanoscience_full_left/baseline/best.pt"
 )
 
 IMG_DIR = Path(

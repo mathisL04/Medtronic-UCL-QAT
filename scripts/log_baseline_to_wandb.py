@@ -5,7 +5,7 @@ import wandb
 REPO = Path("/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT")
 RUNS = Path("/home/zcemml1/medtronic_qat_data/runs_sanoscience")
 
-MODEL = REPO / "models/yolo26n_sanoscience_full_left/best.pt"
+MODEL = REPO / "models/yolo26n_sanoscience_full_left/baseline/best.pt"
 MODEL_CARD = REPO / "models/yolo26n_sanoscience_full_left/model_card.md"
 
 REPORTS = REPO / "reports/yolo26n_sanoscience_full_left"

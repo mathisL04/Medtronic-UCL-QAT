@@ -32,7 +32,7 @@ The pip wheel ships no `trtexec`, so the engine is built through the TensorRT Py
 
 ```bash
 source ~/venvs/medtronic-trt/bin/activate
-ENG=models/yolo26n_sanoscience_full_left/best_fp32.engine    # swap to best_fp16.engine for V3
+ENG=models/yolo26n_sanoscience_full_left/baseline/fp32/best_fp32.engine    # swap to best_fp16.engine for V3
 
 # 1. BUILD -- PRECISION picks fp32 or fp16; writes best_<precision>.engine
 PRECISION=fp32 DEVICE=0 python scripts/build_tensorrt_engine.py

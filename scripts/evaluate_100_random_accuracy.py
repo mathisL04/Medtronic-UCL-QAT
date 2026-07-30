@@ -9,7 +9,7 @@ DEVICE = int(os.environ.get("DEVICE", 3))
 
 MODEL_PATH = Path(
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/best.pt"
+    "models/yolo26n_sanoscience_full_left/baseline/best.pt"
 )
 
 DATA_YAML = Path(

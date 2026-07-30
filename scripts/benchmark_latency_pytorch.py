@@ -29,9 +29,9 @@ import numpy as np
 # numbers. The qat row is a fake-quant SIMULATION, not 8-bit. FP16 cleanliness
 # (pure half vs autocast/FP32 islands) is detected and reported.
 REPO = Path("/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT")
-MODEL_PATH = REPO / "models/yolo26n_sanoscience_full_left/best.pt"
+MODEL_PATH = REPO / "models/yolo26n_sanoscience_full_left/baseline/best.pt"
 QAT_STATE = Path(os.environ.get(
-    "QAT_STATE", str(REPO / "runs_qat/qat_v5/qat_modelopt_state_best.pt")))
+    "QAT_STATE", str(REPO / "models/yolo26n_sanoscience_full_left/qat/v6_final/qat_modelopt_state_best.pt")))
 IMG_DIR = Path(os.environ.get(
     "IMG_DIR", "/home/zcemml1/medtronic_qat_data/demo_val100_random_yolo/images/val"))
 OUT_DIR = Path("/home/zcemml1/medtronic_qat_data/runs_sanoscience")

@@ -9,7 +9,7 @@ This checkpoint is a YOLO26n model fine-tuned on the Open-H Embodiment Sanoscien
 - Number of classes: 1
 - Class name: `surgical_tool`
 - Input size: 640
-- Checkpoint: `best.pt`
+- Checkpoint: `baseline/best.pt`
 
 ## Dataset
 

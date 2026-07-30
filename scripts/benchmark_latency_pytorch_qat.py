@@ -24,9 +24,9 @@ import numpy as np
 # Q/DQ ops) and much slower than the real INT8 TensorRT engine. The deployable
 # latency is the TensorRT engine; this exists for completeness of the PyTorch page.
 REPO = Path("/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT")
-MODEL_PATH = REPO / "models/yolo26n_sanoscience_full_left/best.pt"
+MODEL_PATH = REPO / "models/yolo26n_sanoscience_full_left/baseline/best.pt"
 QAT_STATE = Path(os.environ.get(
-    "QAT_STATE", str(REPO / "runs_qat/qat_v5/qat_modelopt_state_best.pt")))
+    "QAT_STATE", str(REPO / "models/yolo26n_sanoscience_full_left/qat/v6_final/qat_modelopt_state_best.pt")))
 IMG_DIR = Path(os.environ.get(
     "IMG_DIR", "/home/zcemml1/medtronic_qat_data/demo_val100_random_yolo/images/val"))
 OUT_DIR = Path("/home/zcemml1/medtronic_qat_data/runs_sanoscience")

@@ -16,7 +16,7 @@ from time import perf_counter
 # the build writes a sibling .engine named for its precision.
 ONNX_PATH = Path(
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/best.onnx"
+    "models/yolo26n_sanoscience_full_left/baseline/best.onnx"
 )
 
 # Precision baked into the engine. This is a BUILD-time choice -- the engine

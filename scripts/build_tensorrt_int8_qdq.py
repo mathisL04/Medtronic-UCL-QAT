@@ -20,9 +20,9 @@ from time import perf_counter
 # them: PTQ = calibrator + FP32 ONNX; QAT = no calibrator + Q/DQ ONNX.
 REPO = Path("/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT")
 ONNX_PATH = Path(os.environ.get(
-    "ONNX_PATH", str(REPO / "models/yolo26n_sanoscience_full_left/best_qat.onnx")))
+    "ONNX_PATH", str(REPO / "models/yolo26n_sanoscience_full_left/qat/v6_final/best_qat.onnx")))
 ENGINE_PATH = Path(os.environ.get(
-    "ENGINE_PATH", str(REPO / "models/yolo26n_sanoscience_full_left/best_qat_int8.engine")))
+    "ENGINE_PATH", str(REPO / "models/yolo26n_sanoscience_full_left/qat/v6_final/best_qat_int8.engine")))
 WORKSPACE_GB = float(os.environ.get("WORKSPACE_GB", 8))
 
 # DEVICE has no default and the script aborts if unset -- same discipline as the

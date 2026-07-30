@@ -9,7 +9,7 @@ The export is deliberately **FP32 only**. No precision change happens here — h
 ## Overview flow
 
 ```text
-models/yolo26n_sanoscience_full_left/best.pt   (FP32 baseline, read only)
+models/yolo26n_sanoscience_full_left/baseline/best.pt   (FP32 baseline, read only)
         │
         │  ultralytics + torch load the model and run one forward pass
         ▼
@@ -208,8 +208,8 @@ Note that `CONF` here is the parity-comparison threshold (which detections both 
 ## Outputs
 
 ```text
-models/yolo26n_sanoscience_full_left/best.onnx                   (9.4 MB, FP32, opset 17)
-models/yolo26n_sanoscience_full_left/best.onnx.provenance.json   (sha256 + versions + parity record)
+models/yolo26n_sanoscience_full_left/baseline/best.onnx                   (9.4 MB, FP32, opset 17)
+models/yolo26n_sanoscience_full_left/baseline/best.onnx.provenance.json   (sha256 + versions + parity record)
 ```
 
 Both are committed to the repository (the `.onnx` force-added past the `*.onnx` ignore, as with `best.pt`). The provenance JSON is the human-readable record of this export: source checkpoint sha256, all package versions, the exact export settings the exporter baked in, and per-frame parity results.

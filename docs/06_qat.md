@@ -133,11 +133,13 @@ plateau automatically instead of guessing the epoch count.
 (mAP50-95 vs epoch, both runs, best epochs marked, patience window shaded, precision
 bars overlaid). Full per-epoch tables + stats: `reports/qat_training/README.md`.
 
-**Artifacts (durable, on NFS + force-added to git):**
+**Artifacts (force-added to git under `models/yolo26n_sanoscience_full_left/`):**
 ```text
-runs_qat/qat_v6/qat_modelopt_state_best.pt   ep25 best (the V6 deployable model)
-runs_qat/qat_v6/{results.csv, qat_provenance.json, args.yaml}
-runs_qat/qat_v5/...                           the V5 run
+qat/v6_final/qat_modelopt_state_best.pt   ep25 best (the V6 deployable model) + state/results/args
+qat/v5_10ep/                              the V5 run + its Q/DQ ONNX + INT8 engine + sidecars
+qat/smoke_1ep/                            the 1-epoch smoke
+(training writes raw output to runs_qat/<RUN_NAME>/ which is gitignored; the best of each
+ run is curated into models/.../qat/<run>/)
 ```
 
 **Latency** is unchanged between V5 and V6 (graph-determined, not weight-dependent):

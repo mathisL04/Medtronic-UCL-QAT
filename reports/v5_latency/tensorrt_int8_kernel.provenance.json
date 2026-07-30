@@ -2,7 +2,7 @@
   "timestamp_utc": "2026-07-28T12:08:56.558716+00:00",
   "host": "geneva.ee.ucl.ac.uk",
   "device": 2,
-  "engine": "models/yolo26n_sanoscience_full_left/best_qat_int8.engine",
+  "engine": "models/yolo26n_sanoscience_full_left/qat/v5_10ep/best_qat_int8.engine",
   "engine_sha256": "0e069875d77da3a8c9206e6f498f9709bd12f0cf799db30cf51344f8b71e0b93",
   "engine_bytes": 4343100,
   "seed": 42,
