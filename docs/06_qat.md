@@ -174,18 +174,24 @@ V5   0.7427@ep10   0.6614  0.7427  0.7091  0.0256  0.0813
 V6   0.7593@ep25   0.6096  0.7593  0.7107  0.0346  0.1496   (noisier: LR stretched over 50-ep schedule)
 ```
 
-**vs the precision bars (deployable pycocotools, for reference):**
+**V6 engine — MEASURED (deployable, full val pycocotools + CUDA-event latency):**
 ```text
-FP32 / FP16 engine   0.7747 / 0.7748   accuracy leader
-V6 QAT INT8          0.7593*           beats PTQ, ~0.015 below FP16   (*fake-quant metric; engine pending)
-V4 PTQ INT8          0.7571            the bar V6 CLEARED (+0.0022)
-V5 QAT INT8 (engine) 0.7437            undertrained
+                     mAP50    mAP50-95    kernel(GPU)    total
+FP32 engine          0.9325   0.7747       2.019 ms      3.736 ms   accuracy leader
+FP16 engine          0.9327   0.7748       1.137 ms      2.922 ms   accuracy + speed leader (A100)
+V6 QAT INT8 engine   0.9321   0.7644       1.397 ms      3.421 ms   <- MEASURED
+V4 PTQ INT8          0.9282   0.7571        —             —         the bar V6 CLEARED (+0.0073)
+V5 QAT INT8 engine   0.9283   0.7437       1.386 ms      3.789 ms   undertrained
 ```
 
 Takeaways: **~25 epochs is the real convergence point** (V5's fixed 10 was
-undertrained). **V6 recovered accuracy past PTQ** — the win QAT is meant to deliver —
-but stays below FP16/FP32, as expected for 8-bit vs 16-bit. Early stopping found the
-plateau automatically instead of guessing the epoch count.
+undertrained). **V6 recovered INT8 accuracy to 0.7644 — beats PTQ (+0.0073) and lands
+just ~0.010 below FP16/FP32**, the accuracy win QAT is meant to deliver. Early stopping
+found the plateau automatically instead of guessing the epoch count. The engine (0.7644)
+sits a touch above the fake-quant training metric (0.7593) — normal pycocotools-vs-
+Ultralytics noise; the engine faithfully reproduces the model. **Latency is unchanged
+from V5 (~1.4 ms kernel, graph-determined) — still slower than FP16 on A100** (Q/DQ
+reformat overhead; INT8's speed payoff is on edge HW / DLA, not A100).
 
 **Evolution graph:** `reports/qat_training/qat_v5_v6_accuracy.png`
 (mAP50-95 vs epoch, both runs, best epochs marked, patience window shaded, precision
@@ -241,7 +247,8 @@ INT8-accelerated edge HW (Jetson/DLA) or larger compute-bound models.
 
 ## Open items
 
-- **Export V6** best state -> INT8 engine -> confirm the deployable pycocotools mAP
-  (~0.759 expected) and lock in the "beats PTQ" result on the same metric basis.
-- Try **histogram/percentile calibration** (vs MaxCalibrator); consider reducing warmup.
+- **DONE** — V6 exported -> INT8 engine -> measured: mAP50-95 **0.7644** (beats PTQ),
+  kernel **1.397 ms**. All artifacts committed under `models/.../qat/v6_final/`.
+- Try **histogram/percentile calibration** (vs MaxCalibrator); consider reducing warmup —
+  could close the remaining ~0.010 gap to FP16.
 - INT8+FP16 build engine kept in scratch (does not help latency; not shipped).
