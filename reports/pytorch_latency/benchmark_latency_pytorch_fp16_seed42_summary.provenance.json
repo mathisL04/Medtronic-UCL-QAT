@@ -1,0 +1,70 @@
+{
+  "timestamp_utc": "2026-07-27T16:45:47.045617+00:00",
+  "stage": "pytorch_raw_latency",
+  "model_mode": "fp16",
+  "note": "eager PyTorch, no conversion. qat=fake-quant sim (not real INT8). fp16 cleanliness: pure model.half()",
+  "fp16_mode": "pure model.half()",
+  "device": "2",
+  "exclusive_gpu": true,
+  "img_dir": "/home/zcemml1/medtronic_qat_data/demo_val100_random_yolo/images/val",
+  "n_images": 100,
+  "repeats": 10,
+  "img_size": 640,
+  "seed": 42,
+  "torch": "2.7.0+cu128",
+  "A_forward_gpu": {
+    "n": 1000,
+    "mean_ms": 14.03710747241974,
+    "std_ms": 0.7431818870525494,
+    "median_ms": 13.802000045776367,
+    "min_ms": 13.458847999572754,
+    "p95_ms": 16.100208568573,
+    "p99_ms": 16.31145143508911,
+    "max_ms": 19.461952209472656
+  },
+  "B_pipeline": {
+    "preprocess": {
+      "n": 1000,
+      "mean_ms": 2.1550152277341112,
+      "std_ms": 0.43277416464801755,
+      "median_ms": 1.8765759887173772,
+      "min_ms": 1.8259910866618156,
+      "p95_ms": 2.809580083703622,
+      "p99_ms": 2.977242770139128,
+      "max_ms": 5.464868969283998
+    },
+    "inference": {
+      "n": 1000,
+      "mean_ms": 7.882342218072154,
+      "std_ms": 0.23599903139703254,
+      "median_ms": 7.823240535799414,
+      "min_ms": 7.730840006843209,
+      "p95_ms": 8.092672989005223,
+      "p99_ms": 8.839786408934742,
+      "max_ms": 10.741539997979999
+    },
+    "postprocess": {
+      "n": 1000,
+      "mean_ms": 0.24782080797012895,
+      "std_ms": 0.055439557353026,
+      "median_ms": 0.24370045866817236,
+      "min_ms": 0.2317180624231696,
+      "p95_ms": 0.2570000186096877,
+      "p99_ms": 0.32118917210027575,
+      "max_ms": 1.923875999636948
+    },
+    "total": {
+      "n": 1000,
+      "mean_ms": 10.285178253776394,
+      "std_ms": 0.5178535708804443,
+      "median_ms": 9.995705564506352,
+      "min_ms": 9.842601022683084,
+      "p95_ms": 11.023909028153867,
+      "p99_ms": 11.744721938157454,
+      "max_ms": 13.932541944086552
+    },
+    "half": true
+  },
+  "fps_A_forward": 72.45326740206873,
+  "fps_B_total": 100.04296280503597
+}

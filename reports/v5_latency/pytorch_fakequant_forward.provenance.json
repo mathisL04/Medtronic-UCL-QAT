@@ -1,0 +1,54 @@
+{
+  "timestamp_utc": "2026-07-28T12:08:29.107190+00:00",
+  "stage": "pytorch_qat_fakequant_latency",
+  "note": "fake-quant (Q/DQ simulated in FP32) forward; NOT real INT8, NOT deployment",
+  "device": "2",
+  "exclusive_gpu": true,
+  "model": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/best.pt",
+  "qat_state": "runs_qat/qat_v5/qat_modelopt_state_best.pt",
+  "qat_state_sha256": "8cbbb720b0db74bb7a6d6e8b189933e3e6fa11f33e6fb0dbfaf133c1fb92cbd9",
+  "img_dir": "/home/zcemml1/medtronic_qat_data/demo_val100_random_yolo/images/val",
+  "n_images": 100,
+  "repeats": 10,
+  "pooled_samples": 1000,
+  "img_size": 640,
+  "seed": 42,
+  "torch": "2.7.0+cu128",
+  "summary": {
+    "Preprocess(CPU)": {
+      "n": 1000,
+      "mean_ms": 1.9278900591889396,
+      "std_ms": 0.6546892865998015,
+      "median_ms": 1.7164709861390293,
+      "min_ms": 1.6782940365374088,
+      "p90_ms": 2.5147308711893874,
+      "p95_ms": 3.791194572113454,
+      "p99_ms": 4.225633761379868,
+      "max_ms": 6.74717896617949
+    },
+    "Forward(GPU)": {
+      "n": 1000,
+      "mean_ms": 80.10509886932373,
+      "std_ms": 0.48038444125951374,
+      "median_ms": 80.0511360168457,
+      "min_ms": 79.30003356933594,
+      "p90_ms": 80.56833724975586,
+      "p95_ms": 80.74136428833008,
+      "p99_ms": 81.80668571472168,
+      "max_ms": 86.0335693359375
+    },
+    "Total": {
+      "n": 1000,
+      "mean_ms": 82.4257061687531,
+      "std_ms": 0.844210057382239,
+      "median_ms": 82.19215099234134,
+      "min_ms": 81.38966397382319,
+      "p90_ms": 83.29359323251992,
+      "p95_ms": 84.32518086628988,
+      "p99_ms": 86.32011495996267,
+      "max_ms": 88.1402890663594
+    }
+  },
+  "fps_median_forward": 12.49201510131678,
+  "fps_median_total": 12.166611871408255
+}

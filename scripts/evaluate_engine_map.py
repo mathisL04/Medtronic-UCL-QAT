@@ -33,8 +33,28 @@ ONNX_PATH = Path(
     "models/yolo26n_sanoscience_full_left/best.onnx"
 )
 
-IMG_DIR = Path("/home/zcemml1/medtronic_qat_data/demo_val100_random_yolo/images/val")
-LABEL_DIR = Path("/home/zcemml1/medtronic_qat_data/demo_val100_random_yolo/labels/val")
+# Which evaluation set to score against. A NAMED selector, not a free path:
+# dataset locations stay hardcoded per repo convention, so this cannot be
+# pointed at arbitrary data, but the two legitimate sets can be chosen.
+#
+#   val100 -- 100 images / 237 boxes. Fast, and what V2/V3/V4 were first
+#             measured on. Too small to resolve deltas below ~0.01 mAP.
+#   full   -- 6,449 images / 14,517 boxes. The real number. Required whenever a
+#             delta is small enough that val100's noise floor could swallow it,
+#             which is the case for INT8 (docs/05 OPEN 1).
+EVAL_SET = os.environ.get("EVAL_SET", "val100").lower()
+
+_EVAL_SETS = {
+    "val100": Path("/home/zcemml1/medtronic_qat_data/demo_val100_random_yolo"),
+    "full": Path("/home/zcemml1/medtronic_qat_data/datasets/"
+                 "sanoscience_yolo_full_nonexpert_stereo"),
+}
+if EVAL_SET not in _EVAL_SETS:
+    sys.exit(f"EVAL_SET must be one of {sorted(_EVAL_SETS)} (got {EVAL_SET!r}).")
+
+_root = _EVAL_SETS[EVAL_SET]
+IMG_DIR = _root / "images" / "val"
+LABEL_DIR = _root / "labels" / "val"
 
 IMG_SIZE = int(os.environ.get("IMG_SIZE", 640))
 
@@ -306,6 +326,7 @@ prov = {
     "target": str(target),
     "target_sha256": sha256(target),
     "device": DEVICE if MODE == "engine" else "cpu",
+    "eval_set": EVAL_SET,
     "img_dir": str(IMG_DIR),
     "n_images": len(gt["images"]),
     "n_gt_boxes": len(gt["annotations"]),
@@ -318,6 +339,11 @@ prov = {
     "map50_95": map50_95,
     "coco_stats": [float(s) for s in ev.stats],
 }
-out = target.with_name(target.name + ".map.json")
+# Record name carries the eval set. Without this a full-val run would silently
+# overwrite the val100 result under the same filename -- the same defect class as
+# the benchmark writing every precision to a hardcoded "fp32" name. val100 stays
+# ".map.json" so existing records and their references remain valid.
+suffix = ".map.json" if EVAL_SET == "val100" else f".map_{EVAL_SET}.json"
+out = target.with_name(target.name + suffix)
 out.write_text(json.dumps(prov, indent=2))
 print("mAP record:", out)
