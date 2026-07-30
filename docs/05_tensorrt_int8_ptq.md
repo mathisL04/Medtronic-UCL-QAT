@@ -216,14 +216,14 @@ source ~/venvs/medtronic-trt/bin/activate
 ENG=models/yolo26n_sanoscience_full_left/baseline/int8_ptq/best_int8.engine
 
 # calibration set (images are regenerable; only the manifest is committed)
-N_EPISODES=500 SEED=42 python scripts/make_calib_set.py
+N_EPISODES=500 SEED=42 python scripts/data/make_calib_set.py
 
 # build (reuses best_int8_entropy.calib_cache if present, skipping calibration)
-PRECISION=int8 CALIBRATOR=entropy DEVICE=<idle_gpu> python scripts/build_tensorrt_engine.py
+PRECISION=int8 CALIBRATOR=entropy DEVICE=<idle_gpu> python scripts/tensorrt/build_tensorrt_engine.py
 
-ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/validate_engine_parity.py
-MODE=engine ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/evaluate_engine_map.py
-ENGINE_PATH=$ENG DEVICE=<idle_gpu> BENCHMARK_REPEATS=10 python scripts/benchmark_latency_trt.py
+ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/evaluate/validate_engine_parity.py
+MODE=engine ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/evaluate/evaluate_engine_map.py
+ENGINE_PATH=$ENG DEVICE=<idle_gpu> BENCHMARK_REPEATS=10 python scripts/benchmark/benchmark_latency_trt.py
 ```
 
 ---

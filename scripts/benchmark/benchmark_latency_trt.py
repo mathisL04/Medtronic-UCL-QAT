@@ -24,7 +24,7 @@ import pynvml
 if "DEVICE" not in os.environ:
     sys.exit(
         "DEVICE is not set. Refusing to guess a GPU.\n"
-        "Set it explicitly, e.g.  DEVICE=2 python scripts/benchmark_latency_trt.py"
+        "Set it explicitly, e.g.  DEVICE=2 python scripts/benchmark/benchmark_latency_trt.py"
     )
 
 DEVICE = int(os.environ["DEVICE"])

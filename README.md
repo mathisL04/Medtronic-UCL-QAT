@@ -120,13 +120,13 @@ docs/06_qat.md                          quantisation-aware training notes
 ## Current Important Files
 
 ```text
-scripts/build_sanoscience_yolo_full_cork.py
-scripts/train_sanoscience_yolo_full_cork.py
-scripts/export_onnx.py
-scripts/build_tensorrt_engine.py
-scripts/validate_engine_parity.py
-scripts/benchmark_latency_trt.py
-scripts/evaluate_engine_map.py
+scripts/data/build_sanoscience_yolo_full_cork.py
+scripts/train/train_sanoscience_yolo_full_cork.py
+scripts/export/export_onnx.py
+scripts/tensorrt/build_tensorrt_engine.py
+scripts/evaluate/validate_engine_parity.py
+scripts/benchmark/benchmark_latency_trt.py
+scripts/evaluate/evaluate_engine_map.py
 configs/sanoscience_yolo_cork.yaml
 models/yolo26n_sanoscience_full_left/best.pt
 models/yolo26n_sanoscience_full_left/best.onnx
@@ -142,10 +142,10 @@ reports/yolo26n_sanoscience_full_left/confusion_matrix.png
 The three `*_tensorrt_*` / `*_engine_*` scripts above are **not** FP32-specific — they are the shared TensorRT tooling for every precision stage (FP32, FP16, INT8). Precision is a run-time knob passed at the command line, never a code change:
 
 ```text
-scripts/build_tensorrt_engine.py     ONNX -> .engine.  PRECISION={fp32|fp16} selects precision.
-scripts/validate_engine_parity.py    engine vs ONNX detection parity.  ENGINE_PATH selects engine.
-scripts/benchmark_latency_trt.py     batch=1 idle-gated latency.        ENGINE_PATH selects engine.
-scripts/evaluate_engine_map.py       engine mAP (pycocotools) on val100. ENGINE_PATH / MODE.
+scripts/tensorrt/build_tensorrt_engine.py     ONNX -> .engine.  PRECISION={fp32|fp16} selects precision.
+scripts/evaluate/validate_engine_parity.py    engine vs ONNX detection parity.  ENGINE_PATH selects engine.
+scripts/benchmark/benchmark_latency_trt.py     batch=1 idle-gated latency.        ENGINE_PATH selects engine.
+scripts/evaluate/evaluate_engine_map.py       engine mAP (pycocotools) on val100. ENGINE_PATH / MODE.
 ```
 
 ### Choosing FP32 vs FP16
@@ -154,10 +154,10 @@ The precision is set by the `PRECISION` variable in front of the **same** build 
 
 ```bash
 # FP32 engine (V2 baseline)
-PRECISION=fp32 DEVICE=<idle_gpu> python scripts/build_tensorrt_engine.py
+PRECISION=fp32 DEVICE=<idle_gpu> python scripts/tensorrt/build_tensorrt_engine.py
 
 # FP16 engine
-PRECISION=fp16 DEVICE=<idle_gpu> python scripts/build_tensorrt_engine.py
+PRECISION=fp16 DEVICE=<idle_gpu> python scripts/tensorrt/build_tensorrt_engine.py
 ```
 
 Then point the parity / latency / accuracy scripts at whichever engine with `ENGINE_PATH`:
@@ -165,9 +165,9 @@ Then point the parity / latency / accuracy scripts at whichever engine with `ENG
 ```bash
 ENG=models/yolo26n_sanoscience_full_left/best_fp16.engine   # or best_fp32.engine
 
-ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/validate_engine_parity.py
-ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/evaluate_engine_map.py
-ENGINE_PATH=$ENG DEVICE=<idle_gpu> BENCHMARK_REPEATS=10 python scripts/benchmark_latency_trt.py
+ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/evaluate/validate_engine_parity.py
+ENGINE_PATH=$ENG DEVICE=<idle_gpu> python scripts/evaluate/evaluate_engine_map.py
+ENGINE_PATH=$ENG DEVICE=<idle_gpu> BENCHMARK_REPEATS=10 python scripts/benchmark/benchmark_latency_trt.py
 ```
 
 INT8 reuses these too, plus a calibration step added in its own stage.

@@ -2,13 +2,13 @@
 layout, for a supervisor who expects that format.
 
 NOT trtexec. trtexec is not installed on this host. These are OUR numbers, from
-scripts/benchmark_latency_trt.py: real val100 frames, batch=1, N=1000 timed
+scripts/benchmark/benchmark_latency_trt.py: real val100 frames, batch=1, N=1000 timed
 inference calls, idle-GPU-gated. The GPU-side rows (H2D / GPU Compute / D2H) are
 measured with CUDA events exactly as trtexec measures them, so those quantities
 are directly comparable. Host Walltime is wall-clock and, on a loaded shared
 box, includes CPU scheduling latency -- flagged inline.
 
-Usage:  python scripts/format_trtexec_style.py fp32 fp16
+Usage:  python scripts/benchmark/format_trtexec_style.py fp32 fp16
         (reads the pooled_summary.provenance.json for each engine tag)
 """
 import sys

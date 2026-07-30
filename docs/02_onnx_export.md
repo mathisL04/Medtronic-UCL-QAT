@@ -39,7 +39,7 @@ The input `best.pt` is never modified. The export writes a sibling `best.onnx`; 
 Main script:
 
 ```text
-scripts/export_onnx.py
+scripts/export/export_onnx.py
 ```
 
 It is a flat top-to-bottom program with a `# Settings` block of hardcoded constants and env-var overrides for run-time knobs, matching the convention of the other scripts in `scripts/`. It does three things in order:
@@ -192,13 +192,13 @@ pip install onnx onnxruntime onnxslim
 ```bash
 cd ~/medtronic_qat/Medtronics-UCL-QAT
 source ~/venvs/medtronic-qats/bin/activate
-python scripts/export_onnx.py
+python scripts/export/export_onnx.py
 ```
 
 Run-time knobs are environment-variable overrides with defaults, e.g.:
 
 ```bash
-OPSET=17 IMG_SIZE=640 N_PARITY=16 CONF=0.25 python scripts/export_onnx.py
+OPSET=17 IMG_SIZE=640 N_PARITY=16 CONF=0.25 python scripts/export/export_onnx.py
 ```
 
 Note that `CONF` here is the parity-comparison threshold (which detections both models must agree on), not the mAP-evaluation threshold used for the accuracy check above.

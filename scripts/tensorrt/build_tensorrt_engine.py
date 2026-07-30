@@ -28,7 +28,7 @@ ONNX_PATH = Path(
 PRECISION = os.environ.get("PRECISION", "fp32").lower()
 
 # INT8 only. Calibration frames must be DISJOINT from the evaluation data --
-# see scripts/make_calib_set.py, which enforces that at episode level and refuses
+# see scripts/data/make_calib_set.py, which enforces that at episode level and refuses
 # to build an overlapping set. Calibrating on eval frames biases accuracy upward.
 CALIB_DIR = Path(os.environ.get(
     "CALIB_DIR", "/home/zcemml1/medtronic_qat_data/calib_int8_train_yolo"))
@@ -115,7 +115,7 @@ if PRECISION == "int8":
     if not calib_images:
         sys.exit(
             f"No calibration frames in {CALIB_DIR / 'images'}.\n"
-            "Build the set first:  python scripts/make_calib_set.py"
+            "Build the set first:  python scripts/data/make_calib_set.py"
         )
     calib_manifest = next(iter(sorted(CALIB_DIR.glob("calib*_manifest.txt"))), None)
     if calib_manifest is None:

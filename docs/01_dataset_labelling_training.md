@@ -142,7 +142,7 @@ Class: surgical_tool
 Main script:
 
 ```text
-scripts/build_sanoscience_yolo_full_cork.py
+scripts/data/build_sanoscience_yolo_full_cork.py
 ```
 
 The dataset contains colour videos and corresponding segmentation videos. The segmentation videos highlight surgical tools in green. The labelling script converts these segmentation masks into YOLO bounding-box labels.
@@ -210,7 +210,7 @@ Worker launch pattern:
 
 ```bash
 nohup nice -n 10 env START_EPISODE_INDEX=<START> END_EPISODE_INDEX=<END> SHARD_NAME=<NAME> \
-python -u scripts/build_sanoscience_yolo_full_cork.py \
+python -u scripts/data/build_sanoscience_yolo_full_cork.py \
 > /home/zcemml1/medtronic_qat_data/runs_sanoscience/logs/build_cork_<NAME>.log 2>&1 &
 ```
 
@@ -249,7 +249,7 @@ pgrep -af build_sanoscience_yolo_full_cork.py
 Main training script:
 
 ```text
-scripts/train_sanoscience_yolo_full_cork.py
+scripts/train/train_sanoscience_yolo_full_cork.py
 ```
 
 Training command:
@@ -257,7 +257,7 @@ Training command:
 ```bash
 mkdir -p /home/zcemml1/medtronic_qat_data/runs_sanoscience/logs
 
-nohup python -u scripts/train_sanoscience_yolo_full_cork.py \
+nohup python -u scripts/train/train_sanoscience_yolo_full_cork.py \
 > /home/zcemml1/medtronic_qat_data/runs_sanoscience/logs/train_yolo26n_full_cork.log 2>&1 &
 ```
 
@@ -356,7 +356,7 @@ This is a **throughput** number, **not** the deployment latency, and is not comp
 
 ## Latency benchmarking
 
-**Deployment latency (batch=1, Geneva A100) — reported baseline.** Single-frame inference timed with `scripts/benchmark_latency.py`: one image per `model.predict()` call (batch=1), wall-clock around each call, the 100-frame validation subset preloaded to RAM, warmup, then pooled per-stage **medians** over 10 repeats × 100 frames (1000 samples) on a verified-idle A100.
+**Deployment latency (batch=1, Geneva A100) — reported baseline.** Single-frame inference timed with `scripts/benchmark/benchmark_latency.py`: one image per `model.predict()` call (batch=1), wall-clock around each call, the 100-frame validation subset preloaded to RAM, warmup, then pooled per-stage **medians** over 10 repeats × 100 frames (1000 samples) on a verified-idle A100.
 
 ```text
 preprocess    1.552 ms   (median)

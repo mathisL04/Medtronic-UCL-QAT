@@ -348,9 +348,9 @@ if not all_pass:
 # FP32 ONNX on these frames at this threshold" -- for a true-FP32 engine that
 # agreement is exact enough to inherit the ONNX's measured mAP, but for a
 # reduced-precision engine (fp16/int8) it is only a smoke test. Accuracy for any
-# precision comes from scripts/evaluate_engine_map.py, which measures it.
+# precision comes from scripts/evaluate/evaluate_engine_map.py, which measures it.
 print(f"\nPARITY PASSED -- engine matches the FP32 ONNX baseline on {n_pass}/{len(frames)} "
       f"frames at conf {CONF}.")
 print("This is a faithfulness check, not an accuracy measurement. For mAP run:")
 print(f"  MODE=engine ENGINE_PATH={ENGINE_PATH} DEVICE={DEVICE} "
-      f"python scripts/evaluate_engine_map.py")
+      f"python scripts/evaluate/evaluate_engine_map.py")

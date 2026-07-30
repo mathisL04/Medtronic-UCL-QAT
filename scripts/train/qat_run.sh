@@ -12,7 +12,7 @@
 # the copy-back is part of this script, not a manual afterthought -- a finished
 # QAT model must never live only on Geneva's /tmp.
 #
-# Usage:  DEVICE=1 EPOCHS=1 RUN_NAME=qat_smoke bash scripts/qat_run.sh
+# Usage:  DEVICE=1 EPOCHS=1 RUN_NAME=qat_smoke bash scripts/train/qat_run.sh
 set -o pipefail
 
 REPO=/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT
@@ -26,7 +26,7 @@ EPOCHS="${EPOCHS:-1}"
 
 SCRATCH="/tmp/zcemml1_qat"                 # local, off-quota, non-durable
 NFS_OUT="$REPO/runs_qat/$RUN_NAME"         # durable, small: final artifacts only
-TRAIN_SCRIPT="${TRAIN_SCRIPT:-scripts/train_qat.py}"
+TRAIN_SCRIPT="${TRAIN_SCRIPT:-scripts/train/train_qat.py}"
 
 stamp() { date '+%Y-%m-%d %H:%M:%S'; }
 

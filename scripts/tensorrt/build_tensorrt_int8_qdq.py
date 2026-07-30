@@ -11,7 +11,7 @@ from time import perf_counter
 # Settings
 # -----------------------------
 # Build a TensorRT INT8 engine from a Q/DQ (QuantizeLinear/DequantizeLinear) ONNX
-# produced by the QAT export (scripts/export_qat_onnx.py). This is EXPLICIT
+# produced by the QAT export (scripts/export/export_qat_onnx.py). This is EXPLICIT
 # quantization: the scales live in the Q/DQ nodes, so there is NO calibrator and
 # no calibration dataset -- TensorRT reads the scales straight from the graph.
 #

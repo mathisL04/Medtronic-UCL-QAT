@@ -15,7 +15,7 @@ import torch
 # QAT fine-tune of the V1 baseline checkpoint (docs/06). This is the SMOKE-RUN
 # form: 1 epoch by default, to prove plumbing, not to produce accuracy.
 #
-# Invoked through scripts/qat_run.sh, which supplies PROJECT (local scratch, so
+# Invoked through scripts/train/qat_run.sh, which supplies PROJECT (local scratch, so
 # per-epoch checkpoint churn stays off the 50 GB NFS quota) and copies the final
 # artifacts back to NFS on exit.
 MODEL_PATH = Path(

@@ -35,16 +35,16 @@ source ~/venvs/medtronic-trt/bin/activate
 ENG=models/yolo26n_sanoscience_full_left/baseline/fp32/best_fp32.engine    # swap to best_fp16.engine for V3
 
 # 1. BUILD -- PRECISION picks fp32 or fp16; writes best_<precision>.engine
-PRECISION=fp32 DEVICE=0 python scripts/build_tensorrt_engine.py
+PRECISION=fp32 DEVICE=0 python scripts/tensorrt/build_tensorrt_engine.py
 
 # 2. FAITHFULNESS -- engine vs ONNX detections (smoke test, not accuracy)
-ENGINE_PATH=$ENG DEVICE=0 python scripts/validate_engine_parity.py
+ENGINE_PATH=$ENG DEVICE=0 python scripts/evaluate/validate_engine_parity.py
 
 # 3. ACCURACY -- mAP via pycocotools. MODE=engine or MODE=onnx, same metric code
-MODE=engine ENGINE_PATH=$ENG DEVICE=0 python scripts/evaluate_engine_map.py
+MODE=engine ENGINE_PATH=$ENG DEVICE=0 python scripts/evaluate/evaluate_engine_map.py
 
 # 4. LATENCY -- batch=1, idle-gated, 10 repeats x 100 images
-ENGINE_PATH=$ENG DEVICE=0 BENCHMARK_REPEATS=10 python scripts/benchmark_latency_trt.py
+ENGINE_PATH=$ENG DEVICE=0 BENCHMARK_REPEATS=10 python scripts/benchmark/benchmark_latency_trt.py
 ```
 
 The only edits needed to run the whole chain on a different precision:
@@ -70,7 +70,7 @@ GATE_ALLOW_IDLE_MIB    0 = strict; tolerate dormant contexts above 0 (latency)
 
 ## Where precision is actually set
 
-All of it is these six lines in `scripts/build_tensorrt_engine.py`:
+All of it is these six lines in `scripts/tensorrt/build_tensorrt_engine.py`:
 
 ```python
 if PRECISION == "fp16":

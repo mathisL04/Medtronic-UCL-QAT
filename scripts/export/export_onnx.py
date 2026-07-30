@@ -23,7 +23,7 @@ MODEL_PATH = Path(
     "models/yolo26n_sanoscience_full_left/baseline/best.pt"
 )
 
-# imgsz is taken from the baseline, NOT assumed: scripts/benchmark_latency.py
+# imgsz is taken from the baseline, NOT assumed: scripts/benchmark/benchmark_latency.py
 # uses IMG_SIZE (default 640) and the baseline runs used 640.
 IMG_SIZE = int(os.environ.get("IMG_SIZE", 640))
 

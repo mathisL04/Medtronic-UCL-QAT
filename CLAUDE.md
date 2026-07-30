@@ -19,7 +19,7 @@ Every script in `scripts/` is a flat top-to-bottom program with a `# Settings` b
 
 `benchmark_latency.py` is the exception that matters: **`DEVICE` has no default and the script aborts if it is unset.** This is deliberate. The earlier benchmark `benchmark_fp32_geneva_ram_stable.py` defaults `DEVICE` to `0`, so any run outside the exact runbook silently used a different physical GPU than the one reported — which is how a headline latency number became unattributable. Making `DEVICE` strict removes that failure mode: no GPU specified, no run.
 
-Beyond that, the benchmark, evaluation, dataset-build, and subset scripts read a handful of **run-time knobs from environment variables**, each with a hardcoded default so a bare `python scripts/<name>.py` still runs. Override inline, e.g. `DEVICE=3 BENCHMARK_REPEATS=10 python scripts/benchmark_latency.py`. These set the device, run parameters, and workload partitioning — never the dataset or model paths, which stay hardcoded:
+Beyond that, the benchmark, evaluation, dataset-build, and subset scripts read a handful of **run-time knobs from environment variables**, each with a hardcoded default so a bare `python scripts/<name>.py` still runs. Override inline, e.g. `DEVICE=3 BENCHMARK_REPEATS=10 python scripts/benchmark/benchmark_latency.py`. These set the device, run parameters, and workload partitioning — never the dataset or model paths, which stay hardcoded:
 
 - `build_sanoscience_yolo_full_cork.py` — `START_EPISODE_INDEX`, `END_EPISODE_INDEX`, `SHARD_NAME`: partition the labelling workload across shards (`SHARD_NAME` also names the shard's temp-frames directory).
 - `benchmark_latency.py` — `DEVICE`, `SEED`, `IMG_SIZE`, `CONF`, `BENCHMARK_REPEATS`, `WARMUP_IMAGES`, plus the `GATE_UTIL_THRESHOLD` / `GATE_SAMPLES` / `GATE_INTERVAL_S` gating thresholds.
@@ -53,11 +53,11 @@ Cork is a shared server, so long jobs run detached under `nohup` and `nice`:
 ```bash
 # dataset build — one worker per non-overlapping episode range
 nohup nice -n 10 env START_EPISODE_INDEX=0 END_EPISODE_INDEX=400 SHARD_NAME=s0 \
-  python -u scripts/build_sanoscience_yolo_full_cork.py \
+  python -u scripts/data/build_sanoscience_yolo_full_cork.py \
   > /home/zcemml1/medtronic_qat_data/runs_sanoscience/logs/build_cork_s0.log 2>&1 &
 
 # training
-nohup python -u scripts/train_sanoscience_yolo_full_cork.py \
+nohup python -u scripts/train/train_sanoscience_yolo_full_cork.py \
   > /home/zcemml1/medtronic_qat_data/runs_sanoscience/logs/train_yolo26n_full_cork.log 2>&1 &
 
 # monitoring

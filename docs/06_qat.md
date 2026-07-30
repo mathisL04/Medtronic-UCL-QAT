@@ -68,21 +68,21 @@ WORKERS ...`. Structural paths (model, dataset) are hardcoded.
 ## Training / conversion scripts — what each does
 
 ```text
-scripts/train_qat.py                 The QAT fine-tune. QATTrainer(DetectionTrainer): get_model()
+scripts/train/train_qat.py                 The QAT fine-tune. QATTrainer(DetectionTrainer): get_model()
                                      override inserts fake-quant BEFORE ModelEMA; warm-start calib;
                                      best-epoch checkpoint callback (mto.save on mAP50-95 improve);
                                      reload gate (608 quantisers round-trip); PATIENCE early-stop.
-scripts/qat_run.sh                   Runner. Checkpoints to /tmp scratch (off the 50GB NFS quota),
+scripts/train/qat_run.sh                   Runner. Checkpoints to /tmp scratch (off the 50GB NFS quota),
                                      copies durable artifacts back to NFS on exit (best state +
                                      provenance + results). PY env override selects the venv.
-scripts/export_qat_onnx.py           QAT state -> Q/DQ ONNX via modelopt get_onnx_bytes_and_metadata
+scripts/export/export_qat_onnx.py           QAT state -> Q/DQ ONNX via modelopt get_onnx_bytes_and_metadata
                                      + Detect.export head mode (single [1,3,640,640]->[1,300,6]).
-scripts/build_tensorrt_int8_qdq.py   Q/DQ ONNX -> INT8 .engine. Explicit quantization: sets the INT8
+scripts/tensorrt/build_tensorrt_int8_qdq.py   Q/DQ ONNX -> INT8 .engine. Explicit quantization: sets the INT8
                                      flag, TensorRT reads scales from Q/DQ nodes, NO calibrator.
-scripts/evaluate_engine_map.py       Engine mAP (pycocotools, full val or val100).
-scripts/benchmark_latency_trt.py     Engine latency: CUDA-event kernel + pipeline, idle-gated.
-scripts/benchmark_latency_pytorch_qat.py / benchmark_latency_pytorch.py
-                                     PyTorch fake-quant / raw-model latency (reference, not deployment).
+scripts/evaluate/evaluate_engine_map.py       Engine mAP (pycocotools, full val or val100).
+scripts/benchmark/benchmark_latency_trt.py     Engine latency: CUDA-event kernel + pipeline, idle-gated.
+scripts/benchmark/benchmark_latency_pytorch.py   PyTorch raw-model latency (fp32/fp16/qat
+                                     fake-quant), reference only -- not deployment.
 ```
 
 ## Environment (V5 stack) -- a deliberate migration

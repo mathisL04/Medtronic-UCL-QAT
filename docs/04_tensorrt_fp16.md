@@ -19,13 +19,13 @@ everything  ENG=...best_fp32.engine  ->  ENG=...best_fp16.engine
 source ~/venvs/medtronic-trt/bin/activate
 ENG=models/yolo26n_sanoscience_full_left/baseline/fp16/best_fp16.engine
 
-PRECISION=fp16 DEVICE=0 python scripts/build_tensorrt_engine.py
-ENGINE_PATH=$ENG DEVICE=0 python scripts/validate_engine_parity.py            # expected FAIL, see below
-MODE=engine ENGINE_PATH=$ENG DEVICE=0 python scripts/evaluate_engine_map.py   # the accuracy claim
-ENGINE_PATH=$ENG DEVICE=0 BENCHMARK_REPEATS=10 python scripts/benchmark_latency_trt.py
+PRECISION=fp16 DEVICE=0 python scripts/tensorrt/build_tensorrt_engine.py
+ENGINE_PATH=$ENG DEVICE=0 python scripts/evaluate/validate_engine_parity.py            # expected FAIL, see below
+MODE=engine ENGINE_PATH=$ENG DEVICE=0 python scripts/evaluate/evaluate_engine_map.py   # the accuracy claim
+ENGINE_PATH=$ENG DEVICE=0 BENCHMARK_REPEATS=10 python scripts/benchmark/benchmark_latency_trt.py
 ```
 
-The build differs by exactly one line executing (`scripts/build_tensorrt_engine.py`):
+The build differs by exactly one line executing (`scripts/tensorrt/build_tensorrt_engine.py`):
 
 ```python
 if PRECISION == "fp16":

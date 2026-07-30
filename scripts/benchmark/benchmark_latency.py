@@ -20,7 +20,7 @@ from ultralytics import YOLO
 if "DEVICE" not in os.environ:
     sys.exit(
         "DEVICE is not set. Refusing to guess a GPU.\n"
-        "Set it explicitly, e.g.  DEVICE=0 python scripts/benchmark_latency.py"
+        "Set it explicitly, e.g.  DEVICE=0 python scripts/benchmark/benchmark_latency.py"
     )
 
 DEVICE = int(os.environ["DEVICE"])
