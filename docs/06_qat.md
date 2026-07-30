@@ -51,6 +51,41 @@ best.pt ─(train_qat.py)→ qat_modelopt_state_best.pt   [PyTorch, fake-quant, 
         ─(evaluate_engine_map.py / benchmark_latency_trt.py)→ mAP + latency
 ```
 
+## Running the conversion (commands)
+
+The QAT model uses **dedicated** export/build scripts — NOT the baseline
+`export_onnx.py` / `build_tensorrt_engine.py`. Reason (see "Export recipe" below):
+the QAT model is a modelopt fake-quant state and its ONNX carries Q/DQ nodes, so it
+needs modelopt's blessed export and a calibrator-free INT8 build. Defaults point at
+`models/yolo26n_sanoscience_full_left/qat/v6_final/`; override with the env vars shown.
+
+```bash
+M=models/yolo26n_sanoscience_full_left/qat/v6_final
+
+# 1) QAT state -> Q/DQ ONNX      (Py3.11 export venv; CPU is fine -- it is a trace)
+DEVICE=cpu ~/venvs/medtronic-qat-p311/bin/python scripts/export/export_qat_onnx.py
+#   in:  $M/qat_modelopt_state_best.pt   (env QAT_STATE)   out: $M/best_qat.onnx (env OUT_ONNX)
+
+# 2) Q/DQ ONNX -> INT8 engine    (TensorRT venv; IDLE GPU -- the build autotunes on the live GPU)
+DEVICE=<idle_gpu> ~/venvs/medtronic-trt/bin/python scripts/tensorrt/build_tensorrt_int8_qdq.py
+#   in:  $M/best_qat.onnx (env ONNX_PATH)   out: $M/best_qat_int8.engine (env ENGINE_PATH)
+
+# 3) measure (SHARED scripts -- these work on any engine, baseline or QAT)
+MODE=engine ENGINE_PATH=$M/best_qat_int8.engine DEVICE=<gpu> \
+  ~/venvs/medtronic-trt/bin/python scripts/evaluate/evaluate_engine_map.py            # mAP (pycocotools)
+ENGINE_PATH=$M/best_qat_int8.engine DEVICE=<idle_gpu> BENCHMARK_REPEATS=10 \
+  ~/venvs/medtronic-trt/bin/python scripts/benchmark/benchmark_latency_trt.py         # latency
+```
+
+Baseline vs QAT scripts (same idea, different mechanism for the quantised model):
+
+```text
+step            baseline (best.pt)                 QAT (v6 state)
+export -> ONNX  scripts/export/export_onnx.py      scripts/export/export_qat_onnx.py
+build  -> eng   scripts/tensorrt/build_tensorrt_engine.py   scripts/tensorrt/build_tensorrt_int8_qdq.py
+measure         scripts/evaluate/* + scripts/benchmark/*    (shared -- same scripts)
+```
+
 ## Parameters and setup
 
 ```text
