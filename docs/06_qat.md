@@ -1,187 +1,187 @@
-# Quantisation-Aware Training
+# Quantisation-Aware Training (V5)
 
-QAT fine-tunes the converged V1 baseline with fake-quant nodes so the INT8 scales
-are *learned*, not just calibrated (PTQ). It is the V5 stage.
+QAT fine-tunes the converged V1 baseline (`best.pt`) with fake-quant nodes so the
+INT8 scales are **learned**, not just calibrated (PTQ). The goal is INT8 accuracy
+that approaches FP16/FP32 — recovering the accuracy PTQ loses.
 
 ## Where QAT runs, where it is measured
 
 ```text
 train:    PyTorch  -- fake-quant / Q-DQ nodes, optimiser + labelled data
 convert:  PyTorch -> ONNX (Q/DQ) -> TensorRT INT8 engine
-measure:  TensorRT -- accuracy (mAP) and, above all, latency
+measure:  TensorRT -- accuracy (mAP) and latency
 ```
 
 QAT is a training-time technique: it runs in PyTorch, never on TensorRT. TensorRT
-is inference-only -- its job is to fold the learned scales into a real INT8 engine
-that we then benchmark. We do **not** "train on TensorRT".
+is inference-only — its job is to fold the learned scales into a real INT8 engine.
+We do **not** "train on TensorRT".
 
-## Fine-tune parameters
+## Method
 
-Fine-tuning is training with a small learning rate: the weights are already
-converged, so a high LR would retrain rather than adapt. Use a low LR that decays
-to near-zero -- "small" is the start point, "decay" is the shape (not alternatives).
+**1. Fake quantisation.** `mtq.quantize(model, INT8_DEFAULT_CFG, forward_loop)`
+inserts 608 `TensorQuantizer` nodes (253 active with scales) that simulate INT8 in
+the forward pass. Backprop uses the **Straight-Through Estimator** (gradient passes
+through the round as identity) so the network can train through the quantisers. The
+fake-quant is kept ON during validation too, so the per-epoch mAP predicts the
+deployed engine.
+
+**2. Warm-start calibration.** Before fine-tuning, quantiser ranges are initialised
+from **128 train frames (seed 42, one per episode)** — NVIDIA's step 1. It is a warm
+start, not PTQ: training then adapts the scales over the whole train split.
+
+**3. Fine-tuning from a converged model.** The weights are already trained, so a
+**low, decaying LR** (`lr0=1e-3`, ~1% of V1's 0.01; `lrf=0.01` anneals to ~1e-5).
+A high LR would retrain rather than adapt.
+
+**4. Early stopping with patience** (`PATIENCE` env knob, default 0 = off).
+`EPOCHS` becomes a **ceiling**; Ultralytics' `EarlyStopping` stops after `PATIENCE`
+epochs with no improvement in the monitored metric, and the best-epoch checkpoint is
+kept. In this Ultralytics (8.4.90) the detection `fitness` weights are `[0,0,0,1.0]`
+= **pure mAP50-95**, so both the early-stopping and the best checkpoint track
+**mAP50-95** (not the old blended fitness, not mAP50). The rule is "no NEW best for
+`PATIENCE` epochs", which tolerates the noisy per-epoch wobble a naive
+"consecutive-equal" test could not.
+
+## The process (end to end)
 
 ```text
-lr0     ~1e-3 or lower   ~1% of the full-training lr0 (0.01); NOT yet set in the
-                         script -- it currently inherits Ultralytics' 0.01
-lrf     keep default     decay tail (cosine/linear to near-zero) -- wanted
-epochs  by convergence   short fine-tune; choose when mAP stops improving, NOT 2^n
-batch   16               power-of-two is a mild GPU-efficiency nicety, not a rule
-imgsz   640              LOCKED: multiple of 32 (YOLO stride) and the engine's
-                         fixed input -- do not change
-amp     False            fake-quant scales are FP32; FP16 autocast corrupts them
-                         (deviation from V1, which trained with amp)
-workers 0 for the smoke  avoids the fork/overcommit OSError-12 on the shared box
-layers  unchanged        QAT wraps existing layers with fake-quant; it never
-                         adds/removes any. Architecture is fixed.
+best.pt ─(train_qat.py)→ qat_modelopt_state_best.pt   [PyTorch, fake-quant, mto.save]
+        ─(export_qat_onnx.py)→ best_qat.onnx          [Q/DQ ONNX, Py3.11 venv]
+        ─(build_tensorrt_int8_qdq.py)→ best_qat_int8.engine  [INT8, no calibrator, TRT venv]
+        ─(evaluate_engine_map.py / benchmark_latency_trt.py)→ mAP + latency
 ```
 
-Power-of-two note: it matters *mildly* for batch (memory/tensor-core alignment)
-and not at all for epochs. The only hard sizing rule is imgsz = multiple of 32,
-which 640 already satisfies.
+## Parameters and setup
+
+```text
+lr0      1e-3     low fine-tune LR (env LR0)             amp      False  (fake-quant scales are FP32)
+lrf      0.01     decay tail -> ~1e-5 (env LRF)          batch    16
+EPOCHS   ceiling  (env; V5=10 fixed, V6=50)              imgsz    640    LOCKED (stride 32 + engine input)
+PATIENCE 0=off    early-stop epochs (env; V6=10)         workers  0      (fork/overcommit guard)
+quant    INT8_DEFAULT_CFG  608 quant / 253 scales        warmup   3      (Ultralytics default)
+calib    128 train frames, seed 42 (MaxCalibrator)       device   single A100, Geneva (env DEVICE)
+```
+
+Config is by env knobs (repo convention): `EPOCHS PATIENCE LR0 LRF DEVICE RUN_NAME
+WORKERS ...`. Structural paths (model, dataset) are hardcoded.
+
+## Training / conversion scripts — what each does
+
+```text
+scripts/train_qat.py                 The QAT fine-tune. QATTrainer(DetectionTrainer): get_model()
+                                     override inserts fake-quant BEFORE ModelEMA; warm-start calib;
+                                     best-epoch checkpoint callback (mto.save on mAP50-95 improve);
+                                     reload gate (608 quantisers round-trip); PATIENCE early-stop.
+scripts/qat_run.sh                   Runner. Checkpoints to /tmp scratch (off the 50GB NFS quota),
+                                     copies durable artifacts back to NFS on exit (best state +
+                                     provenance + results). PY env override selects the venv.
+scripts/export_qat_onnx.py           QAT state -> Q/DQ ONNX via modelopt get_onnx_bytes_and_metadata
+                                     + Detect.export head mode (single [1,3,640,640]->[1,300,6]).
+scripts/build_tensorrt_int8_qdq.py   Q/DQ ONNX -> INT8 .engine. Explicit quantization: sets the INT8
+                                     flag, TensorRT reads scales from Q/DQ nodes, NO calibrator.
+scripts/evaluate_engine_map.py       Engine mAP (pycocotools, full val or val100).
+scripts/benchmark_latency_trt.py     Engine latency: CUDA-event kernel + pipeline, idle-gated.
+scripts/benchmark_latency_pytorch_qat.py / benchmark_latency_pytorch.py
+                                     PyTorch fake-quant / raw-model latency (reference, not deployment).
+```
 
 ## Environment (V5 stack) -- a deliberate migration
 
-QAT training and QAT export run on a **different** venv from the FP32/FP16/PTQ
-work, and the split is forced, not incidental:
-
 ```text
 V2-V4 (TensorRT stages):  ~/venvs/medtronic-trt        Py3.9,  TensorRT 10.16.1.11
-V5 QAT train + export:    ~/venvs/medtronic-qat-p311   Py3.11, torch 2.7.0+cu128,
-                                                        modelopt 0.33.1
+V5 QAT train + export:    ~/venvs/medtronic-qat-p311   Py3.11, torch 2.7.0+cu128, modelopt 0.33.1
 (superseded)              ~/venvs/medtronic-qat         Py3.9,  modelopt 0.29.0
 ```
 
-Why the migration off Py3.9 / modelopt 0.29:
+Forced, not incidental: modelopt 0.29 **cannot export** this model to Q/DQ ONNX
+under any torch; modelopt >= 0.31 fixes it but needs Python >= 3.10, and 0.29 was the
+last Py3.9 build. `train_qat.py` runs UNCHANGED under 0.33.1 (same 608/253, reload
+gate passes) — the migration touched the environment, not the training logic.
+
+## Results -- V5 (fixed-10) vs V6 (early-stopping)
+
+Two runs, identical except the epoch/patience regime. Metrics are the **Ultralytics
+fake-quant validation mAP** per epoch (full val, conf 0.001).
 
 ```text
-- modelopt 0.29 CANNOT export this model to Q/DQ ONNX under ANY torch version
-  (see root cause below). It is a dead end for deployment, not just slow.
-- modelopt >= 0.31 fixes the export path but requires Python >= 3.10, so the
-  training venv had to move to Py3.11 as well. 0.29 was the last Py3.9 build.
-- train_qat.py runs UNCHANGED under 0.33.1: same 608 quantisers / 253 with
-  scales, reload gate passes, losses coherent. The migration touched the
-  environment, not the training logic. qat_run.sh takes PY as an env override
-  so the venv can move without editing the script.
+              regime                 epochs   runtime   best mAP50-95   stop reason
+V5   EPOCHS=10 (fixed)                 10      1h41m     0.7427 @ ep10   hit fixed limit (still climbing)
+V6   EPOCHS=50, PATIENCE=10 (early)    35      6h41m     0.7593 @ ep25   PLATEAU (patience fired)
 ```
 
-The engine build (Q/DQ -> INT8) still happens in the TensorRT venv; the ONNX is a
-portable hand-off between the two.
+**Fluctuation (mAP50-95):**
+```text
+       best         min     max     mean    std     range
+V5   0.7427@ep10   0.6614  0.7427  0.7091  0.0256  0.0813
+V6   0.7593@ep25   0.6096  0.7593  0.7107  0.0346  0.1496   (noisier: LR stretched over 50-ep schedule)
+```
+
+**vs the precision bars (deployable pycocotools, for reference):**
+```text
+FP32 / FP16 engine   0.7747 / 0.7748   accuracy leader
+V6 QAT INT8          0.7593*           beats PTQ, ~0.015 below FP16   (*fake-quant metric; engine pending)
+V4 PTQ INT8          0.7571            the bar V6 CLEARED (+0.0022)
+V5 QAT INT8 (engine) 0.7437            undertrained
+```
+
+Takeaways: **~25 epochs is the real convergence point** (V5's fixed 10 was
+undertrained). **V6 recovered accuracy past PTQ** — the win QAT is meant to deliver —
+but stays below FP16/FP32, as expected for 8-bit vs 16-bit. Early stopping found the
+plateau automatically instead of guessing the epoch count.
+
+**Evolution graph:** `reports/qat_training/qat_v5_v6_accuracy.png`
+(mAP50-95 vs epoch, both runs, best epochs marked, patience window shaded, precision
+bars overlaid). Full per-epoch tables + stats: `reports/qat_training/README.md`.
+
+**Artifacts (durable, on NFS + force-added to git):**
+```text
+runs_qat/qat_v6/qat_modelopt_state_best.pt   ep25 best (the V6 deployable model)
+runs_qat/qat_v6/{results.csv, qat_provenance.json, args.yaml}
+runs_qat/qat_v5/...                           the V5 run
+```
+
+**Latency** is unchanged between V5 and V6 (graph-determined, not weight-dependent):
+INT8 kernel ~1.39-1.43 ms, ~57x faster than the PyTorch fake-quant forward (~80 ms).
+Full distributions: `reports/v5_latency/`.
 
 ## Export recipe (QAT fake-quant -> Q/DQ ONNX -> TensorRT INT8)
 
-This was hard-won and is fragile. The exact working path:
-
-```text
-export:  scripts/export_qat_onnx.py   (run with the Py3.11 venv)
-build:   scripts/build_tensorrt_int8_qdq.py   (run with the TensorRT venv)
-```
-
-**Root cause of the original failure -- it is the API, not the torch version.**
-The obvious approach, `torch.onnx.export()` under modelopt's `export_torch_mode()`,
-FAILS: the quantiser scale `_amax` traces as a graph input where modelopt's INT8
-symbolic needs an `onnx::Constant` -> `SymbolicValueError: got 'prim::Param'`.
-This fails identically on torch 2.6, 2.7 and 2.8, and on BOTH the legacy and
-dynamo exporter backends. **Do not chase a torch downgrade** -- it does nothing.
-
-**The fix is modelopt's blessed API**, which wraps the export in
-`torch.inference_mode` with the right graph post-processing:
+Hard-won and fragile. **Root cause of the original failure — the API, not torch.**
+`torch.onnx.export()` under `export_torch_mode()` FAILS: the quantiser scale `_amax`
+traces as a graph input where modelopt's INT8 symbolic needs an `onnx::Constant`
+(`SymbolicValueError: got 'prim::Param'`) — identical on torch 2.6/2.7/2.8 and both
+exporter backends. **The fix is modelopt's blessed API:**
 
 ```text
 from modelopt.torch._deploy.utils.torch_onnx import get_onnx_bytes_and_metadata
 payload, _ = get_onnx_bytes_and_metadata(model, dummy, onnx_opset=17)
-OnnxBytes.from_bytes(payload).write_to_disk(dir)
 ```
 
-**The dep set must be pinned exactly -- each pin fixes a real failure:**
-
+**Exact pinned deps (each fixes a real failure):**
 ```text
-modelopt   0.33.1     >=0.31 for the fixed export; needs Py>=3.10
-torch      2.7.0                (version is NOT the discriminator; any works with 0.33)
-onnx       1.17.0     onnx 1.22 REMOVED onnx.reference.custom_element_types, which
-                      modelopt imports -> ImportError at import time
-numpy      <2         numpy 2.x breaks modelopt's onnx importer
-plus:      onnxruntime, onnx_graphsurgeon, polygraphy   (the modelopt [onnx] extra,
-           from --extra-index-url https://pypi.nvidia.com)
+modelopt 0.33.1 (>=0.31, needs Py>=3.10) · torch 2.7.0 · onnx 1.17.0 (1.22 removes
+onnx.reference.custom_element_types -> import error) · numpy <2 (2.x breaks modelopt's
+importer) · onnxruntime, onnx_graphsurgeon, polygraphy  (modelopt [onnx] extra, pypi.nvidia.com)
 ```
 
-**Head export mode gives a single deployment output.** Restored raw, YOLO26n's
-forward returns 11 tensors ([1,300,6] detections + 10 one2many/one2one auxiliary
-heads). Setting `Detect.export=True` (+ eval, requires_grad off) collapses it to
-the single `[1,3,640,640] -> [1,300,6]` graph.
-
-**The 255 -> 207 Q/DQ drop is CORRECT, not a regression.** Without head export
-mode the graph has ~255 Q/DQ pairs; with it, ~207. The difference is the
-one2many auxiliary training heads being pruned -- their quantisers leave the graph
-with them. Only the deployment path (one2one + backbone) stays quantised.
-
-**TensorRT INT8 build is calibrator-free.** A Q/DQ ONNX is explicit quantization:
-`config.set_flag(trt.BuilderFlag.INT8)` and TensorRT reads scales from the Q/DQ
-nodes. (Contrast the PTQ path in build_tensorrt_engine.py, which needs an
-IInt8Calibrator + calibration data.) Built cleanly on TRT 10.16.1.11.
-
-## Results (V5 -- first real fine-tune, 10 epochs)
-
-Run: 10 epochs, lr0 1e-3 / lrf 0.01, warmup 3, amp off, batch 16, ~1h41m on A100
-(GPU 1). State: `runs_qat/qat_v5/qat_modelopt_state_best.pt` (best epoch = 10).
-
-**Accuracy** (full 6,449-img val, pycocotools) vs the other precisions:
-
-```text
-                mAP50    mAP50-95
-V2 FP32         0.9325   0.7747
-V3 FP16         0.9327   0.7748
-V4 INT8 PTQ     0.9282   0.7571
-V5 INT8 QAT     0.9283   0.7437   <- this run
-```
-
-QAT did **not** recover accuracy: mAP50-95 (0.7437) is BELOW both PTQ and FP32.
-Cause: **undertrained** -- still climbing at epoch 10 (mAP50-95 0.684 ep1 -> 0.743
-ep10, best = last epoch). NVIDIA's recipe is ~10% of the original schedule with an
-annealing LR; note the 30% warmup on 10 epochs also re-perturbs the converged
-model. Calibration is `MaxCalibrator`; histogram/percentile is NVIDIA-preferred
-and untried.
-
-**Latency** (batch=1, val100, CUDA-event; engine numbers idle-gated):
-
-```text
-                        kernel(GPU) median   total median   FPS(total)
-V2 FP32 engine              2.019 ms            3.736 ms       267.7
-V3 FP16 engine              1.137 ms            2.922 ms       342.2
-V5 INT8 QAT engine          1.429 ms            3.789 ms       263.9
-PyTorch QAT fake-quant     81.427 ms           83.958 ms        11.9   <- NOT deployable
-```
-
-Final same-session distribution run (GPU 2, idle/exclusive, N=1000), compute level:
-**INT8 kernel 1.386 ms** (mean 1.397, std 0.033, min 1.379, max 1.669, p95 1.453, p99 1.536);
-**PyTorch fake-quant forward 80.05 ms** (mean 80.11, std 0.48, min 79.30, max 86.03, p95 80.74,
-p99 81.81) -- ~57.7x the kernel. Run-to-run the kernel sits at ~1.39-1.43 ms (within the ~2.4%
-std). Full distributions + raw provenance: `reports/v5_latency/`.
+**Head export mode** (`Detect.export=True`) collapses YOLO26n's 11-tensor forward to
+the single `[1,3,640,640]->[1,300,6]` graph; the Q/DQ count drops 255->207 (the
+one2many auxiliary heads and their quantisers are pruned — correct). **TensorRT INT8
+build is calibrator-free** (explicit Q/DQ; `set_flag(INT8)`, scales read from nodes).
 
 ## Latency analysis -- why INT8 is NOT faster than FP16 here
 
-INT8 kernel (1.429 ms) is **slower** than FP16 (1.137 ms). Investigated and settled:
-
-- **NOT FP32 fallback.** Rebuilding the same Q/DQ ONNX with INT8+FP16 moved 56
-  layers FP32->FP16 (`144 INT8 / 113 FP32` -> `144 INT8 / 56 FP16 / 40 FP32`) but
-  the kernel did **not** change (1.429 -> 1.440). Disproves the fallback theory.
-- **Explicit-quantization semantics** (NVIDIA): in a Q/DQ network TensorRT is
-  forbidden from swapping Q/DQ-dictated INT8 for faster FP16 -- so the INT8+FP16
-  flag *cannot* help, exactly the observed null result.
-- **Real cause: Q/DQ reformat overhead on a launch-bound tiny model.** YOLO26n is
-  2.5M params / 5.8 GFLOPs; on A100 each layer is memory/launch-bound, not
-  compute-bound, so INT8's arithmetic advantage is ~nil while the reformat kernels
-  at INT8<->other boundaries add cost. Uniform-precision FP16 has no reformats.
-
-**Deployment implication:** on A100, **FP16 is the right precision for this model**.
-INT8/QAT pays off on INT8-accelerated edge HW (Jetson/DLA) or larger compute-bound
-models. The PyTorch fake-quant 81 ms is the eager Q/DQ-in-FP32 simulation (~57x the
-deployed engine) -- it is *why* deployment runs on TensorRT, not a number to compare.
+INT8 kernel (1.429 ms) > FP16 (1.137 ms). Settled: **NOT FP32 fallback** (rebuilding
+INT8+FP16 moved 56 layers FP32->FP16 but the kernel didn't change, 1.429->1.440);
+**explicit-quantization semantics** forbid TensorRT from swapping Q/DQ-dictated INT8
+for faster FP16; the **real cause is Q/DQ reformat overhead on a launch-bound tiny
+model** (YOLO26n 2.5M params — INT8's arithmetic edge is ~nil, reformats add cost).
+**On A100, FP16 is the right precision for this model**; INT8/QAT pays off on
+INT8-accelerated edge HW (Jetson/DLA) or larger compute-bound models.
 
 ## Open items
 
-- **Longer QAT fine-tune to plateau** -- accuracy is the real gap; best-epoch
-  checkpoint already keeps the best.
-- Try **histogram/percentile calibration** (vs the current MaxCalibrator); reduce warmup.
+- **Export V6** best state -> INT8 engine -> confirm the deployable pycocotools mAP
+  (~0.759 expected) and lock in the "beats PTQ" result on the same metric basis.
+- Try **histogram/percentile calibration** (vs MaxCalibrator); consider reducing warmup.
 - INT8+FP16 build engine kept in scratch (does not help latency; not shipped).
-- Two-venv ergonomics + the INT8-only build flag are documented on the conversion page.
