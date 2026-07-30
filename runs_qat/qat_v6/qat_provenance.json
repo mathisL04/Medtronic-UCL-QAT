@@ -1,0 +1,19 @@
+{
+  "timestamp_utc": "2026-07-28T21:23:25.067051+00:00",
+  "run_name": "qat_v6",
+  "epochs": 50,
+  "device": "1",
+  "amp": false,
+  "source_checkpoint": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/best.pt",
+  "source_sha256": "ee9c775c8ab27caf0abbaa23c3ac34dac9a1a9c7eb18745d6e3d4ab1f2a69fb7",
+  "quant_config": "INT8_DEFAULT_CFG",
+  "n_calib_frames": 128,
+  "warm_start_source": "/home/zcemml1/medtronic_qat_data/datasets/sanoscience_yolo_full_nonexpert_stereo/images/train",
+  "warm_start_seed": 42,
+  "quantizers_inserted": 608,
+  "quantizers_after_restore": 608,
+  "quantizers_with_scales_after_restore": 253,
+  "reload_gate": "PASSED",
+  "torch": "2.7.0+cu128",
+  "single_gpu": true
+}
