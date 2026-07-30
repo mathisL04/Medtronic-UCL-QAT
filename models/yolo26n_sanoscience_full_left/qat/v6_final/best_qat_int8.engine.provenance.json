@@ -1,0 +1,38 @@
+{
+  "timestamp_utc": "2026-07-30T16:50:52.729924+00:00",
+  "stage": "tensorrt_int8_qdq_build",
+  "tensorrt_version": "10.16.1.11",
+  "device": "2",
+  "onnx_path": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/qat/v6_final/best_qat.onnx",
+  "onnx_sha256": "dc44838a0e09d5e030e9b05144d3cea6c21bf82ae84979f2ed89874fdee42e60",
+  "engine_path": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/qat/v6_final/best_qat_int8.engine",
+  "engine_sha256": "f45bd47f99cd86759234f4f1fd606d422204bc5a86e7a684bb8e6a9eb6e778a4",
+  "engine_bytes": 4338292,
+  "workspace_gb": 8.0,
+  "quantization": "explicit Q/DQ (no calibrator)",
+  "num_layers": 2246,
+  "io": [
+    {
+      "name": "x",
+      "mode": "INPUT",
+      "shape": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "dtype": "FLOAT"
+    },
+    {
+      "name": "out",
+      "mode": "OUTPUT",
+      "shape": [
+        1,
+        300,
+        6
+      ],
+      "dtype": "FLOAT"
+    }
+  ],
+  "build_seconds": 65.59473709505983
+}
