@@ -86,6 +86,29 @@ build  -> eng   scripts/tensorrt/build_tensorrt_engine.py   scripts/tensorrt/bui
 measure         scripts/evaluate/* + scripts/benchmark/*    (shared -- same scripts)
 ```
 
+### Why the export takes TWO inputs (best.pt + the QAT state)
+
+`export_qat_onnx.py` fetches **both** the baseline `best.pt` *and* the QAT state. This
+is not a duplicate -- the QAT state is a modelopt **state (a recipe + weights), not a
+standalone loadable model**, so it has to be replayed onto a base architecture:
+
+```python
+model = YOLO(best.pt).model      # 1. build the ARCHITECTURE (structure) from best.pt
+mto.restore(model, qat_state)    # 2. replay onto it: RE-INSERT the 608 quantizers +
+                                 #    LOAD the fine-tuned weights + learned INT8 scales
+```
+
+Think of it as a puzzle: **best.pt is the frame + original pieces; the QAT state (a)
+ADDS new pieces -- the 608 quantiser nodes best.pt never had -- and (b) SWAPS the
+weights for the fine-tuned ones + the learned scales.** So best.pt supplies the
+*skeleton*, the QAT state supplies the *quantisers and the trained weights/scales*;
+best.pt's own weights are loaded then overwritten. Neither file alone is enough.
+
+Why modelopt works this way: the quantised model uses dynamically-generated classes
+(`QuantConv2d`, ...) that Python's pickler cannot reload standalone -- which is why
+`train_qat.py` disables Ultralytics' native `save_model` and uses `mto.save`/`restore`.
+Saving the state and replaying it onto a fresh base model sidesteps that entirely.
+
 ## Parameters and setup
 
 ```text
