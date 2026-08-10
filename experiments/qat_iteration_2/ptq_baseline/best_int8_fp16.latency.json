@@ -1,0 +1,1 @@
+{"engine":"best_int8_fp16.engine","gpu":0,"kernel_median_ms":1.126,"exclusive_gate_lines":1}

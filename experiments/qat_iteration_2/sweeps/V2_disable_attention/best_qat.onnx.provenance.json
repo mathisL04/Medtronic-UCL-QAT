@@ -1,0 +1,22 @@
+{
+  "timestamp_utc": "2026-08-07T23:17:49.611894+00:00",
+  "stage": "qat_onnx_export",
+  "modelopt": "0.33.1",
+  "torch": "2.7.0+cu128",
+  "base_model": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/baseline/best.pt",
+  "qat_state": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/qat_iteration_2/sweeps/V2_disable_attention/qat_modelopt_state_best.pt",
+  "qat_state_sha256": "5293c2c3fee83fa681832bdf27848e064608d0447182c6dee29c476b0df349b2",
+  "out_onnx": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/qat_iteration_2/sweeps/V2_disable_attention/best_qat.onnx",
+  "out_onnx_sha256": "3e43ab59f64efe3992d67779f29e801335917ca54702398e7c7b2bcd9bad669e",
+  "imgsz": 640,
+  "batch": 1,
+  "opset": 17,
+  "device": "1",
+  "quantizers_restored": 608,
+  "quantizers_with_scales": 221,
+  "onnx_nodes_total": 1333,
+  "quantize_linear_nodes": 175,
+  "dequantize_linear_nodes": 175,
+  "num_outputs": 1,
+  "export_seconds": 4.573943659896031
+}

@@ -1,0 +1,32 @@
+{
+  "timestamp_utc": "2026-08-07T07:54:27.838368+00:00",
+  "mode": "engine",
+  "target": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/qat_iteration_2/sweeps/V2_lrf_0.1/best_qat_int8.engine",
+  "target_sha256": "bc47740a905f52644c1cb13b2e761d5b9689f8dba852e623ce61204933aab4f3",
+  "device": "0",
+  "eval_set": "full",
+  "img_dir": "/home/zcemml1/medtronic_qat_data/datasets/sanoscience_yolo_full_nonexpert_stereo/images/val",
+  "n_images": 6449,
+  "n_gt_boxes": 14517,
+  "n_detections": 48335,
+  "conf": 0.001,
+  "img_size": 640,
+  "max_dets": 300,
+  "metric": "pycocotools COCOeval bbox",
+  "map50": 0.9346815144516204,
+  "map50_95": 0.767100038489059,
+  "coco_stats": [
+    -1.0,
+    0.9346815144516204,
+    0.8448874345399054,
+    0.5348166201250024,
+    0.7555177124972111,
+    0.8176239743149788,
+    0.3722876627402355,
+    0.8172487428532065,
+    0.8219329062478474,
+    0.6280228758169935,
+    0.8003236245954692,
+    0.8740756361591451
+  ]
+}

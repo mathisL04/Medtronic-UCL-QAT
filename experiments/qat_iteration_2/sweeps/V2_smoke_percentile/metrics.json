@@ -1,0 +1,22 @@
+{
+  "version": "V2_smoke_percentile",
+  "knobs": {
+    "version": "V2_smoke_percentile",
+    "lr0": "1e-3",
+    "epochs": "1",
+    "patience": "10",
+    "batch": "16",
+    "n_calib": "128",
+    "weight_axis": "0",
+    "disable_layers": "",
+    "calib_method": "percentile",
+    "calib_percentile": "99.99",
+    "calib_num_bins": "2048"
+  },
+  "map50": 0.854065976900251,
+  "map50_95": 0.6403177390088083,
+  "kernel_ms": null,
+  "size_mb": 4.36,
+  "qdq_pairs": 207,
+  "eval_n": 100
+}

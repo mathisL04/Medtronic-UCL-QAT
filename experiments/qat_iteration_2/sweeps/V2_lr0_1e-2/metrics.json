@@ -1,0 +1,22 @@
+{
+  "version": "V2_lr0_1e-2",
+  "knobs": {
+    "version": "V2_lr0_1e-2",
+    "lr0": "1e-2",
+    "epochs": "50",
+    "patience": "10",
+    "batch": "16",
+    "n_calib": "128",
+    "weight_axis": "0",
+    "disable_layers": "",
+    "calib_method": "max",
+    "calib_percentile": "99.99",
+    "calib_num_bins": "2048"
+  },
+  "map50": 0.9321796097626296,
+  "map50_95": 0.764688491362121,
+  "kernel_ms": 1.56,
+  "size_mb": 4.35,
+  "qdq_pairs": 207,
+  "eval_n": 6449
+}

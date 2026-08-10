@@ -1,0 +1,6 @@
+*.log
+*.engine
+*.pt
+*.onnx
+*.calib_cache
+_qat_onnx_tmp/

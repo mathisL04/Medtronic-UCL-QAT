@@ -1,0 +1,4 @@
+{ "version":"V2_disable_attention", "lr0":"1e-3", "lrf":"0.01", "epochs":"50", "patience":"10",
+  "batch":"16", "n_calib":"128", "weight_axis":"0",
+  "disable_layers":"*model.10*,*model.22*", "calib_method":"max",
+  "calib_percentile":"99.99", "calib_num_bins":"2048" }

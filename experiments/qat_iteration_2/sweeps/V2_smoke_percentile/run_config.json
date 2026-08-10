@@ -1,0 +1,4 @@
+{ "version":"V2_smoke_percentile", "lr0":"1e-3", "epochs":"1", "patience":"10",
+  "batch":"16", "n_calib":"128", "weight_axis":"0",
+  "disable_layers":"", "calib_method":"percentile",
+  "calib_percentile":"99.99", "calib_num_bins":"2048" }
