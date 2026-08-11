@@ -1,0 +1,42 @@
+{
+  "source": "trtexec --exportProfile",
+  "anchor_ms": 1.209,
+  "regions": [
+    {
+      "region": "Backbone (conv 0-9)",
+      "jobs": 57,
+      "ms": 0.31619885100010986,
+      "share": 0.26153751116634394
+    },
+    {
+      "region": "Attention \u2014 backbone (10)",
+      "jobs": 14,
+      "ms": 0.06543119191661988,
+      "share": 0.05412009256957805
+    },
+    {
+      "region": "Neck / FPN-PAN (11-21)",
+      "jobs": 54,
+      "ms": 0.2754374942969973,
+      "share": 0.22782257592803748
+    },
+    {
+      "region": "Attention \u2014 head (22)",
+      "jobs": 16,
+      "ms": 0.07837267354585739,
+      "share": 0.06482437844984068
+    },
+    {
+      "region": "Detect head (23)",
+      "jobs": 33,
+      "ms": 0.17286729439437562,
+      "share": 0.14298370090519075
+    },
+    {
+      "region": "NMS / post-proc + foreign-fused",
+      "jobs": 71,
+      "ms": 0.30069249484604016,
+      "share": 0.24871174098100923
+    }
+  ]
+}
