@@ -1,0 +1,1962 @@
+[
+ {
+  "ms": 0.0342442,
+  "pct": 1.7924145369790407,
+  "region": "NMS",
+  "prec": "FP16",
+  "myl": true,
+  "name": "__myl_Topk_myl229_2"
+ },
+ {
+  "ms": 0.0165425,
+  "pct": 0.8658697670839378,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.0.conv.weight + /model.0/conv/weight_quantizer/QuantizeLinear + /model.0/conv/Conv + PWN(/model.0/act/Sigmoid, /model.0/act/Mul)"
+ },
+ {
+  "ms": 0.013254,
+  "pct": 0.6937426563657554,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.2.m.0.cv2.conv.weight + /model.2/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.2/m.0/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.013206,
+  "pct": 0.6912302338891027,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.1.conv.weight + /model.1/conv/weight_quantizer/QuantizeLinear + /model.1/conv/Conv + PWN(/model.1/act/Sigmoid, /model.1/act/Mul)"
+ },
+ {
+  "ms": 0.0129958,
+  "pct": 0.6802279171267606,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv2.2.0.conv.weight + /model.23/one2one_cv2.2/one2one_cv2.2.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.2/one2one_cv2.2.0/conv/Conv + PWN(/model.23/one2one_cv2.2/one2one_cv2.2.0/act/Sigmoid, /model.23/one2one_cv2.2/one2one_cv2.2.0/act/Mul)"
+ },
+ {
+  "ms": 0.0122683,
+  "pct": 0.6421490139649915,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.5.conv.weight + /model.5/conv/weight_quantizer/QuantizeLinear + /model.5/conv/Conv + PWN(/model.5/act/Sigmoid, /model.5/act/Mul)"
+ },
+ {
+  "ms": 0.0121671,
+  "pct": 0.6368519899100485,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.2.cv1.conv.weight + /model.2/cv1/conv/weight_quantizer/QuantizeLinear + /model.2/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.0121361,
+  "pct": 0.6352293837272103,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "Reformatting CopyNode for Input Tensor 0 to model.2.cv2.conv.weight + /model.2/cv2/conv/weight_quantizer/QuantizeLinear + /model.2/cv2/conv/Conv + PWN(/model.2/cv2/act/Sigmoid, /model.2/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.0120066,
+  "pct": 0.6284510772537406,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.2.m.0.cv1.conv.weight + /model.2/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.2/m.0/cv1/conv/Conv + PWN(/model.2/m.0/cv1/act/Sigmoid, /model.2/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.0119959,
+  "pct": 0.6278910164099868,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.2.cv2.conv.weight + /model.2/cv2/conv/weight_quantizer/QuantizeLinear + /model.2/cv2/conv/Conv + PWN(/model.2/cv2/act/Sigmoid, /model.2/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.0117137,
+  "pct": 0.6131200659326657,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.3.conv.weight + /model.3/conv/weight_quantizer/QuantizeLinear + /model.3/conv/Conv + PWN(/model.3/act/Sigmoid, /model.3/act/Mul)"
+ },
+ {
+  "ms": 0.0112782,
+  "pct": 0.5903250661705345,
+  "region": "attn-head",
+  "prec": "FP32",
+  "myl": true,
+  "name": "/model.22/m.0/m.0.1/attn/MatMul_1_myl185_4"
+ },
+ {
+  "ms": 0.0112013,
+  "pct": 0.586299955994397,
+  "region": "attn-backbone",
+  "prec": "FP32",
+  "myl": true,
+  "name": "/model.10/m/m.0/attn/MatMul_1_myl88_4"
+ },
+ {
+  "ms": 0.0110647,
+  "pct": 0.5791500203629225,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.7.conv.weight + /model.7/conv/weight_quantizer/QuantizeLinear + /model.7/conv/Conv + PWN(/model.7/act/Sigmoid, /model.7/act/Mul)"
+ },
+ {
+  "ms": 0.0110041,
+  "pct": 0.5759780869861483,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.20.conv.weight + /model.20/conv/weight_quantizer/QuantizeLinear + /model.20/conv/Conv + PWN(/model.20/act/Sigmoid, /model.20/act/Mul)"
+ },
+ {
+  "ms": 0.0109721,
+  "pct": 0.5743031386683798,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv2.0.0.conv.weight + /model.23/one2one_cv2.0/one2one_cv2.0.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.0/one2one_cv2.0.0/conv/Conv + PWN(/model.23/one2one_cv2.0/one2one_cv2.0.0/act/Sigmoid, /model.23/one2one_cv2.0/one2one_cv2.0.0/act/Mul)"
+ },
+ {
+  "ms": 0.0109329,
+  "pct": 0.5722513269791134,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv2.1.0.conv.weight + /model.23/one2one_cv2.1/one2one_cv2.1.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.1/one2one_cv2.1.0/conv/Conv + PWN(/model.23/one2one_cv2.1/one2one_cv2.1.0/act/Sigmoid, /model.23/one2one_cv2.1/one2one_cv2.1.0/act/Mul)"
+ },
+ {
+  "ms": 0.010754,
+  "pct": 0.5628873190400886,
+  "region": "attn-head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.22.m.0.0.cv1.conv.weight + /model.22/m.0/m.0.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.0/cv1/conv/Conv + PWN(/model.22/m.0/m.0.0/cv1/act/Sigmoid, /model.22/m.0/m.0.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.0106881,
+  "pct": 0.559437972348184,
+  "region": "attn-head",
+  "prec": "FP32",
+  "myl": true,
+  "name": "/model.22/m.0/m.0.1/attn/MatMul_myl185_1"
+ },
+ {
+  "ms": 0.0106785,
+  "pct": 0.5589354878528534,
+  "region": "attn-backbone",
+  "prec": "FP32",
+  "myl": true,
+  "name": "/model.10/m/m.0/attn/MatMul_myl88_1"
+ },
+ {
+  "ms": 0.0105661,
+  "pct": 0.5530522318866915,
+  "region": "attn-backbone",
+  "prec": "float(fused)",
+  "myl": false,
+  "name": "model.10.m.0.attn.qkv.conv.weight + /model.10/m/m.0/attn/qkv/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/attn/qkv/conv/Conv"
+ },
+ {
+  "ms": 0.0104211,
+  "pct": 0.5454626223218029,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.23.one2one_cv2.0.1.conv.weight + /model.23/one2one_cv2.0/one2one_cv2.0.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.0/one2one_cv2.0.1/conv/Conv"
+ },
+ {
+  "ms": 0.0104039,
+  "pct": 0.5445623376010023,
+  "region": "attn-head",
+  "prec": "float(fused)",
+  "myl": false,
+  "name": "model.22.m.0.1.attn.qkv.conv.weight + /model.22/m.0/m.0.1/attn/qkv/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/attn/qkv/conv/Conv"
+ },
+ {
+  "ms": 0.0103838,
+  "pct": 0.5435102606889038,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.4.m.0.cv1.conv.weight + /model.4/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.4/m.0/cv1/conv/Conv + PWN(/model.4/m.0/cv1/act/Sigmoid, /model.4/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.0102716,
+  "pct": 0.537637473149728,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.16.m.0.m.0.cv1.conv.weight + /model.16/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/m/m.0/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.0100789,
+  "pct": 0.5275511437486655,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.16.m.0.m.1.cv1.conv.weight + /model.16/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/m/m.1/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00999277,
+  "pct": 0.5230429156671216,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.17.conv.weight + /model.17/conv/weight_quantizer/QuantizeLinear + /model.17/conv/Conv + PWN(/model.17/act/Sigmoid, /model.17/act/Mul)"
+ },
+ {
+  "ms": 0.00991791,
+  "pct": 0.5191245834462419,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.4.m.0.cv2.conv.weight + /model.4/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.4/m.0/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00989011,
+  "pct": 0.5176694720951805,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.16.m.0.m.0.cv2.conv.weight + /model.16/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/m/m.0/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00972478,
+  "pct": 0.5090157469271595,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.8.m.0.m.0.cv1.conv.weight + /model.8/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/m/m.0/cv1/conv/Conv + PWN(/model.8/m.0/m/m.0/cv1/act/Sigmoid, /model.8/m.0/m/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00970194,
+  "pct": 0.5078202525653521,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.16.cv1.conv.weight + /model.16/cv1/conv/weight_quantizer/QuantizeLinear + /model.16/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00965854,
+  "pct": 0.5055486039093786,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.16.m.0.m.1.cv2.conv.weight + /model.16/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/m/m.1/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00960494,
+  "pct": 0.5027430654771162,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.8.m.0.m.0.cv2.conv.weight + /model.8/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/m/m.0/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00959396,
+  "pct": 0.5021683488355819,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.8.m.0.m.1.cv1.conv.weight + /model.8/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/m/m.1/cv1/conv/Conv + PWN(/model.8/m.0/m/m.1/cv1/act/Sigmoid, /model.8/m.0/m/m.1/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00958012,
+  "pct": 0.5014439336881471,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.4.cv2.conv.weight + /model.4/cv2/conv/weight_quantizer/QuantizeLinear + /model.4/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00956719,
+  "pct": 0.5007671498834987,
+  "region": "attn-backbone",
+  "prec": "float(fused)",
+  "myl": false,
+  "name": "model.10.m.0.attn.pe.conv.weight + /model.10/m/m.0/attn/pe/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/attn/pe/conv/Conv"
+ },
+ {
+  "ms": 0.0095654,
+  "pct": 0.5006734574619736,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.9/m/MaxPool"
+ },
+ {
+  "ms": 0.00955755,
+  "pct": 0.500262571702771,
+  "region": "NMS",
+  "prec": "FP16",
+  "myl": true,
+  "name": "__myl_Topk_myl229_4"
+ },
+ {
+  "ms": 0.00949569,
+  "pct": 0.4970246872359846,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.6.m.0.m.0.cv1.conv.weight + /model.6/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/m/m.0/cv1/conv/Conv + PWN(/model.6/m.0/m/m.0/cv1/act/Sigmoid, /model.6/m.0/m/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00945296,
+  "pct": 0.4947881078104144,
+  "region": "attn-head",
+  "prec": "float(fused)",
+  "myl": false,
+  "name": "model.22.m.0.1.attn.pe.conv.weight + /model.22/m.0/m.0.1/attn/pe/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/attn/pe/conv/Conv"
+ },
+ {
+  "ms": 0.00943475,
+  "pct": 0.49383495753333423,
+  "region": "attn-head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.22.m.0.0.cv2.conv.weight + /model.22/m.0/m.0.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.0/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.0094331,
+  "pct": 0.49374859301069923,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.9/m_1/MaxPool"
+ },
+ {
+  "ms": 0.00940481,
+  "pct": 0.492267834013522,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.9/m_2/MaxPool"
+ },
+ {
+  "ms": 0.00934833,
+  "pct": 0.48931155023266054,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.13.m.0.m.0.cv1.conv.weight + /model.13/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/m/m.0/cv1/conv/Conv + PWN(/model.13/m.0/m/m.0/cv1/act/Sigmoid, /model.13/m.0/m/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00934013,
+  "pct": 0.4888823447262323,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.19.m.0.m.0.cv1.conv.weight + /model.19/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/m/m.0/cv1/conv/Conv + PWN(/model.19/m.0/m/m.0/cv1/act/Sigmoid, /model.19/m.0/m/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00932129,
+  "pct": 0.48789621890414614,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.16/m.0/m/m.1/cv1/conv/input_quantizer/QuantizeLinear"
+ },
+ {
+  "ms": 0.00925648,
+  "pct": 0.4845039251393155,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.6.m.0.m.0.cv2.conv.weight + /model.6/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/m/m.0/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00921377,
+  "pct": 0.4822683925564438,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.16/m.0/m/m.0/cv1/conv/input_quantizer/QuantizeLinear"
+ },
+ {
+  "ms": 0.00919572,
+  "pct": 0.4813236170209525,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.16.cv2.conv.weight + /model.16/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/cv2/conv/Conv + PWN(/model.16/cv2/act/Sigmoid, /model.16/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.0091913,
+  "pct": 0.48109226478456074,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.23.one2one_cv2.2.1.conv.weight + /model.23/one2one_cv2.2/one2one_cv2.2.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.2/one2one_cv2.2.1/conv/Conv"
+ },
+ {
+  "ms": 0.0091657,
+  "pct": 0.479752306130346,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.6.m.0.m.1.cv1.conv.weight + /model.6/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/m/m.1/cv1/conv/Conv + PWN(/model.6/m.0/m/m.1/cv1/act/Sigmoid, /model.6/m.0/m/m.1/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00910367,
+  "pct": 0.4765055235006214,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.13.cv1.conv.weight + /model.13/cv1/conv/weight_quantizer/QuantizeLinear + /model.13/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.0090968,
+  "pct": 0.47614593303365055,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.19.m.0.m.0.cv2.conv.weight + /model.19/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/m/m.0/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00909576,
+  "pct": 0.47609149721332306,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.13.m.0.m.0.cv2.conv.weight + /model.13/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/m/m.0/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00909425,
+  "pct": 0.4760124605895784,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.8.m.0.m.1.cv2.conv.weight + /model.8/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/m/m.1/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00908286,
+  "pct": 0.47541628367272265,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.19.m.0.m.1.cv1.conv.weight + /model.19/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/m/m.1/cv1/conv/Conv + PWN(/model.19/m.0/m/m.1/cv1/act/Sigmoid, /model.19/m.0/m/m.1/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00908271,
+  "pct": 0.4754084323524831,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.13.m.0.m.1.cv1.conv.weight + /model.13/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/m/m.1/cv1/conv/Conv + PWN(/model.13/m.0/m/m.1/cv1/act/Sigmoid, /model.13/m.0/m/m.1/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00907966,
+  "pct": 0.47524878884094574,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "Reformatting CopyNode for Output Tensor 0 to model.16.m.0.cv2.conv.weight + /model.16/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/cv2/conv/Conv + PWN(/model.16/m.0/cv2/act/Sigmoid, /model.16/m.0/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00899779,
+  "pct": 0.47096353825420484,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.23.one2one_cv2.1.1.conv.weight + /model.23/one2one_cv2.1/one2one_cv2.1.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.1/one2one_cv2.1.1/conv/Conv"
+ },
+ {
+  "ms": 0.008983,
+  "pct": 0.4701893980785862,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.0.0.1.conv.weight + /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/conv/Conv + PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Sigmoid, /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Mul)"
+ },
+ {
+  "ms": 0.00894487,
+  "pct": 0.46819359247369513,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.0.1.1.conv.weight + /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/conv/Conv + PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Sigmoid, /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Mul)"
+ },
+ {
+  "ms": 0.00888285,
+  "pct": 0.46494733326531995,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.6.m.0.m.1.cv2.conv.weight + /model.6/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/m/m.1/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00886069,
+  "pct": 0.4637874315552652,
+  "region": "attn-head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.22.cv2.conv.weight + /model.22/cv2/conv/weight_quantizer/QuantizeLinear + /model.22/cv2/conv/Conv + PWN(/model.22/cv2/act/Sigmoid, /model.22/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00885756,
+  "pct": 0.4636236006729335,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.19.m.0.m.1.cv2.conv.weight + /model.19/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/m/m.1/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00882915,
+  "pct": 0.4621365606195646,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.13.m.0.m.1.cv2.conv.weight + /model.13/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/m/m.1/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00876311,
+  "pct": 0.4586798860287698,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.9.cv2.conv.weight + /model.9/cv2/conv/weight_quantizer/QuantizeLinear + /model.9/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00873529,
+  "pct": 0.4572237278350098,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.6.cv1.conv.weight + /model.6/cv1/conv/weight_quantizer/QuantizeLinear + /model.6/cv1/conv/Conv + PWN(/model.6/cv1/act/Sigmoid, /model.6/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00868511,
+  "pct": 0.454597199504209,
+  "region": "attn-backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.10.cv2.conv.weight + /model.10/cv2/conv/weight_quantizer/QuantizeLinear + /model.10/cv2/conv/Conv + PWN(/model.10/cv2/act/Sigmoid, /model.10/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.0086691,
+  "pct": 0.4537592019239755,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.0.1.0.conv.weight + /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/conv/Conv + PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Sigmoid, /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Mul)"
+ },
+ {
+  "ms": 0.00866547,
+  "pct": 0.45356919997417855,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.16.m.0.cv3.conv.weight + /model.16/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/cv3/conv/Conv + PWN(/model.16/m.0/cv3/act/Sigmoid, /model.16/m.0/cv3/act/Mul)"
+ },
+ {
+  "ms": 0.00864767,
+  "pct": 0.4526375099724198,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.4.cv1.conv.weight + /model.4/cv1/conv/weight_quantizer/QuantizeLinear + /model.4/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00861702,
+  "pct": 0.45103322353680714,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.16.m.0.cv2.conv.weight + /model.16/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/cv2/conv/Conv + PWN(/model.16/m.0/cv2/act/Sigmoid, /model.16/m.0/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00860412,
+  "pct": 0.4503580099962067,
+  "region": "attn-head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.22.cv1.conv.weight + /model.22/cv1/conv/weight_quantizer/QuantizeLinear + /model.22/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00859752,
+  "pct": 0.450012551905667,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.19.cv2.conv.weight + /model.19/cv2/conv/weight_quantizer/QuantizeLinear + /model.19/cv2/conv/Conv + PWN(/model.19/cv2/act/Sigmoid, /model.19/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00859704,
+  "pct": 0.44998742768090044,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.13.cv2.conv.weight + /model.13/cv2/conv/weight_quantizer/QuantizeLinear + /model.13/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00858869,
+  "pct": 0.4495503708542327,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.8.cv2.conv.weight + /model.8/cv2/conv/weight_quantizer/QuantizeLinear + /model.8/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00858789,
+  "pct": 0.4495084971462885,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.19.cv1.conv.weight + /model.19/cv1/conv/weight_quantizer/QuantizeLinear + /model.19/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00856621,
+  "pct": 0.4483737196610003,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.6.cv2.conv.weight + /model.6/cv2/conv/weight_quantizer/QuantizeLinear + /model.6/cv2/conv/Conv"
+ },
+ {
+  "ms": 0.00853991,
+  "pct": 0.4469971215123343,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.0.0.0.conv.weight + /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/conv/Conv + PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Sigmoid, /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Mul)"
+ },
+ {
+  "ms": 0.00847539,
+  "pct": 0.44362000696663345,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.2.0.1.conv.weight + /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/conv/Conv + PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Sigmoid, /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Mul)"
+ },
+ {
+  "ms": 0.00840116,
+  "pct": 0.43973465029075975,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.9.cv1.conv.weight + /model.9/cv1/conv/weight_quantizer/QuantizeLinear + /model.9/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.0083781,
+  "pct": 0.4385276406592678,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.1.0.0.conv.weight + /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/conv/Conv + PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Sigmoid, /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Mul)"
+ },
+ {
+  "ms": 0.00837617,
+  "pct": 0.43842662033885244,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.1.0.1.conv.weight + /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/conv/Conv + PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Sigmoid, /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Mul)"
+ },
+ {
+  "ms": 0.00837042,
+  "pct": 0.4381256530630034,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.1.1.0.conv.weight + /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/conv/Conv + PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Sigmoid, /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Mul)"
+ },
+ {
+  "ms": 0.00836885,
+  "pct": 0.43804347591116294,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.2.0.0.conv.weight + /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/conv/Conv + PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Sigmoid, /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Mul)"
+ },
+ {
+  "ms": 0.00835164,
+  "pct": 0.437142667769013,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.8.cv1.conv.weight + /model.8/cv1/conv/weight_quantizer/QuantizeLinear + /model.8/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00833812,
+  "pct": 0.4364350021047557,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.23.one2one_cv3.0.2.weight + /model.23/one2one_cv3.0/one2one_cv3.0.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.2/Conv"
+ },
+ {
+  "ms": 0.00833513,
+  "pct": 0.4362784991213142,
+  "region": "attn-backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.10.cv1.conv.weight + /model.10/cv1/conv/weight_quantizer/QuantizeLinear + /model.10/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00831701,
+  "pct": 0.43533005963637783,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.23.one2one_cv2.0.2.weight + /model.23/one2one_cv2.0/one2one_cv2.0.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.0/one2one_cv2.0.2/Conv"
+ },
+ {
+  "ms": 0.00831547,
+  "pct": 0.43524945274858523,
+  "region": "attn-backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.10.m.0.ffn.1.conv.weight + /model.10/m/m.0/ffn/ffn.1/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/ffn/ffn.1/conv/Conv + /model.10/m/m.0/Add_1"
+ },
+ {
+  "ms": 0.00831263,
+  "pct": 0.43510080108538324,
+  "region": "attn-backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.10.m.0.ffn.0.conv.weight + /model.10/m/m.0/ffn/ffn.0/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/ffn/ffn.0/conv/Conv + PWN(/model.10/m/m.0/ffn/ffn.0/act/Sigmoid, /model.10/m/m.0/ffn/ffn.0/act/Mul)"
+ },
+ {
+  "ms": 0.00831087,
+  "pct": 0.435008678927906,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.16.m.0.cv1.conv.weight + /model.16/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00831071,
+  "pct": 0.43500030418631724,
+  "region": "attn-head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.22.m.0.1.ffn.1.conv.weight + /model.22/m.0/m.0.1/ffn/ffn.1/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/ffn/ffn.1/conv/Conv + /model.22/m.0/m.0.1/Add_1"
+ },
+ {
+  "ms": 0.00830312,
+  "pct": 0.43460302738219647,
+  "region": "attn-backbone",
+  "prec": "float(fused)",
+  "myl": false,
+  "name": "model.10.m.0.attn.proj.conv.weight + /model.10/m/m.0/attn/proj/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/attn/proj/conv/Conv + /model.10/m/m.0/Add"
+ },
+ {
+  "ms": 0.00830144,
+  "pct": 0.4345150925955136,
+  "region": "attn-head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.22.m.0.1.ffn.0.conv.weight + /model.22/m.0/m.0.1/ffn/ffn.0/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/ffn/ffn.0/conv/Conv + PWN(/model.22/m.0/m.0.1/ffn/ffn.0/act/Sigmoid, /model.22/m.0/m.0.1/ffn/ffn.0/act/Mul)"
+ },
+ {
+  "ms": 0.00828965,
+  "pct": 0.4338979788246858,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.13.m.0.cv3.conv.weight + /model.13/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/cv3/conv/Conv + PWN(/model.13/m.0/cv3/act/Sigmoid, /model.13/m.0/cv3/act/Mul)"
+ },
+ {
+  "ms": 0.00826552,
+  "pct": 0.43263496310881844,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.2.1.0.conv.weight + /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/conv/Conv + PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Sigmoid, /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Mul)"
+ },
+ {
+  "ms": 0.00825542,
+  "pct": 0.4321063075460227,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCastReplConcReshTran_myl5_0"
+ },
+ {
+  "ms": 0.00819091,
+  "pct": 0.4287297164216712,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.8.m.0.cv2.conv.weight + /model.8/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/cv2/conv/Conv + PWN(/model.8/m.0/cv2/act/Sigmoid, /model.8/m.0/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00814484,
+  "pct": 0.4263183142654338,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.6.m.0.cv2.conv.weight + /model.6/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/cv2/conv/Conv + PWN(/model.6/m.0/cv2/act/Sigmoid, /model.6/m.0/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00813731,
+  "pct": 0.4259241779894089,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.8.m.0.cv3.conv.weight + /model.8/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/cv3/conv/Conv + PWN(/model.8/m.0/cv3/act/Sigmoid, /model.8/m.0/cv3/act/Mul)"
+ },
+ {
+  "ms": 0.00809478,
+  "pct": 0.42369806699082463,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.13.m.0.cv2.conv.weight + /model.13/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/cv2/conv/Conv + PWN(/model.13/m.0/cv2/act/Sigmoid, /model.13/m.0/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.008091,
+  "pct": 0.4235002137207882,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.6.m.0.cv3.conv.weight + /model.6/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/cv3/conv/Conv + PWN(/model.6/m.0/cv3/act/Sigmoid, /model.6/m.0/cv3/act/Mul)"
+ },
+ {
+  "ms": 0.00806325,
+  "pct": 0.42204771947647335,
+  "region": "attn-head",
+  "prec": "float(fused)",
+  "myl": false,
+  "name": "model.22.m.0.1.attn.proj.conv.weight + /model.22/m.0/m.0.1/attn/proj/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/attn/proj/conv/Conv + /model.22/m.0/m.0.1/Add"
+ },
+ {
+  "ms": 0.00805495,
+  "pct": 0.4216132797565521,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.19.m.0.cv2.conv.weight + /model.19/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/cv2/conv/Conv + PWN(/model.19/m.0/cv2/act/Sigmoid, /model.19/m.0/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00804924,
+  "pct": 0.4213144061661003,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.19.m.0.cv3.conv.weight + /model.19/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/cv3/conv/Conv + PWN(/model.19/m.0/cv3/act/Sigmoid, /model.19/m.0/cv3/act/Mul)"
+ },
+ {
+  "ms": 0.0080424,
+  "pct": 0.42095638596317725,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.1.1.1.conv.weight + /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/conv/Conv + PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Sigmoid, /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Mul)"
+ },
+ {
+  "ms": 0.00798004,
+  "pct": 0.4176923304289259,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.8.m.0.cv1.conv.weight + /model.8/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00790333,
+  "pct": 0.4136771652584251,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "model.23.one2one_cv3.2.1.1.conv.weight + /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/conv/Conv + PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Sigmoid, /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Mul)"
+ },
+ {
+  "ms": 0.00787693,
+  "pct": 0.4122953328962661,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.23.one2one_cv2.1.2.weight + /model.23/one2one_cv2.1/one2one_cv2.1.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.1/one2one_cv2.1.2/Conv"
+ },
+ {
+  "ms": 0.00786619,
+  "pct": 0.41173317836711504,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.23.one2one_cv3.2.2.weight + /model.23/one2one_cv3.2/one2one_cv3.2.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.2/Conv"
+ },
+ {
+  "ms": 0.00782241,
+  "pct": 0.4094416396998679,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "model.6.m.0.cv1.conv.weight + /model.6/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.0078165,
+  "pct": 0.4091322976824301,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.13.m.0.cv1.conv.weight + /model.13/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00781396,
+  "pct": 0.40899934865970716,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.2/cv1/act/Sigmoid, /model.2/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00781283,
+  "pct": 0.4089402020472359,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "model.19.m.0.cv1.conv.weight + /model.19/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/cv1/conv/Conv"
+ },
+ {
+  "ms": 0.00778353,
+  "pct": 0.4074065774937792,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.23.one2one_cv2.2.2.weight + /model.23/one2one_cv2.2/one2one_cv2.2.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.2/one2one_cv2.2.2/Conv"
+ },
+ {
+  "ms": 0.00777675,
+  "pct": 0.40705169781895195,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "model.23.one2one_cv3.1.2.weight + /model.23/one2one_cv3.1/one2one_cv3.1.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.2/Conv"
+ },
+ {
+  "ms": 0.00776562,
+  "pct": 0.40646912985717804,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_DivMulTran_myl185_3"
+ },
+ {
+  "ms": 0.00776061,
+  "pct": 0.4062068957611774,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_DivMulTran_myl88_3"
+ },
+ {
+  "ms": 0.00775958,
+  "pct": 0.4061529833621993,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(PWN(/model.2/m.0/cv2/act/Sigmoid, /model.2/m.0/cv2/act/Mul), /model.2/m.0/Add)"
+ },
+ {
+  "ms": 0.00750797,
+  "pct": 0.39298317879239486,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(PWN(/model.16/m.0/m/m.1/cv2/act/Sigmoid, /model.16/m.0/m/m.1/cv2/act/Mul), /model.16/m.0/m/m.1/Add)"
+ },
+ {
+  "ms": 0.00746815,
+  "pct": 0.3908989149794716,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(PWN(/model.16/m.0/m/m.0/cv2/act/Sigmoid, /model.16/m.0/m/m.0/cv2/act/Mul), /model.16/m.0/m/m.0/Add)"
+ },
+ {
+  "ms": 0.00742099,
+  "pct": 0.3884304598961602,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCast_myl0_0"
+ },
+ {
+  "ms": 0.00741329,
+  "pct": 0.3880274254571972,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.4/cv2/act/Sigmoid, /model.4/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00730828,
+  "pct": 0.38253097786816986,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_MaxrSubExpSum_myl185_2"
+ },
+ {
+  "ms": 0.00726496,
+  "pct": 0.38026351658299073,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.14/Resize"
+ },
+ {
+  "ms": 0.00723267,
+  "pct": 0.3785733890460924,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(/model.16/m.0/m/m.0/cv1/act/Sigmoid, /model.16/m.0/m/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00722632,
+  "pct": 0.37824101648928515,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Sigmoid, /model.23/one2one_cv2.0/one2one_cv2.0.1/act/Mul)"
+ },
+ {
+  "ms": 0.0072248,
+  "pct": 0.3781614564441912,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_MaxrSubExpSum_myl88_2"
+ },
+ {
+  "ms": 0.00721791,
+  "pct": 0.3778008191345216,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(/model.16/m.0/m/m.1/cv1/act/Sigmoid, /model.16/m.0/m/m.1/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00715611,
+  "pct": 0.3745660751958312,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(PWN(/model.4/m.0/cv2/act/Sigmoid, /model.4/m.0/cv2/act/Mul), /model.4/m.0/Add)"
+ },
+ {
+  "ms": 0.00704851,
+  "pct": 0.3689340614773345,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.16/m.0/cv1/act/Sigmoid, /model.16/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00697242,
+  "pct": 0.3649513484304905,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "Reformatting CopyNode for Input Tensor 0 to {ForeignNode[/model.23/Gather_1_output_0[Constant] + ONNXTRT_Broadcast_1066.../model.23/Concat_6]}"
+ },
+ {
+  "ms": 0.00697023,
+  "pct": 0.36483671915499316,
+  "region": "attn-backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "Reformatting CopyNode for Input Tensor 0 to model.10.m.0.attn.pe.conv.weight + /model.10/m/m.0/attn/pe/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/attn/pe/conv/Conv"
+ },
+ {
+  "ms": 0.00695643,
+  "pct": 0.3641143976929555,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Sigmoid, /model.23/one2one_cv2.1/one2one_cv2.1.1/act/Mul)"
+ },
+ {
+  "ms": 0.00694742,
+  "pct": 0.3636427950572338,
+  "region": "attn-head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "Reformatting CopyNode for Input Tensor 0 to model.22.m.0.1.attn.pe.conv.weight + /model.22/m.0/m.0.1/attn/pe/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/attn/pe/conv/Conv"
+ },
+ {
+  "ms": 0.00689974,
+  "pct": 0.36114712206375865,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl144_0"
+ },
+ {
+  "ms": 0.00687095,
+  "pct": 0.3596401919991163,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl20_0"
+ },
+ {
+  "ms": 0.00686024,
+  "pct": 0.35907960773401315,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCast_myl10_0"
+ },
+ {
+  "ms": 0.00681812,
+  "pct": 0.35687495701075034,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCast_myl8_0"
+ },
+ {
+  "ms": 0.00680068,
+  "pct": 0.35596211017756646,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(PWN(/model.6/m.0/m/m.1/cv2/act/Sigmoid, /model.6/m.0/m/m.1/cv2/act/Mul), /model.6/m.0/m/m.1/Add)"
+ },
+ {
+  "ms": 0.0067986,
+  "pct": 0.35585323853691153,
+  "region": "NMS/foreign",
+  "prec": "FP16",
+  "myl": true,
+  "name": "__myl_ReshReshReshConcSigmSubAddConcMulConcTranSlicMaxrReshSlic_myl229_1"
+ },
+ {
+  "ms": 0.00679631,
+  "pct": 0.3557333750479212,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.4/cv1/act/Sigmoid, /model.4/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00677053,
+  "pct": 0.35438399480941896,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_Move_myl11_0"
+ },
+ {
+  "ms": 0.00676419,
+  "pct": 0.35405214567396104,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.11/Resize"
+ },
+ {
+  "ms": 0.00673337,
+  "pct": 0.3524389610754102,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(PWN(/model.13/m.0/m/m.1/cv2/act/Sigmoid, /model.13/m.0/m/m.1/cv2/act/Mul), /model.13/m.0/m/m.1/Add)"
+ },
+ {
+  "ms": 0.00671953,
+  "pct": 0.3517145459279753,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(PWN(/model.19/m.0/m/m.1/cv2/act/Sigmoid, /model.19/m.0/m/m.1/cv2/act/Mul), /model.19/m.0/m/m.1/Add)"
+ },
+ {
+  "ms": 0.00671556,
+  "pct": 0.3515067476523021,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(PWN(/model.9/cv2/act/Sigmoid, /model.9/cv2/act/Mul), /model.9/Add)"
+ },
+ {
+  "ms": 0.00671457,
+  "pct": 0.35145492893872116,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "Reformatting CopyNode for Input Tensor 3 to {ForeignNode[/model.23/Gather_1_output_0[Constant] + ONNXTRT_Broadcast_1066.../model.23/Concat_6]}"
+ },
+ {
+  "ms": 0.00670164,
+  "pct": 0.35077814513407285,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.16/cv1/act/Sigmoid, /model.16/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00669747,
+  "pct": 0.3505598784314136,
+  "region": "head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Sigmoid, /model.23/one2one_cv2.2/one2one_cv2.2.1/act/Mul)"
+ },
+ {
+  "ms": 0.00668734,
+  "pct": 0.35002965260457,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.12/Concat_/model.11/Resize_output_0_clone_0 copy"
+ },
+ {
+  "ms": 0.00665399,
+  "pct": 0.34828404240464567,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "Reformatting CopyNode for Input Tensor 2 to {ForeignNode[/model.23/Gather_1_output_0[Constant] + ONNXTRT_Broadcast_1066.../model.23/Concat_6]}"
+ },
+ {
+  "ms": 0.00658093,
+  "pct": 0.34445992602664033,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl26_0"
+ },
+ {
+  "ms": 0.00654678,
+  "pct": 0.34267244211877174,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "PWN(PWN(/model.8/m.0/m/m.1/cv2/act/Sigmoid, /model.8/m.0/m/m.1/cv2/act/Mul), /model.8/m.0/m/m.1/Add)"
+ },
+ {
+  "ms": 0.00654518,
+  "pct": 0.34258869470288333,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_ReshCastReshDivNeqXorLtAndAddSeleSubReshCastGathCastReplGathConcCast_myl229_5"
+ },
+ {
+  "ms": 0.00650177,
+  "pct": 0.34031652262556045,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "Reformatting CopyNode for Input Tensor 1 to {ForeignNode[/model.23/Gather_1_output_0[Constant] + ONNXTRT_Broadcast_1066.../model.23/Concat_6]}"
+ },
+ {
+  "ms": 0.00649466,
+  "pct": 0.3399443700462062,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.8/cv2/act/Sigmoid, /model.8/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00646085,
+  "pct": 0.33817468246421395,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "Reformatting CopyNode for Input Tensor 4 to {ForeignNode[/model.23/Gather_1_output_0[Constant] + ONNXTRT_Broadcast_1066.../model.23/Concat_6]}"
+ },
+ {
+  "ms": 0.00645426,
+  "pct": 0.33782974779502345,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.16/Concat_/model.16/Slice_output_0_clone_0 copy"
+ },
+ {
+  "ms": 0.00645111,
+  "pct": 0.33766487006999313,
+  "region": "attn-head",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(PWN(/model.22/m.0/m.0.0/cv2/act/Sigmoid, /model.22/m.0/m.0.0/cv2/act/Mul), /model.22/m.0/m.0.0/Add)"
+ },
+ {
+  "ms": 0.00644155,
+  "pct": 0.33716447926005977,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_ReshTranReshSlicReshTranReshSlicConcReshTran_myl142_0"
+ },
+ {
+  "ms": 0.00643758,
+  "pct": 0.33695668098438664,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCastReshTranReshTran_myl93_0"
+ },
+ {
+  "ms": 0.00643332,
+  "pct": 0.3367337034895837,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl122_0"
+ },
+ {
+  "ms": 0.00642841,
+  "pct": 0.33647670360707604,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.13/cv2/act/Sigmoid, /model.13/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00642809,
+  "pct": 0.33645995412389834,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.6/cv2/act/Sigmoid, /model.6/cv2/act/Mul)"
+ },
+ {
+  "ms": 0.00642403,
+  "pct": 0.33624744505608145,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.19/cv1/act/Sigmoid, /model.19/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00642264,
+  "pct": 0.33617468948852847,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.13/cv1/act/Sigmoid, /model.13/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00637673,
+  "pct": 0.3337716620738798,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.4/Concat_/model.4/Slice_output_0_clone_0 copy"
+ },
+ {
+  "ms": 0.00635362,
+  "pct": 0.3325620353356414,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCastReshTran_myl89_0"
+ },
+ {
+  "ms": 0.00629779,
+  "pct": 0.3296397739424846,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl149_0"
+ },
+ {
+  "ms": 0.00629676,
+  "pct": 0.32958586154350644,
+  "region": "attn-head",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.22/cv1/act/Sigmoid, /model.22/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00627721,
+  "pct": 0.32856257280561973,
+  "region": "attn-backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.10/Concat_/model.10/Split_output_0_clone_0 copy"
+ },
+ {
+  "ms": 0.00627703,
+  "pct": 0.3285531512213323,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.19/Concat_/model.19/Slice_output_0_clone_0 copy"
+ },
+ {
+  "ms": 0.00626781,
+  "pct": 0.32807055673727525,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(PWN(/model.6/m.0/m/m.0/cv2/act/Sigmoid, /model.6/m.0/m/m.0/cv2/act/Mul), /model.6/m.0/m/m.0/Add)"
+ },
+ {
+  "ms": 0.00625532,
+  "pct": 0.3274168034719962,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.6/m.0/cv1/act/Sigmoid, /model.6/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00625159,
+  "pct": 0.3272215673087063,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.8/cv1/act/Sigmoid, /model.8/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00625129,
+  "pct": 0.3272058646682272,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.19/m.0/cv1/act/Sigmoid, /model.19/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00623304,
+  "pct": 0.32625062070574984,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl165_0"
+ },
+ {
+  "ms": 0.00622678,
+  "pct": 0.3259229589410864,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(PWN(/model.13/m.0/m/m.0/cv2/act/Sigmoid, /model.13/m.0/m/m.0/cv2/act/Mul), /model.13/m.0/m/m.0/Add)"
+ },
+ {
+  "ms": 0.00621638,
+  "pct": 0.32537860073781155,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCast_myl45_0"
+ },
+ {
+  "ms": 0.00621397,
+  "pct": 0.32525245619262966,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_Resh_myl124_0"
+ },
+ {
+  "ms": 0.00621272,
+  "pct": 0.3251870285239668,
+  "region": "NMS/foreign",
+  "prec": "FP16",
+  "myl": true,
+  "name": "__myl_ReshReshReshConcSlicSlic_myl229_0"
+ },
+ {
+  "ms": 0.00620527,
+  "pct": 0.32479707961873633,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl127_0"
+ },
+ {
+  "ms": 0.00620092,
+  "pct": 0.32456939133178975,
+  "region": "head",
+  "prec": "?",
+  "myl": false,
+  "name": "Reformatting CopyNode for Input Tensor 5 to {ForeignNode[/model.23/Gather_1_output_0[Constant] + ONNXTRT_Broadcast_1066.../model.23/Concat_6]}"
+ },
+ {
+  "ms": 0.00619574,
+  "pct": 0.32429825907285087,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.6/Concat_/model.6/Slice_output_0_clone_0 copy"
+ },
+ {
+  "ms": 0.00619127,
+  "pct": 0.3240642897297126,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl121_0"
+ },
+ {
+  "ms": 0.00618777,
+  "pct": 0.3238810922574567,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl17_0"
+ },
+ {
+  "ms": 0.00618671,
+  "pct": 0.3238256095944306,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCastResh_myl98_0"
+ },
+ {
+  "ms": 0.00618481,
+  "pct": 0.32372615953806305,
+  "region": "attn-backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.10/cv1/act/Sigmoid, /model.10/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00618459,
+  "pct": 0.3237146442683784,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl145_0"
+ },
+ {
+  "ms": 0.00618264,
+  "pct": 0.32361257710526437,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(PWN(/model.19/m.0/m/m.0/cv2/act/Sigmoid, /model.19/m.0/m/m.0/cv2/act/Mul), /model.19/m.0/m/m.0/Add)"
+ },
+ {
+  "ms": 0.00617753,
+  "pct": 0.3233451087957707,
+  "region": "neck",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.13/m.0/cv1/act/Sigmoid, /model.13/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00617595,
+  "pct": 0.3232624082225809,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCastReshTran_myl204_0"
+ },
+ {
+  "ms": 0.00617308,
+  "pct": 0.32311218629533106,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastReshTranResh_myl208_0"
+ },
+ {
+  "ms": 0.00617263,
+  "pct": 0.32308863233461244,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_MulAddAdd_myl88_5"
+ },
+ {
+  "ms": 0.00617091,
+  "pct": 0.3229986038625323,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(PWN(/model.8/m.0/m/m.0/cv2/act/Sigmoid, /model.8/m.0/m/m.0/cv2/act/Mul), /model.8/m.0/m/m.0/Add)"
+ },
+ {
+  "ms": 0.00616879,
+  "pct": 0.3228876385364802,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastReshTranResh_myl62_0"
+ },
+ {
+  "ms": 0.00616759,
+  "pct": 0.32282482797456385,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl116_0"
+ },
+ {
+  "ms": 0.00616554,
+  "pct": 0.3227175265979568,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.13/Concat_/model.13/Slice_output_0_clone_0 copy"
+ },
+ {
+  "ms": 0.00616104,
+  "pct": 0.32248198699077063,
+  "region": "neck",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.11/Resize_output_0 copy"
+ },
+ {
+  "ms": 0.00615693,
+  "pct": 0.3222668608162072,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.9/m/input_quantizer/QuantizeLinear_output_0 copy"
+ },
+ {
+  "ms": 0.00615386,
+  "pct": 0.3221061704619713,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl22_0"
+ },
+ {
+  "ms": 0.00614854,
+  "pct": 0.3218277103041423,
+  "region": "backbone",
+  "prec": "?",
+  "myl": false,
+  "name": "PWN(/model.8/m.0/cv1/act/Sigmoid, /model.8/m.0/cv1/act/Mul)"
+ },
+ {
+  "ms": 0.00613846,
+  "pct": 0.3213001015840452,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.6/m.0/cv2/conv/input_quantizer/QuantizeLinear_output_0 copy"
+ },
+ {
+  "ms": 0.0061191,
+  "pct": 0.3202867578517952,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_MoveSlicSlicTran_myl185_0"
+ },
+ {
+  "ms": 0.0060825,
+  "pct": 0.3183710357133475,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl111_0"
+ },
+ {
+  "ms": 0.00607517,
+  "pct": 0.3179873678643087,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_Move_myl83_0"
+ },
+ {
+  "ms": 0.00601649,
+  "pct": 0.31491593138660057,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_MoveSlicSlicTran_myl88_0"
+ },
+ {
+  "ms": 0.00601049,
+  "pct": 0.314601878577019,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl173_0"
+ },
+ {
+  "ms": 0.00599178,
+  "pct": 0.3136225572324737,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl117_0"
+ },
+ {
+  "ms": 0.00598881,
+  "pct": 0.3134671010917308,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl177_0"
+ },
+ {
+  "ms": 0.00595622,
+  "pct": 0.3117612709143534,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl210_0"
+ },
+ {
+  "ms": 0.00593027,
+  "pct": 0.310402992512913,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCast_myl67_0"
+ },
+ {
+  "ms": 0.0059287,
+  "pct": 0.3103208153610725,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_MulAddAdd_myl185_5"
+ },
+ {
+  "ms": 0.00592679,
+  "pct": 0.3102208418833557,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_ReshTranResh_myl212_0"
+ },
+ {
+  "ms": 0.0059198,
+  "pct": 0.3098549703601931,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_ReshTranResh_myl64_0"
+ },
+ {
+  "ms": 0.00591682,
+  "pct": 0.30969899079810087,
+  "region": "NMS/foreign",
+  "prec": "FP16",
+  "myl": true,
+  "name": "__myl_CastResh_myl79_0"
+ },
+ {
+  "ms": 0.00591433,
+  "pct": 0.30956865888212454,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl103_0"
+ },
+ {
+  "ms": 0.00591352,
+  "pct": 0.309526261752831,
+  "region": "NMS/foreign",
+  "prec": "FP16",
+  "myl": true,
+  "name": "__myl_CastReshCastGathResh_myl229_3"
+ },
+ {
+  "ms": 0.00591183,
+  "pct": 0.3094378035447989,
+  "region": "NMS/foreign",
+  "prec": "FP32",
+  "myl": true,
+  "name": "__myl_Move_myl180_0"
+ },
+ {
+  "ms": 0.00591043,
+  "pct": 0.30936452455589647,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl206_0"
+ },
+ {
+  "ms": 0.00590865,
+  "pct": 0.3092713555557206,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl160_0"
+ },
+ {
+  "ms": 0.00590656,
+  "pct": 0.30916196049371636,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl91_0"
+ },
+ {
+  "ms": 0.00590541,
+  "pct": 0.3091017670385465,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl152_0"
+ },
+ {
+  "ms": 0.00590315,
+  "pct": 0.3089834738136042,
+  "region": "backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.9/m/input_quantizer_2/QuantizeLinear_output_0 copy"
+ },
+ {
+  "ms": 0.00590271,
+  "pct": 0.30896044327423483,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl166_0"
+ },
+ {
+  "ms": 0.00589979,
+  "pct": 0.30880760424023845,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl107_0"
+ },
+ {
+  "ms": 0.00589974,
+  "pct": 0.3088049871334919,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl95_0"
+ },
+ {
+  "ms": 0.00589831,
+  "pct": 0.30873013788054166,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl156_0"
+ },
+ {
+  "ms": 0.00587847,
+  "pct": 0.30769166992352515,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl49_0"
+ },
+ {
+  "ms": 0.00586909,
+  "pct": 0.30720070069787925,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl57_0"
+ },
+ {
+  "ms": 0.00586153,
+  "pct": 0.3068049941578065,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl63_0"
+ },
+ {
+  "ms": 0.00585447,
+  "pct": 0.3064354586851987,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl53_0"
+ },
+ {
+  "ms": 0.00584936,
+  "pct": 0.30616799037570513,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCastResh_myl211_0"
+ },
+ {
+  "ms": 0.00583051,
+  "pct": 0.3051813411322696,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl32_0"
+ },
+ {
+  "ms": 0.00582622,
+  "pct": 0.3049567933734187,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl36_0"
+ },
+ {
+  "ms": 0.00581671,
+  "pct": 0.3044590196702319,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCast_myl181_0"
+ },
+ {
+  "ms": 0.00573465,
+  "pct": 0.3001638240778542,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_MulMinMaxRounCast_myl84_0"
+ },
+ {
+  "ms": 0.00566944,
+  "pct": 0.2967505934590515,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_CastMulMinMaxRounCast_myl80_0"
+ },
+ {
+  "ms": 0.00565154,
+  "pct": 0.29581366924379976,
+  "region": "NMS/foreign",
+  "prec": "INT8",
+  "myl": true,
+  "name": "__myl_Resh_myl73_0"
+ },
+ {
+  "ms": 0,
+  "pct": 0.0,
+  "region": "attn-backbone",
+  "prec": "float(fused)",
+  "myl": false,
+  "name": "/model.10/m/m.0/attn/Reshape"
+ },
+ {
+  "ms": 0,
+  "pct": 0.0,
+  "region": "attn-backbone",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.10/m/m.0/attn/Reshape_2"
+ },
+ {
+  "ms": 0,
+  "pct": 0.0,
+  "region": "attn-head",
+  "prec": "float(fused)",
+  "myl": false,
+  "name": "/model.22/m.0/m.0.1/attn/Reshape"
+ },
+ {
+  "ms": 0,
+  "pct": 0.0,
+  "region": "attn-head",
+  "prec": "INT8",
+  "myl": false,
+  "name": "/model.22/m.0/m.0.1/attn/Reshape_2"
+ }
+]

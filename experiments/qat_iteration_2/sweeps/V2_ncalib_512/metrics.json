@@ -1,0 +1,22 @@
+{
+  "version": "V2_ncalib_512",
+  "knobs": {
+    "version": "V2_ncalib_512",
+    "lr0": "1e-3",
+    "epochs": "50",
+    "patience": "10",
+    "batch": "16",
+    "n_calib": "512",
+    "weight_axis": "0",
+    "disable_layers": "",
+    "calib_method": "max",
+    "calib_percentile": "99.99",
+    "calib_num_bins": "2048"
+  },
+  "map50": 0.936070503005418,
+  "map50_95": 0.76081655435859,
+  "kernel_ms": null,
+  "size_mb": 4.31,
+  "qdq_pairs": 207,
+  "eval_n": 6449
+}

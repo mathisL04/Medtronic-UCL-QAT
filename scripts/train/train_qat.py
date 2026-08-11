@@ -2,6 +2,7 @@ import os
 import random
 import sys
 import json
+import copy
 import hashlib
 from pathlib import Path
 from datetime import datetime, timezone
@@ -107,6 +108,9 @@ def count_quantizers(model):
 # Number of TensorQuantizers inserted at quantise time, captured live so the
 # reload gate asserts against what THIS run actually inserted, never a literal.
 _inserted_quantizers = None
+# The composed quant config + active sweep knobs for THIS run (recorded in provenance).
+_quant_cfg = None
+_quant_knobs = {}
 
 
 def sha256(path):
@@ -150,12 +154,87 @@ def make_forward_loop(frames, device):
                 img = cv2.imread(str(fp))
                 if img is None:
                     raise RuntimeError(f"Calibration frame unreadable: {fp}")
-                x = torch.from_numpy(preprocess(img, IMG_SIZE)).to(device)
+                x = torch.from_numpy(preprocess(img, IMG_SIZE)).to(
+                    next(model.parameters()).device)   # follow the model's device (not a captured one)
                 model(x)
                 if (i + 1) % 32 == 0:
                     print(f"    calibrated {i + 1}/{len(frames)}", flush=True)
         model.train()
     return forward_loop
+
+
+# -----------------------------
+# Sweep knobs: composable quant config + calibration-method hook
+# -----------------------------
+# All knobs default to INT8_DEFAULT_CFG's EXACT behaviour, so a default run == V6.
+# Built via copy.deepcopy(mtq.INT8_DEFAULT_CFG); modelopt's object is never mutated.
+def compose_quant_config():
+    """Config-level knobs. WEIGHT_AXIS (0 per-channel | None per-tensor);
+    DISABLE_LAYERS (comma-sep fnmatch patterns -> {'enable': False}).
+    Verified: default (both unset) is byte-identical to INT8_DEFAULT_CFG."""
+    cfg = copy.deepcopy(mtq.INT8_DEFAULT_CFG)
+    knobs = {}
+    waxis = os.environ.get("WEIGHT_AXIS") or "0"          # unset/empty -> per-channel default
+    if str(waxis).lower() == "none":
+        cfg["quant_cfg"]["*weight_quantizer"]["axis"] = None
+        knobs["WEIGHT_AXIS"] = None
+    elif str(waxis) != "0":
+        sys.exit(f"WEIGHT_AXIS must be 0|None (got {waxis})")
+    dis = os.environ.get("DISABLE_LAYERS", "").strip()
+    if dis:
+        pats = [p.strip() for p in dis.split(",") if p.strip()]
+        for p in pats:
+            cfg["quant_cfg"][p] = {"enable": False}
+        knobs["DISABLE_LAYERS"] = pats
+    return cfg, knobs
+
+
+def _calibrate_qat(model, cfg, forward_loop):
+    """Calibration-method knob. CALIB_METHOD=max -> untouched default path (byte-identical to V6).
+    entropy|mse|percentile -> the VERIFIED per-quantizer histogram hook (smoke: 127 hist + 481 max,
+    0 fails): insert with algorithm=None, enable_stats_collection, run forward_loop, then
+    load_calib_amax on each ENABLED quantizer. Histogram methods hit the per-tensor *input_quantizer;
+    weights stay per-channel max."""
+    method = (os.environ.get("CALIB_METHOD") or "max").lower()
+    if method == "max":
+        return mtq.quantize(model, cfg, forward_loop)                # unchanged V6 path
+    if method not in ("entropy", "mse", "percentile"):
+        sys.exit(f"CALIB_METHOD must be max|entropy|mse|percentile (got {method})")
+
+    from modelopt.torch.quantization.model_calib import enable_stats_collection
+    from modelopt.torch.quantization.calib.histogram import HistogramCalibrator
+    # HISTOGRAM CALIB MUST RUN ON GPU. In get_model the model is still on CPU, and CPU
+    # np.histogram over 128 frames x ~127 quantizers stalls (0% GPU, all cores maxed). On GPU
+    # it is ~0.2 s/frame. Move to GPU for calibration; Ultralytics keeps it there afterwards.
+    if torch.cuda.is_available():
+        model.cuda()
+    cfg = copy.deepcopy(cfg)
+    cfg["quant_cfg"]["*input_quantizer"]["calibrator"] = "histogram"
+    if os.environ.get("CALIB_NUM_BINS"):
+        cfg["quant_cfg"]["*input_quantizer"]["num_bins"] = int(os.environ["CALIB_NUM_BINS"])
+    cfg["algorithm"] = None                                          # _no_calibrate -> insert only
+    mtq.quantize(model, cfg, forward_loop=None)                      # 1) insert, no auto-calib
+    enable_stats_collection(model)                                  # 2) arm stats collection
+    forward_loop(model)                                             # 3) collect histograms + max
+    pct = float(os.environ.get("CALIB_PERCENTILE", "99.99"))
+    # 4) load amax AND switch each quantizer from calib mode back to quant mode. This mirrors
+    # modelopt's finish_stats_collection (enable_quant + disable_calib). WITHOUT the switch the
+    # quantizers stay in calibration mode -> training does NOT fake-quant (not real QAT) and the
+    # ONNX export emits 0 Q/DQ nodes. Iterate `not _disabled` (what enable_stats_collection armed).
+    for _, q in model.named_modules():
+        if not isinstance(q, TensorQuantizer) or q._disabled:
+            continue
+        cal = getattr(q, "_calibrator", None)
+        if cal is not None and not getattr(q, "_dynamic", False):
+            if isinstance(cal, HistogramCalibrator):
+                kw = {"percentile": pct} if method == "percentile" else {}
+                if cal.compute_amax(method, **kw) is not None:
+                    q.load_calib_amax(method=method, **kw)
+            elif cal.compute_amax() is not None:
+                q.load_calib_amax()
+        q.enable_quant()       # <-- calib mode -> quant mode (the missing switch)
+        q.disable_calib()
+    return model
 
 
 # -----------------------------
@@ -202,10 +281,13 @@ class QATTrainer(DetectionTrainer):
         device = next(model.parameters()).device
         print(f"\n[QAT] warm-starting quantiser ranges from {len(frames)} train "
               f"frames across {len(chosen)} episodes (seed {CALIB_SEED})", flush=True)
-        print("[QAT] quantising with INT8_DEFAULT_CFG BEFORE ModelEMA "
-              "(get_model :292 vs ModelEMA :373)", flush=True)
-        model = mtq.quantize(model, mtq.INT8_DEFAULT_CFG,
-                             make_forward_loop(frames, device))
+        print("[QAT] quantising BEFORE ModelEMA (get_model :292 vs ModelEMA :373)", flush=True)
+        global _quant_cfg, _quant_knobs
+        _quant_cfg, _quant_knobs = compose_quant_config()
+        _calib_method = os.environ.get("CALIB_METHOD") or "max"
+        print(f"[QAT] knobs: {_quant_knobs or '(config defaults)'}  "
+              f"CALIB_METHOD={_calib_method}", flush=True)
+        model = _calibrate_qat(model, _quant_cfg, make_forward_loop(frames, device))
         mtq.print_quant_summary(model)
 
         global _inserted_quantizers
@@ -378,7 +460,12 @@ prov = {
     "amp": False,
     "source_checkpoint": str(MODEL_PATH),
     "source_sha256": sha256(MODEL_PATH),
-    "quant_config": "INT8_DEFAULT_CFG",
+    "quant_config": "INT8_DEFAULT_CFG(composed)",
+    "quant_config_knobs": _quant_knobs,
+    "calib_method": os.environ.get("CALIB_METHOD") or "max",
+    "calib_percentile": float(os.environ.get("CALIB_PERCENTILE", "99.99")),
+    "calib_num_bins": int(os.environ.get("CALIB_NUM_BINS", "2048")),
+    "quant_config_resolved": json.loads(json.dumps(_quant_cfg, default=str)),
     "n_calib_frames": N_CALIB,
     "warm_start_source": str(TRAIN_IMAGES),
     "warm_start_seed": CALIB_SEED,

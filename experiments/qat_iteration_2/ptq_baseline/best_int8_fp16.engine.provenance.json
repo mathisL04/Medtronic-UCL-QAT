@@ -1,0 +1,113 @@
+{
+  "timestamp_utc": "2026-08-04T13:14:09.868816+00:00",
+  "build_seconds": 511.82,
+  "host": "geneva.ee.ucl.ac.uk",
+  "device_index": "2",
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "precision": "int8",
+  "fp16_flag": true,
+  "int8_flag": true,
+  "tf32_enabled": false,
+  "layer_output_dtypes": {
+    "Int8": 149,
+    "Float": 40,
+    "Int32": 2,
+    "Int64": 1
+  },
+  "int8_layer_count": 149,
+  "float_layer_count": 40,
+  "engine_layer_count": 189,
+  "float_layer_names": [
+    "/model.10/m/m.0/attn/qkv/conv/Conv",
+    "/model.10/m/m.0/attn/Reshape",
+    "Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Constant_1_output_0 + ONNXTRT_Broadcast + /model.10/m/m.0/attn/Mul",
+    "/model.10/m/m.0/attn/Constant_1_output_0 + ONNXTRT_Broadcast + /model.10/m/m.0/attn/Mul",
+    "/model.10/m/m.0/attn/Split_16",
+    "/model.10/m/m.0/attn/MatMul",
+    "/model.10/m/m.0/attn/Softmax",
+    "/model.10/m/m.0/attn/Split_18",
+    "/model.10/m/m.0/attn/Reshape_2",
+    "/model.10/m/m.0/attn/MatMul_1",
+    "/model.10/m/m.0/attn/Reshape_1",
+    "/model.10/m/m.0/attn/pe/conv/Conv + /model.10/m/m.0/attn/Add",
+    "/model.22/m.0/m.0.1/attn/qkv/conv/Conv",
+    "/model.22/m.0/m.0.1/attn/Reshape",
+    "Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Constant_1_output_0_clone_1 + ONNXTRT_Broadcast_46 + /model.22/m.0/m.0.1/attn/Mul",
+    "/model.10/m/m.0/attn/Constant_1_output_0_clone_1 + ONNXTRT_Broadcast_46 + /model.22/m.0/m.0.1/attn/Mul",
+    "/model.22/m.0/m.0.1/attn/Split_42",
+    "/model.22/m.0/m.0.1/attn/MatMul",
+    "/model.22/m.0/m.0.1/attn/Softmax",
+    "/model.22/m.0/m.0.1/attn/Split_44",
+    "/model.22/m.0/m.0.1/attn/Reshape_2",
+    "/model.22/m.0/m.0.1/attn/MatMul_1",
+    "/model.22/m.0/m.0.1/attn/Reshape_1",
+    "/model.22/m.0/m.0.1/attn/pe/conv/Conv + /model.22/m.0/m.0.1/attn/Add",
+    "/model.23/one2one_cv2.2/one2one_cv2.2.1/conv/Conv",
+    "PWN(PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Sigmoid), PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Mul))",
+    "/model.23/one2one_cv2.2/one2one_cv2.2.2/Conv",
+    "/model.23/one2one_cv3.2/one2one_cv3.2.2/Conv",
+    "/model.23/one2one_cv2.1/one2one_cv2.1.1/conv/Conv",
+    "PWN(PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Sigmoid), PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Mul))",
+    "/model.23/one2one_cv2.1/one2one_cv2.1.2/Conv",
+    "/model.23/one2one_cv3.1/one2one_cv3.1.2/Conv",
+    "/model.23/one2one_cv2.0/one2one_cv2.0.2/Conv",
+    "/model.23/one2one_cv3.0/one2one_cv3.0.2/Conv",
+    "__myl_ReshReshReshConcSlicSlic_myl183_0",
+    "__myl_SubAddConcMulReshReshReshConcSigmConcTranSlicMaxrReshSlic_myl183_1",
+    "__myl_Topk_myl183_2",
+    "__myl_CastReshCastGathResh_myl183_3",
+    "__myl_Topk_myl183_4",
+    "__myl_CastReshReshGathCastReplDivNeqXorLtAndAddSeleSubReshCastGathConc_myl183_5"
+  ],
+  "tensorrt_version": "10.16.1.11",
+  "workspace_gib": 8.0,
+  "num_layers": 469,
+  "source_onnx": {
+    "path": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/baseline/best.onnx",
+    "sha256": "ac188a00ce0b8c90f07985f93473ee1f61541ddfb3b5b219ada2d4fe7ed911f7",
+    "bytes": 9805067
+  },
+  "output_engine": {
+    "path": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/baseline/best_int8.engine",
+    "sha256": "65f3ae147544eb3e5db5ed1c9647249189b42dafdbb5802d72b0912947f1a8cc",
+    "bytes": 4290004
+  },
+  "io_tensors": [
+    {
+      "name": "images",
+      "mode": "INPUT",
+      "shape": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "dtype": "FLOAT"
+    },
+    {
+      "name": "output0",
+      "mode": "OUTPUT",
+      "shape": [
+        1,
+        300,
+        6
+      ],
+      "dtype": "FLOAT"
+    }
+  ],
+  "calibration": {
+    "calibrator": "entropy",
+    "calibrator_class": "EntropyCalibrator",
+    "deprecated_api": true,
+    "n_frames": 500,
+    "calib_dir": "/home/zcemml1/medtronic_qat_data/calib_int8_train_yolo",
+    "manifest": "/home/zcemml1/medtronic_qat_data/calib_int8_train_yolo/calib500_seed42_manifest.txt",
+    "manifest_sha256": "07020bce34bf806b65a01cccfc3a445fcd6323b9044c488dce89a931353472f5",
+    "calib_set_sha256": "ce7774ec1ff18953f1775a53d31ad97384327d1247005106318b2ba96eb26d5a",
+    "source_split": "/home/zcemml1/medtronic_qat_data/datasets/sanoscience_yolo_full_nonexpert_stereo/images/train",
+    "seed": "42",
+    "cache": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/baseline/best_int8_entropy.calib_cache",
+    "cache_sha256": "845daa7a03030e2de1a0bfb8284d3f90a128c03e866c6c5283cbdffdaecf6033",
+    "int8_allow_fp16": true
+  }
+}

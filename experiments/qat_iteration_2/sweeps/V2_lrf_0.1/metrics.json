@@ -1,0 +1,23 @@
+{
+  "version": "V2_lrf_0.1",
+  "knobs": {
+    "version": "V2_lrf_0.1",
+    "lr0": "1e-3",
+    "epochs": "50",
+    "patience": "10",
+    "batch": "16",
+    "n_calib": "128",
+    "weight_axis": "0",
+    "disable_layers": "",
+    "calib_method": "max",
+    "calib_percentile": "99.99",
+    "calib_num_bins": "2048",
+    "lrf": "0.1"
+  },
+  "map50": 0.9346815144516204,
+  "map50_95": 0.767100038489059,
+  "kernel_ms": null,
+  "size_mb": 4.47,
+  "qdq_pairs": 207,
+  "eval_n": 6449
+}

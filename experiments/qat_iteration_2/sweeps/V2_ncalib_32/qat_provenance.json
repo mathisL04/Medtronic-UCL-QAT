@@ -1,0 +1,83 @@
+{
+  "timestamp_utc": "2026-08-07T17:01:29.470676+00:00",
+  "run_name": "V2_ncalib_32",
+  "epochs": 50,
+  "device": "1",
+  "amp": false,
+  "source_checkpoint": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/baseline/best.pt",
+  "source_sha256": "ee9c775c8ab27caf0abbaa23c3ac34dac9a1a9c7eb18745d6e3d4ab1f2a69fb7",
+  "quant_config": "INT8_DEFAULT_CFG(composed)",
+  "quant_config_knobs": {},
+  "calib_method": "max",
+  "calib_percentile": 99.99,
+  "calib_num_bins": 2048,
+  "quant_config_resolved": {
+    "quant_cfg": {
+      "*weight_quantizer": {
+        "num_bits": 8,
+        "axis": 0
+      },
+      "*input_quantizer": {
+        "num_bits": 8,
+        "axis": null
+      },
+      "nn.BatchNorm1d": {
+        "*": {
+          "enable": false
+        }
+      },
+      "nn.BatchNorm2d": {
+        "*": {
+          "enable": false
+        }
+      },
+      "nn.BatchNorm3d": {
+        "*": {
+          "enable": false
+        }
+      },
+      "nn.LeakyReLU": {
+        "*": {
+          "enable": false
+        }
+      },
+      "*lm_head*": {
+        "enable": false
+      },
+      "*proj_out.*": {
+        "enable": false
+      },
+      "*block_sparse_moe.gate*": {
+        "enable": false
+      },
+      "*router*": {
+        "enable": false
+      },
+      "*mlp.gate.*": {
+        "enable": false
+      },
+      "*mlp.shared_expert_gate.*": {
+        "enable": false
+      },
+      "*output_layer*": {
+        "enable": false
+      },
+      "output.*": {
+        "enable": false
+      },
+      "default": {
+        "enable": false
+      }
+    },
+    "algorithm": "max"
+  },
+  "n_calib_frames": 32,
+  "warm_start_source": "/home/zcemml1/medtronic_qat_data/datasets/sanoscience_yolo_full_nonexpert_stereo/images/train",
+  "warm_start_seed": 42,
+  "quantizers_inserted": 608,
+  "quantizers_after_restore": 608,
+  "quantizers_with_scales_after_restore": 253,
+  "reload_gate": "PASSED",
+  "torch": "2.7.0+cu128",
+  "single_gpu": true
+}

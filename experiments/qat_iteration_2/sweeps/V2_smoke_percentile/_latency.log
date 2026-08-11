@@ -1,0 +1,10 @@
+/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/scripts/benchmark/benchmark_latency_trt.py:15: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml
+------------------------------------------------------------
+GPU gate
+------------------------------------------------------------
+Target physical GPU 0: NVIDIA A100-SXM4-80GB
+Refusing to run. Compute processes already on this GPU:
+  pid 2009590: 864 MiB
+  pid 2138138: 778 MiB
+  pid 2280902: 1594 MiB

@@ -1,0 +1,32 @@
+{
+  "timestamp_utc": "2026-08-06T15:26:05.768903+00:00",
+  "mode": "engine",
+  "target": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/qat_iteration_2/sweeps/V2_smoke_percentile/best_qat_int8.engine",
+  "target_sha256": "65f9c6ed128a63305e3a7865c0525417b13554c4339e4f22295b1e450a0c03c5",
+  "device": "0",
+  "eval_set": "val100",
+  "img_dir": "/home/zcemml1/medtronic_qat_data/demo_val100_random_yolo/images/val",
+  "n_images": 100,
+  "n_gt_boxes": 237,
+  "n_detections": 1497,
+  "conf": 0.001,
+  "img_size": 640,
+  "max_dets": 300,
+  "metric": "pycocotools COCOeval bbox",
+  "map50": 0.854065976900251,
+  "map50_95": 0.6403177390088083,
+  "coco_stats": [
+    -1.0,
+    0.854065976900251,
+    0.6902676162625765,
+    0.4312144610849734,
+    0.7354580822278167,
+    0.6103667986140835,
+    0.3240506329113924,
+    0.7198312236286919,
+    0.729957805907173,
+    0.5346153846153846,
+    0.8095744680851062,
+    0.7094017094017093
+  ]
+}

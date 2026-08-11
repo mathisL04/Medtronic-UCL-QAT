@@ -25,7 +25,7 @@ DEVICE="${DEVICE:?DEVICE is required -- no default, same discipline as the bench
 EPOCHS="${EPOCHS:-1}"
 
 SCRATCH="/tmp/zcemml1_qat"                 # local, off-quota, non-durable
-NFS_OUT="$REPO/runs_qat/$RUN_NAME"         # durable, small: final artifacts only
+NFS_OUT="${NFS_OUT:-$REPO/runs_qat/$RUN_NAME}"   # durable, small: final artifacts (overridable for sweeps)
 TRAIN_SCRIPT="${TRAIN_SCRIPT:-scripts/train/train_qat.py}"
 
 stamp() { date '+%Y-%m-%d %H:%M:%S'; }

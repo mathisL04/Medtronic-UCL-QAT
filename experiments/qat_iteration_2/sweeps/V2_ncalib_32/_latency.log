@@ -1,0 +1,105 @@
+/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/scripts/benchmark/benchmark_latency_trt.py:15: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml
+------------------------------------------------------------
+GPU gate
+------------------------------------------------------------
+Target physical GPU 1: NVIDIA A100-SXM4-80GB
+Compute processes: none
+Utilisation samples (%): [0, 0, 0, 0, 0]  peak=0
+Memory used: 781 MiB of 81920 MiB
+Gate passed: GPU is idle (exclusive).
+
+============================================================
+TensorRT FP32 engine latency benchmark (pooled percentiles)
+============================================================
+Host: geneva.ee.ucl.ac.uk
+Engine: /home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/qat_iteration_2/sweeps/V2_ncalib_32/best_qat_int8.engine
+Physical NVML index: 1
+Image size: 640  Confidence: 0.25
+Repeats: 10  Warmup images: 30
+TensorRT: 10.16.1.11
+
+Preloading images into RAM...
+Loaded 100 images into RAM.
+
+Loading engine once...
+Engine loaded.
+
+Warmup...
+Warmup complete.
+
+Run 1/10
+  images: 100   mean total: 5.945 ms   min: 3.305   max: 12.216
+  gpu snapshot: util_peak=28%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run1.csv
+
+Run 2/10
+  images: 100   mean total: 3.354 ms   min: 2.969   max: 4.841
+  gpu snapshot: util_peak=32%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run2.csv
+
+Run 3/10
+  images: 100   mean total: 3.732 ms   min: 3.082   max: 7.443
+  gpu snapshot: util_peak=41%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run3.csv
+
+Run 4/10
+  images: 100   mean total: 3.578 ms   min: 2.889   max: 7.148
+  gpu snapshot: util_peak=33%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run4.csv
+
+Run 5/10
+  images: 100   mean total: 3.487 ms   min: 3.102   max: 9.339
+  gpu snapshot: util_peak=39%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run5.csv
+
+Run 6/10
+  images: 100   mean total: 3.313 ms   min: 2.762   max: 5.575
+  gpu snapshot: util_peak=43%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run6.csv
+
+Run 7/10
+  images: 100   mean total: 3.477 ms   min: 2.763   max: 7.503
+  gpu snapshot: util_peak=31%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run7.csv
+
+Run 8/10
+  images: 100   mean total: 3.222 ms   min: 2.769   max: 5.124
+  gpu snapshot: util_peak=37%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run8.csv
+
+Run 9/10
+  images: 100   mean total: 3.356 ms   min: 2.960   max: 5.397
+  gpu snapshot: util_peak=37%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run9.csv
+
+Run 10/10
+  images: 100   mean total: 3.380 ms   min: 2.894   max: 5.632
+  gpu snapshot: util_peak=41%  mem_peak=1259 MiB  other_compute_procs=0
+  saved per-image CSV: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_run10.csv
+Provenance: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_pooled_summary.provenance.json
+
+============================================================
+Pooled latency summary (TensorRT QAT_INT8 engine)
+============================================================
+Runs: 10   Images/run: 100   Pooled samples: 1000
+CSV summary: /home/zcemml1/medtronic_qat_data/runs_sanoscience/benchmark_latency_trt_qat_int8_seed42_pooled_summary.csv
+
+Stage             Mean       Std    Median       Min       P95       P99       Max
+----------------------------------------------------------------------------------
+Preprocess       1.810     1.121     1.460     0.995     5.135     6.302     9.677
+Inference        1.851     0.133     1.850     1.720     1.975     2.238     3.739
+H2D(GPU)         0.310     0.036     0.299     0.280     0.363     0.471     0.734
+Kernel(GPU)      1.498     0.115     1.518     1.400     1.572     1.702     3.345
+D2H(GPU)         0.017     0.006     0.016     0.011     0.020     0.024     0.189
+GPUlatency       1.825     0.128     1.826     1.697     1.945     2.179     3.713
+Postprocess      0.023     0.007     0.022     0.020     0.030     0.039     0.202
+Total            3.685     1.165     3.315     2.762     7.052     8.228    12.216
+----------------------------------------------------------------------------------
+Approx FPS (from pooled Total median): 301.64
+
+------------------------------------------------------------
+Per-repeat GPU snapshot (contention check)
+------------------------------------------------------------
+No other compute processes seen on any repeat: all clean.
+Done.

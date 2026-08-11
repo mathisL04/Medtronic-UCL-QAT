@@ -1,0 +1,38 @@
+{
+  "timestamp_utc": "2026-08-06T15:26:01.163577+00:00",
+  "stage": "tensorrt_int8_qdq_build",
+  "tensorrt_version": "10.16.1.11",
+  "device": "0",
+  "onnx_path": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/qat_iteration_2/sweeps/V2_smoke_percentile/best_qat.onnx",
+  "onnx_sha256": "6589811f7fa3cde8a87c897d5c694a72454d421a86a724b345fa0b4deca342d4",
+  "engine_path": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/qat_iteration_2/sweeps/V2_smoke_percentile/best_qat_int8.engine",
+  "engine_sha256": "65f9c6ed128a63305e3a7865c0525417b13554c4339e4f22295b1e450a0c03c5",
+  "engine_bytes": 4361900,
+  "workspace_gb": 8.0,
+  "quantization": "explicit Q/DQ (no calibrator)",
+  "num_layers": 2246,
+  "io": [
+    {
+      "name": "x",
+      "mode": "INPUT",
+      "shape": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "dtype": "FLOAT"
+    },
+    {
+      "name": "out",
+      "mode": "OUTPUT",
+      "shape": [
+        1,
+        300,
+        6
+      ],
+      "dtype": "FLOAT"
+    }
+  ],
+  "build_seconds": 207.0057295029983
+}
