@@ -1,0 +1,5 @@
+path: /workspace/datasets/sanoscience_yolo_full_nonexpert_stereo
+train: images/train
+val: images/val
+names:
+  0: surgical_tool
