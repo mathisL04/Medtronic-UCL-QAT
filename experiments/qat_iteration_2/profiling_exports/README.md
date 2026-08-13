@@ -1,5 +1,8 @@
 # QAT / PTQ trtexec profiling exports
 
+> **Note:** the three per-kernel profile JSONs (`qat_batch32_`, `ptq_int8_`, `fp16_per_kernel_profile.json`) now live in `../Per_kernel_json_file/`. The `*_layer_info.json` / `*_layers.json` and analysis files remain here.
+
+
 Raw profiling JSONs for the production TensorRT engines, for inspection/download.
 Generated with **trtexec 10.16.1.11** (`--exportProfile` + `--exportLayerInfo`,
 `--profilingVerbosity=detailed --separateProfileRun --noDataTransfers`), on an
@@ -41,3 +44,14 @@ Engine: `experiments/qat_iteration_2/ptq_baseline/best_int8_fp16.engine`
 - The per-kernel `averageMs` are **instrumented** (profiling adds ~1.58× overhead): they sum to ~1.91 ms for QAT, which scales to the real 1.200 ms median. Shares are unaffected by the scaling.
 - Precision is **not** a field on a layer — it is read from each layer's output `Format/Datatype` in the `*_layer_info.json`.
 - `name` fields show TensorRT's fusions explicitly, e.g. `.../conv/Conv + PWN(Sigmoid, Mul)` = a fused conv+SiLU kernel.
+
+## FP16 engine (same-architecture, NO Q/DQ baseline — mAP50-95 0.7748)
+
+Engine: `models/yolo26n_sanoscience_full_left/baseline/fp16/best_fp16.engine`
+Median GPU compute this session: **1.127 ms** (batch=1, no CUDA graph). Same trtexec
+flags as the QAT/PTQ profiles.
+
+| file | what it is |
+|---|---|
+| `fp16_per_kernel_profile.json` | trtexec `--exportProfile` — per-kernel timing (231 kernels). Same schema as QAT/PTQ. |
+| `fp16_layers.json` | trtexec `--exportLayerInfo` — per-layer structure/precision (FP16). |
