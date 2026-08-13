@@ -1,5 +1,8 @@
 # QAT / PTQ trtexec profiling exports
 
+> **Note:** the three per-kernel profile JSONs (`qat_batch32_`, `ptq_int8_`, `fp16_per_kernel_profile.json`) now live in `../Per_kernel_json_file/`. The `*_layer_info.json` / `*_layers.json` and analysis files remain here.
+
+
 Raw profiling JSONs for the production TensorRT engines, for inspection/download.
 Generated with **trtexec 10.16.1.11** (`--exportProfile` + `--exportLayerInfo`,
 `--profilingVerbosity=detailed --separateProfileRun --noDataTransfers`), on an
