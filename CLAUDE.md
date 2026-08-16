@@ -82,7 +82,7 @@ Generated datasets, `runs*/`, HF caches, and all weight/export formats (`*.pt`, 
 
 Two files are deliberate exceptions, force-added past the ignore rules: `models/yolo26n_sanoscience_full_left/best.pt` (the baseline checkpoint, hand-copied from the Cork run) and `yolo26n.pt` (pretrained init). Committing any other checkpoint needs `git add -f` and probably shouldn't happen.
 
-`reports/` holds curated metrics copied out of a run; `runs_sanoscience/` and `runs_utenn/` are raw untracked Ultralytics output. `scripts/archive/` holds superseded work — `utenn/` is an earlier abandoned dataset, `prototypes/` and `exploration/` are dead ends kept for reference. Don't build on archived scripts.
+`reports/` holds curated metrics copied out of a run; `runs_sanoscience/` and `runs_utenn/` are raw untracked Ultralytics output. Superseded work is **not on `main`** — it lives on the **`archive/legacy-scripts`** branch: the old `scripts/archive/` (`utenn/` abandoned dataset, `prototypes/`/`exploration/` dead ends, old benchmarks) plus the superseded QAT versions (`models/.../qat/smoke_1ep`, `qat/v5_10ep`). `git checkout archive/legacy-scripts` to see them. Don't build on archived work.
 
 ## Documentation convention
 
