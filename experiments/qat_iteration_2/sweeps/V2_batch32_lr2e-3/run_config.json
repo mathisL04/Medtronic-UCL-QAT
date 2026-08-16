@@ -1,0 +1,4 @@
+{ "version":"V2_batch32_lr2e-3", "lr0":"2e-3", "lrf":"0.01", "epochs":"50", "patience":"10",
+  "batch":"32", "n_calib":"128", "weight_axis":"0",
+  "disable_layers":"", "calib_method":"max",
+  "calib_percentile":"99.99", "calib_num_bins":"2048" }

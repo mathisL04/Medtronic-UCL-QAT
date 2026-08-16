@@ -1,0 +1,2582 @@
+[
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.0/conv/Conv + PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Float"
+    ],
+    "module_index": 0,
+    "profile_ms": 0.01476383998990059
+  },
+  {
+    "name": "/model.0/conv/Conv + PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 0,
+    "profile_ms": 0.016383679993450643
+  },
+  {
+    "name": "/model.1/conv/Conv + PWN(PWN(/model.1/act/Sigmoid), PWN(/model.1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 1,
+    "profile_ms": 0.012743359971791506
+  },
+  {
+    "name": "/model.2/cv1/conv/Conv + PWN(PWN(/model.2/cv1/act/Sigmoid), PWN(/model.2/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 2,
+    "profile_ms": 0.009728320017457008
+  },
+  {
+    "name": "/model.2/Split_1",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 2,
+    "profile_ms": 0.010598400002345442
+  },
+  {
+    "name": "/model.2/m.0/cv1/conv/Conv + PWN(PWN(/model.2/m.0/cv1/act/Sigmoid), PWN(/model.2/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 2,
+    "profile_ms": 0.01189887996762991
+  },
+  {
+    "name": "/model.2/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.2/m.0/cv2/act/Sigmoid), PWN(/model.2/m.0/cv2/act/Mul)), PWN(/model.2/m.0/Add))",
+    "type": "CaskJitConv",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 2,
+    "profile_ms": 0.014733759993687272
+  },
+  {
+    "name": "/model.2/Split_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 2,
+    "profile_ms": 0.008273919951170683
+  },
+  {
+    "name": "/model.2/Split_output_1 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 2,
+    "profile_ms": 0.006841600034385919
+  },
+  {
+    "name": "/model.2/m.0/Add_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 2,
+    "profile_ms": 0.006771840024739504
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.2/cv2/conv/Conv + PWN(PWN(/model.2/cv2/act/Sigmoid), PWN(/model.2/cv2/act/Mul))",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 2,
+    "profile_ms": 0.008563839932903647
+  },
+  {
+    "name": "/model.2/cv2/conv/Conv + PWN(PWN(/model.2/cv2/act/Sigmoid), PWN(/model.2/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 2,
+    "profile_ms": 0.012257600035518408
+  },
+  {
+    "name": "/model.3/conv/Conv + PWN(PWN(/model.3/act/Sigmoid), PWN(/model.3/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 3,
+    "profile_ms": 0.011208959966897964
+  },
+  {
+    "name": "/model.4/cv1/conv/Conv + PWN(PWN(/model.4/cv1/act/Sigmoid), PWN(/model.4/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 4,
+    "profile_ms": 0.0087945600412786
+  },
+  {
+    "name": "/model.4/Split_4",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 4,
+    "profile_ms": 0.006067840037867427
+  },
+  {
+    "name": "/model.4/m.0/cv1/conv/Conv + PWN(PWN(/model.4/m.0/cv1/act/Sigmoid), PWN(/model.4/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 4,
+    "profile_ms": 0.010046080052852631
+  },
+  {
+    "name": "/model.4/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.4/m.0/cv2/act/Sigmoid), PWN(/model.4/m.0/cv2/act/Mul)), PWN(/model.4/m.0/Add))",
+    "type": "CaskJitConv",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 4,
+    "profile_ms": 0.011575040044263005
+  },
+  {
+    "name": "/model.4/Split_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 4,
+    "profile_ms": 0.005917760012671351
+  },
+  {
+    "name": "/model.4/Split_output_1 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 4,
+    "profile_ms": 0.005833279988728464
+  },
+  {
+    "name": "/model.4/m.0/Add_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 4,
+    "profile_ms": 0.005827839989215136
+  },
+  {
+    "name": "/model.4/cv2/conv/Conv + PWN(PWN(/model.4/cv2/act/Sigmoid), PWN(/model.4/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 4,
+    "profile_ms": 0.009765439974144101
+  },
+  {
+    "name": "/model.5/conv/Conv + PWN(PWN(/model.5/act/Sigmoid), PWN(/model.5/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 5,
+    "profile_ms": 0.011689920099452139
+  },
+  {
+    "name": "/model.6/cv1/conv/Conv + PWN(PWN(/model.6/cv1/act/Sigmoid), PWN(/model.6/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.008425599932670592
+  },
+  {
+    "name": "/model.6/m.0/cv1/conv/Conv + PWN(PWN(/model.6/m.0/cv1/act/Sigmoid), PWN(/model.6/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.0077308799838647245
+  },
+  {
+    "name": "/model.6/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.6/m.0/m/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.008956800010055303
+  },
+  {
+    "name": "/model.6/m.0/m/m.0/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.008840320063754917
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.6/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.0/cv2/act/Mul)), PWN(/model.6/m.0/m/m.0/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.0063971199514344336
+  },
+  {
+    "name": "/model.6/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.6/m.0/m/m.1/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.008631360037252307
+  },
+  {
+    "name": "/model.6/m.0/m/m.1/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.008497599950060249
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.6/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.1/cv2/act/Mul)), PWN(/model.6/m.0/m/m.1/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.006806720020249486
+  },
+  {
+    "name": "/model.6/m.0/cv2/conv/Conv + PWN(PWN(/model.6/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.007705279951915145
+  },
+  {
+    "name": "/model.6/m.0/cv3/conv/Conv + PWN(PWN(/model.6/m.0/cv3/act/Sigmoid), PWN(/model.6/m.0/cv3/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.007735679959878326
+  },
+  {
+    "name": "/model.6/Split_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.005843520029447973
+  },
+  {
+    "name": "/model.6/Split_output_1 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.005779199968092143
+  },
+  {
+    "name": "/model.6/cv2/conv/Conv + PWN(PWN(/model.6/cv2/act/Sigmoid), PWN(/model.6/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.008276479989290238
+  },
+  {
+    "name": "/model.7/conv/Conv + PWN(PWN(/model.7/act/Sigmoid), PWN(/model.7/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 7,
+    "profile_ms": 0.010827840073034167
+  },
+  {
+    "name": "/model.8/cv1/conv/Conv + PWN(PWN(/model.8/cv1/act/Sigmoid), PWN(/model.8/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.008159679993987083
+  },
+  {
+    "name": "/model.8/m.0/cv1/conv/Conv + PWN(PWN(/model.8/m.0/cv1/act/Sigmoid), PWN(/model.8/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.0075606400519609455
+  },
+  {
+    "name": "/model.8/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.8/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.8/m.0/m/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.009266240000724792
+  },
+  {
+    "name": "/model.8/m.0/m/m.0/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.009214079966768622
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.8/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.8/m.0/m/m.0/cv2/act/Mul)), PWN(/model.8/m.0/m/m.0/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.00614720004145056
+  },
+  {
+    "name": "/model.8/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.8/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.8/m.0/m/m.1/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.009093759907409548
+  },
+  {
+    "name": "/model.8/m.0/m/m.1/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.008888319982215762
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.8/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.8/m.0/m/m.1/cv2/act/Mul)), PWN(/model.8/m.0/m/m.1/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.006374399946071208
+  },
+  {
+    "name": "/model.8/m.0/cv2/conv/Conv + PWN(PWN(/model.8/m.0/cv2/act/Sigmoid), PWN(/model.8/m.0/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.007737919962964952
+  },
+  {
+    "name": "/model.8/m.0/cv3/conv/Conv + PWN(PWN(/model.8/m.0/cv3/act/Sigmoid), PWN(/model.8/m.0/cv3/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.007542080008424819
+  },
+  {
+    "name": "/model.8/Split_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.005781439966522157
+  },
+  {
+    "name": "/model.8/Split_output_1 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.005597759964875877
+  },
+  {
+    "name": "/model.8/cv2/conv/Conv + PWN(PWN(/model.8/cv2/act/Sigmoid), PWN(/model.8/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 8,
+    "profile_ms": 0.00824287997558713
+  },
+  {
+    "name": "/model.9/cv1/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 9,
+    "profile_ms": 0.007959040035493671
+  },
+  {
+    "name": "/model.9/m/MaxPool",
+    "type": "CaskPooling",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 9,
+    "profile_ms": 0.00920671995729208
+  },
+  {
+    "name": "/model.9/m_1/MaxPool",
+    "type": "CaskPooling",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 9,
+    "profile_ms": 0.009011839954182506
+  },
+  {
+    "name": "/model.9/m_2/MaxPool",
+    "type": "CaskPooling",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 9,
+    "profile_ms": 0.009032319951802491
+  },
+  {
+    "name": "/model.9/cv1/conv/Conv_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 9,
+    "profile_ms": 0.005642879926599562
+  },
+  {
+    "name": "/model.9/m/MaxPool_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 9,
+    "profile_ms": 0.00562559993006289
+  },
+  {
+    "name": "/model.9/m_1/MaxPool_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 9,
+    "profile_ms": 0.005643519959412515
+  },
+  {
+    "name": "/model.9/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 9,
+    "profile_ms": 0.008350399890914559
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.9/cv2/act/Sigmoid), PWN(/model.9/cv2/act/Mul)), PWN(/model.9/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 9,
+    "profile_ms": 0.006572479996830225
+  },
+  {
+    "name": "/model.10/cv1/conv/Conv + PWN(PWN(/model.10/cv1/act/Sigmoid), PWN(/model.10/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.007978559988550842
+  },
+  {
+    "name": "/model.10/Split_13",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.005625599906779826
+  },
+  {
+    "name": "/model.10/m/m.0/attn/qkv/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.007777279978618026
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Reshape",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.007541760057210922
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Reshape",
+    "type": "NoOp",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.0
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Constant_1_output_0 + ONNXTRT_Broadcast + /model.10/m/m.0/attn/Mul",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.005544319972395897
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Constant_1_output_0 + ONNXTRT_Broadcast + /model.10/m/m.0/attn/Mul",
+    "type": "Scale",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.0061644799960777165
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Split_16",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.005519359982572496
+  },
+  {
+    "name": "/model.10/m/m.0/attn/MatMul",
+    "type": "CaskGemmMatrixMultiply",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.007788800015114248
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Softmax",
+    "type": "CaskSoftMaxV2",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.00894944000057876
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Split_18",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.0056236799387261276
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Reshape_2",
+    "type": "NoOp",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.10/m/m.0/attn/MatMul_1",
+    "type": "CaskGemmMatrixMultiply",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.008914240030571818
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Reshape_1",
+    "type": "NoOp",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.10/m/m.0/attn/pe/conv/Conv + /model.10/m/m.0/attn/Add",
+    "type": "CaskConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.021005440130829812
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/proj/conv/Conv + /model.10/m/m.0/Add",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.008602560004219413
+  },
+  {
+    "name": "/model.10/m/m.0/attn/proj/conv/Conv + /model.10/m/m.0/Add",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.007967680003494024
+  },
+  {
+    "name": "/model.10/m/m.0/ffn/ffn.0/conv/Conv + PWN(PWN(/model.10/m/m.0/ffn/ffn.0/act/Sigmoid), PWN(/model.10/m/m.0/ffn/ffn.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.008051839983090758
+  },
+  {
+    "name": "/model.10/m/m.0/ffn/ffn.1/conv/Conv + /model.10/m/m.0/Add_1",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.008177599981427192
+  },
+  {
+    "name": "/model.10/Split_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.0058169599808752534
+  },
+  {
+    "name": "/model.10/m/m.0/Add_1_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.005742719988338649
+  },
+  {
+    "name": "/model.10/cv2/conv/Conv + PWN(PWN(/model.10/cv2/act/Sigmoid), PWN(/model.10/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.007958720019087196
+  },
+  {
+    "name": "/model.11/Resize",
+    "type": "Resize",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 11,
+    "profile_ms": 0.006557440008036792
+  },
+  {
+    "name": "/model.11/Resize_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 11,
+    "profile_ms": 0.006294719949364662
+  },
+  {
+    "name": "/model.6/cv2/act/Mul_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 6,
+    "profile_ms": 0.005991680040024221
+  },
+  {
+    "name": "/model.13/cv1/conv/Conv + PWN(PWN(/model.13/cv1/act/Sigmoid), PWN(/model.13/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.009179520010948182
+  },
+  {
+    "name": "/model.13/m.0/cv1/conv/Conv + PWN(PWN(/model.13/m.0/cv1/act/Sigmoid), PWN(/model.13/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.007576000015251339
+  },
+  {
+    "name": "/model.13/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.13/m.0/m/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.008955520018935204
+  },
+  {
+    "name": "/model.13/m.0/m/m.0/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.008837120067328215
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.13/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.0/cv2/act/Mul)), PWN(/model.13/m.0/m/m.0/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.00640863994602114
+  },
+  {
+    "name": "/model.13/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.13/m.0/m/m.1/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.008628479996696114
+  },
+  {
+    "name": "/model.13/m.0/m/m.1/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.008483839957043528
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.13/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.1/cv2/act/Mul)), PWN(/model.13/m.0/m/m.1/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.006792320036329329
+  },
+  {
+    "name": "/model.13/m.0/cv2/conv/Conv + PWN(PWN(/model.13/m.0/cv2/act/Sigmoid), PWN(/model.13/m.0/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.007668799962848425
+  },
+  {
+    "name": "/model.13/m.0/cv3/conv/Conv + PWN(PWN(/model.13/m.0/cv3/act/Sigmoid), PWN(/model.13/m.0/cv3/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.007746879956685006
+  },
+  {
+    "name": "/model.13/Split_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.0059260800201445816
+  },
+  {
+    "name": "/model.13/Split_output_1 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.005781439980491996
+  },
+  {
+    "name": "/model.13/cv2/conv/Conv + PWN(PWN(/model.13/cv2/act/Sigmoid), PWN(/model.13/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.008257919969037176
+  },
+  {
+    "name": "/model.14/Resize",
+    "type": "Resize",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 14,
+    "profile_ms": 0.006955519933253527
+  },
+  {
+    "name": "/model.14/Resize_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 14,
+    "profile_ms": 0.007012479910627007
+  },
+  {
+    "name": "/model.4/cv2/act/Mul_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 4,
+    "profile_ms": 0.006900159954093397
+  },
+  {
+    "name": "/model.16/cv1/conv/Conv + PWN(PWN(/model.16/cv1/act/Sigmoid), PWN(/model.16/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.009521920047700406
+  },
+  {
+    "name": "/model.16/m.0/cv1/conv/Conv + PWN(PWN(/model.16/m.0/cv1/act/Sigmoid), PWN(/model.16/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.008275839984416961
+  },
+  {
+    "name": "/model.16/m.0/m/m.0/cv1/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.009636160004884004
+  },
+  {
+    "name": "PWN(PWN(/model.16/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.16/m.0/m/m.0/cv1/act/Mul))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.0068729599611833695
+  },
+  {
+    "name": "/model.16/m.0/m/m.0/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.009059839928522707
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.16/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/m/m.0/cv2/act/Mul)), PWN(/model.16/m.0/m/m.0/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.007241279995068908
+  },
+  {
+    "name": "/model.16/m.0/m/m.1/cv1/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.009100479958578944
+  },
+  {
+    "name": "PWN(PWN(/model.16/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.16/m.0/m/m.1/cv1/act/Mul))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.008692479957826436
+  },
+  {
+    "name": "/model.16/m.0/m/m.1/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.009007039936259389
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.16/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.16/m.0/m/m.1/cv2/act/Mul)), PWN(/model.16/m.0/m/m.1/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.007163200001232326
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.16/m.0/cv2/conv/Conv + PWN(PWN(/model.16/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/cv2/act/Mul))",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.0059539200365543365
+  },
+  {
+    "name": "/model.16/m.0/cv2/conv/Conv + PWN(PWN(/model.16/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.008305919934064149
+  },
+  {
+    "name": "Reformatting CopyNode for Output Tensor 0 to /model.16/m.0/cv2/conv/Conv + PWN(PWN(/model.16/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/cv2/act/Mul))",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.008962879981845617
+  },
+  {
+    "name": "/model.16/m.0/cv3/conv/Conv + PWN(PWN(/model.16/m.0/cv3/act/Sigmoid), PWN(/model.16/m.0/cv3/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.007996160052716732
+  },
+  {
+    "name": "/model.16/Split_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.005883520003408194
+  },
+  {
+    "name": "/model.16/Split_output_1 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.005862720021978021
+  },
+  {
+    "name": "/model.16/cv2/conv/Conv + PWN(PWN(/model.16/cv2/act/Sigmoid), PWN(/model.16/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 16,
+    "profile_ms": 0.008831679988652467
+  },
+  {
+    "name": "/model.17/conv/Conv + PWN(PWN(/model.17/act/Sigmoid), PWN(/model.17/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 17,
+    "profile_ms": 0.009525120053440332
+  },
+  {
+    "name": "/model.13/cv2/act/Mul_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 13,
+    "profile_ms": 0.005984960040077567
+  },
+  {
+    "name": "/model.19/cv1/conv/Conv + PWN(PWN(/model.19/cv1/act/Sigmoid), PWN(/model.19/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.00857311999425292
+  },
+  {
+    "name": "/model.19/m.0/cv1/conv/Conv + PWN(PWN(/model.19/m.0/cv1/act/Sigmoid), PWN(/model.19/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.007683199965395033
+  },
+  {
+    "name": "/model.19/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.19/m.0/m/m.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.008797440035268665
+  },
+  {
+    "name": "/model.19/m.0/m/m.0/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.008883200036361814
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.19/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.0/cv2/act/Mul)), PWN(/model.19/m.0/m/m.0/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.0063407999323681
+  },
+  {
+    "name": "/model.19/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.19/m.0/m/m.1/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.00866240001283586
+  },
+  {
+    "name": "/model.19/m.0/m/m.1/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.00849472003057599
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.19/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.1/cv2/act/Mul)), PWN(/model.19/m.0/m/m.1/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.0068371200561523435
+  },
+  {
+    "name": "/model.19/m.0/cv2/conv/Conv + PWN(PWN(/model.19/m.0/cv2/act/Sigmoid), PWN(/model.19/m.0/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.007694719918072223
+  },
+  {
+    "name": "/model.19/m.0/cv3/conv/Conv + PWN(PWN(/model.19/m.0/cv3/act/Sigmoid), PWN(/model.19/m.0/cv3/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.00772127992939204
+  },
+  {
+    "name": "/model.19/Split_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.005803839964792132
+  },
+  {
+    "name": "/model.19/Split_output_1 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.005758079956285656
+  },
+  {
+    "name": "/model.19/cv2/conv/Conv + PWN(PWN(/model.19/cv2/act/Sigmoid), PWN(/model.19/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 19,
+    "profile_ms": 0.00826175993308425
+  },
+  {
+    "name": "/model.20/conv/Conv + PWN(PWN(/model.20/act/Sigmoid), PWN(/model.20/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 20,
+    "profile_ms": 0.010601280080154539
+  },
+  {
+    "name": "/model.10/cv2/act/Mul_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.005811519986018539
+  },
+  {
+    "name": "/model.22/cv1/conv/Conv + PWN(PWN(/model.22/cv1/act/Sigmoid), PWN(/model.22/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.008462080070748924
+  },
+  {
+    "name": "/model.22/m.0/m.0.0/cv1/conv/Conv + PWN(PWN(/model.22/m.0/m.0.0/cv1/act/Sigmoid), PWN(/model.22/m.0/m.0.0/cv1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.010275520030409097
+  },
+  {
+    "name": "/model.22/m.0/m.0.0/cv2/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.01109311987645924
+  },
+  {
+    "name": "PWN(PWN(PWN(/model.22/m.0/m.0.0/cv2/act/Sigmoid), PWN(/model.22/m.0/m.0.0/cv2/act/Mul)), PWN(/model.22/m.0/m.0.0/Add))",
+    "type": "PointWiseV2",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.00658496000804007
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/qkv/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.007707199924625457
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.22/m.0/m.0.1/attn/Reshape",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.007521920064464211
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/Reshape",
+    "type": "NoOp",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.0
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Constant_1_output_0_clone_1 + ONNXTRT_Broadcast_46 + /model.22/m.0/m.0.1/attn/Mul",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.005546559956856072
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Constant_1_output_0_clone_1 + ONNXTRT_Broadcast_46 + /model.22/m.0/m.0.1/attn/Mul",
+    "type": "Scale",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 10,
+    "profile_ms": 0.0061638400098308925
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/Split_42",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.005523519953712821
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/MatMul",
+    "type": "CaskGemmMatrixMultiply",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.007814720002934337
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/Softmax",
+    "type": "CaskSoftMaxV2",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.008936000009998678
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/Split_44",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.005557759907096624
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/Reshape_2",
+    "type": "NoOp",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/MatMul_1",
+    "type": "CaskGemmMatrixMultiply",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.008943999875336886
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/Reshape_1",
+    "type": "NoOp",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/pe/conv/Conv + /model.22/m.0/m.0.1/attn/Add",
+    "type": "CaskConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.02094048023223877
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.22/m.0/m.0.1/attn/proj/conv/Conv + /model.22/m.0/m.0.1/Add",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.008547199917957186
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/proj/conv/Conv + /model.22/m.0/m.0.1/Add",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.007948479875922202
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/ffn/ffn.0/conv/Conv + PWN(PWN(/model.22/m.0/m.0.1/ffn/ffn.0/act/Sigmoid), PWN(/model.22/m.0/m.0.1/ffn/ffn.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.007962879901751875
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/ffn/ffn.1/conv/Conv + /model.22/m.0/m.0.1/Add_1",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.008200319996103645
+  },
+  {
+    "name": "/model.22/Split_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.005797119964845479
+  },
+  {
+    "name": "/model.22/Split_output_1 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.00565823994576931
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/Add_1_output_0 copy",
+    "type": "Reformat",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.0055657598841935396
+  },
+  {
+    "name": "/model.22/cv2/conv/Conv + PWN(PWN(/model.22/cv2/act/Sigmoid), PWN(/model.22/cv2/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 22,
+    "profile_ms": 0.008220799984410405
+  },
+  {
+    "name": "/model.23/one2one_cv2.2/one2one_cv2.2.0/conv/Conv + PWN(PWN(/model.23/one2one_cv2.2/one2one_cv2.2.0/act/Sigmoid), PWN(/model.23/one2one_cv2.2/one2one_cv2.2.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.012626880062744022
+  },
+  {
+    "name": "/model.23/one2one_cv2.2/one2one_cv2.2.1/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.008719360148534179
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Sigmoid), PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Mul))",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.005272960057482123
+  },
+  {
+    "name": "PWN(PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Sigmoid), PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Mul))",
+    "type": "PointWiseV2",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.0056559999473392965
+  },
+  {
+    "name": "/model.23/one2one_cv2.2/one2one_cv2.2.2/Conv",
+    "type": "CaskGemmConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.0074073600536212324
+  },
+  {
+    "name": "/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007899840027093888
+  },
+  {
+    "name": "/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007934719910845161
+  },
+  {
+    "name": "/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.008670399887487292
+  },
+  {
+    "name": "/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.0074172800686210395
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.23/one2one_cv3.2/one2one_cv3.2.2/Conv",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.005541119892150163
+  },
+  {
+    "name": "/model.23/one2one_cv3.2/one2one_cv3.2.2/Conv",
+    "type": "CaskGemmConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007609919952228665
+  },
+  {
+    "name": "/model.23/one2one_cv2.1/one2one_cv2.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv2.1/one2one_cv2.1.0/act/Sigmoid), PWN(/model.23/one2one_cv2.1/one2one_cv2.1.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.01056128011085093
+  },
+  {
+    "name": "/model.23/one2one_cv2.1/one2one_cv2.1.1/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.008725760178640485
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Sigmoid), PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Mul))",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.005536639899946749
+  },
+  {
+    "name": "PWN(PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Sigmoid), PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Mul))",
+    "type": "PointWiseV2",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.005803199945949018
+  },
+  {
+    "name": "/model.23/one2one_cv2.1/one2one_cv2.1.2/Conv",
+    "type": "CaskGemmConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007665599891915917
+  },
+  {
+    "name": "/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007887360015884042
+  },
+  {
+    "name": "/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007933759894222021
+  },
+  {
+    "name": "/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007989760097116232
+  },
+  {
+    "name": "/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007605119962245226
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.23/one2one_cv3.1/one2one_cv3.1.2/Conv",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.005799999968148768
+  },
+  {
+    "name": "/model.23/one2one_cv3.1/one2one_cv3.1.2/Conv",
+    "type": "CaskGemmConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007639359971508383
+  },
+  {
+    "name": "/model.23/one2one_cv2.0/one2one_cv2.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv2.0/one2one_cv2.0.0/act/Sigmoid), PWN(/model.23/one2one_cv2.0/one2one_cv2.0.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.012616000091657042
+  },
+  {
+    "name": "/model.23/one2one_cv2.0/one2one_cv2.0.1/conv/Conv",
+    "type": "CaskConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.009525120006874204
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Sigmoid), PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Mul))",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.0068675199104473
+  },
+  {
+    "name": "PWN(PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Sigmoid), PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Mul))",
+    "type": "PointWiseV2",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.005868479995988309
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.23/one2one_cv2.0/one2one_cv2.0.2/Conv",
+    "type": "NoOp",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.23/one2one_cv2.0/one2one_cv2.0.2/Conv",
+    "type": "CaskConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.007691839900799096
+  },
+  {
+    "name": "/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.00817567995749414
+  },
+  {
+    "name": "/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.008664960144087672
+  },
+  {
+    "name": "/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.008268159972503781
+  },
+  {
+    "name": "/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Mul))",
+    "type": "CaskConvolution",
+    "precision": "INT8",
+    "out_dtypes": [
+      "Int8"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.008402559915557503
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to /model.23/one2one_cv3.0/one2one_cv3.0.2/Conv",
+    "type": "Reformat",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Int8"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.006082880082540214
+  },
+  {
+    "name": "/model.23/one2one_cv3.0/one2one_cv3.0.2/Conv",
+    "type": "CaskGemmConvolution",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": 23,
+    "profile_ms": 0.008070719977840781
+  },
+  {
+    "name": "__myl_ReshReshReshConcSlicSlic_myl192_0",
+    "type": "kgen",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": null,
+    "profile_ms": 0.005815680003724993
+  },
+  {
+    "name": "__myl_SubAddConcMulReshReshReshConcSigmConcTranSlicMaxrReshSlic_myl192_1",
+    "type": "kgen",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": null,
+    "profile_ms": 0.00635295994579792
+  },
+  {
+    "name": "__myl_Topk_myl192_2",
+    "type": "kgen",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half",
+      "Int32"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": null,
+    "profile_ms": 0.033101118691265585
+  },
+  {
+    "name": "__myl_CastReshCastGathResh_myl192_3",
+    "type": "kgen",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half",
+      "Int64"
+    ],
+    "in_dtypes": [
+      "Half",
+      "Int32"
+    ],
+    "module_index": null,
+    "profile_ms": 0.005546239879913628
+  },
+  {
+    "name": "__myl_Topk_myl192_4",
+    "type": "kgen",
+    "precision": "FP16",
+    "out_dtypes": [
+      "Half",
+      "Int32"
+    ],
+    "in_dtypes": [
+      "Half"
+    ],
+    "module_index": null,
+    "profile_ms": 0.009166399911046029
+  },
+  {
+    "name": "__myl_CastReshReshGathCastReplDivNeqXorLtAndAddSeleSubReshCastGathConcCast_myl192_5",
+    "type": "kgen",
+    "precision": "FP32",
+    "out_dtypes": [
+      "Float"
+    ],
+    "in_dtypes": [
+      "Half",
+      "Int32",
+      "Int64"
+    ],
+    "module_index": null,
+    "profile_ms": 0.006083200043067336
+  }
+]

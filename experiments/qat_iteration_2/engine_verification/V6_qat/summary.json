@@ -1,0 +1,44 @@
+{
+  "n_layers": 253,
+  "detailed_verbosity": false,
+  "precision_count": {},
+  "type_count": {},
+  "n_reformat": 0,
+  "io": [
+    {
+      "name": "x",
+      "mode": "INPUT",
+      "shape": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "dtype": "FLOAT"
+    },
+    {
+      "name": "out",
+      "mode": "OUTPUT",
+      "shape": [
+        1,
+        300,
+        6
+      ],
+      "dtype": "FLOAT"
+    }
+  ],
+  "timing_clean": {
+    "median_ms": 1.398144006729126,
+    "mean_ms": 1.403358396689097,
+    "min_ms": 1.3937280178070068,
+    "max_ms": 1.5595519542694092,
+    "std_ms": 0.02646475076135924,
+    "n": 300
+  },
+  "profile_instrumented": {
+    "total_ms": 2.0432175969379034,
+    "reformat_ms": 0,
+    "reformat_share_pct": 0.0,
+    "n_layers_timed": 253
+  }
+}

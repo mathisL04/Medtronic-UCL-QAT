@@ -1,0 +1,53 @@
+{
+  "timestamp_utc": "2026-08-03T14:37:28.309970+00:00",
+  "stage": "pytorch_fp16_accuracy",
+  "precision": "fp16",
+  "model": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/models/yolo26n_sanoscience_full_left/baseline/best.pt",
+  "model_sha256": "ee9c775c8ab27caf0abbaa23c3ac34dac9a1a9c7eb18745d6e3d4ab1f2a69fb7",
+  "torch": "2.7.0+cu128",
+  "device": "0",
+  "eval_set": "val100",
+  "n_images": 100,
+  "n_gt_boxes": 237,
+  "n_detections": 986,
+  "conf": 0.001,
+  "img_size": 640,
+  "max_dets": 300,
+  "params_total": 2504190,
+  "params_fp16": 2504190,
+  "params_other": {},
+  "buffers_total": 19106,
+  "buffers_fp16": 18992,
+  "buffers_other": {
+    "torch.int64": 114
+  },
+  "probe_output_shape": [
+    1,
+    300,
+    6
+  ],
+  "probe_output_dtype": "torch.float32",
+  "modules_emitting_tensor": 261,
+  "modules_fp16_output": 260,
+  "modules_fp32_output": [
+    "model.23"
+  ],
+  "detect_head_output_dtype": "torch.float32",
+  "metric": "pycocotools COCOeval bbox",
+  "map50": 0.9342789813916577,
+  "map50_95": 0.7571660075117325,
+  "coco_stats": [
+    -1.0,
+    0.9342789813916577,
+    0.833899932436689,
+    0.5193979923542961,
+    0.7713739517223636,
+    0.8067565843003185,
+    0.3481012658227848,
+    0.819831223628692,
+    0.8244725738396624,
+    0.6,
+    0.8255319148936169,
+    0.8735042735042734
+  ]
+}

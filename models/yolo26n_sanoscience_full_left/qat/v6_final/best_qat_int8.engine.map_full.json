@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-07-30T16:59:29.254966+00:00",
+  "timestamp_utc": "2026-07-31T10:49:56.243819+00:00",
   "mode": "engine",
   "target": "models/yolo26n_sanoscience_full_left/qat/v6_final/best_qat_int8.engine",
   "target_sha256": "f45bd47f99cd86759234f4f1fd606d422204bc5a86e7a684bb8e6a9eb6e778a4",

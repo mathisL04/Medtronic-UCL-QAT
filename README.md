@@ -38,6 +38,16 @@ Completed:
 - TensorRT FP16 engine (V3): built, mAP measured (-0.0002 mAP50 vs V2)
 - Paired V2/V3 latency benchmark (1.49x inference, 1.28x end-to-end)
 - Engine mAP tooling (pycocotools, ONNX and engine through identical metric code)
+- TensorRT INT8 PTQ (V4): built, calibrated, measured — −0.0300 mAP50-95 vs FP32 (docs/05)
+- QAT (V5/V6): fake-quant fine-tune recovers INT8 accuracy to mAP50-95 0.7644, beats PTQ (docs/06)
+- QAT Iteration 2 sweep (11 OFAT runs, verified clean): **batch=32 → mAP50-95 0.7801 — best of any precision**
+- QAT build-side latency recovery (FP16+opt5): 1.40 → 1.20 ms, accuracy-neutral, across all 11 models
+
+```text
+QAT deployment candidate (batch=32, rebuilt FP16+opt5):
+  mAP50-95 0.7797  |  1.200 ms kernel  |  4.79 MB disk / 9.7 MB device scratch
+  best accuracy of any precision, ~0.12 ms above the PTQ floor (1.082 ms), no retraining
+```
 
 Current baseline:
 
@@ -183,12 +193,13 @@ Done:
 4. ONNX validation
 5. TensorRT FP32 engine (V2 baseline): build + parity + accuracy + latency
 6. TensorRT FP16 engine (V3): build + parity + accuracy + latency
+7. TensorRT INT8 PTQ (V4): build + calibrate + accuracy + latency (docs/05)
+8. QAT (V5/V6 + Iteration 2 sweep): batch=32 = 0.7801; FP16+opt5 rebuild = 1.20 ms (docs/06)
 ```
 
 Remaining:
 
 ```text
-7. TensorRT INT8 post-training quantisation
-8. Quantisation-aware training
-9. Accuracy / latency / memory comparison
+9. Final consolidated accuracy / latency / memory comparison across all precisions
+   (optional: QAT Q/DQ-placement or CUDA-graphs study to close the last ~0.11 ms to PTQ)
 ```

@@ -210,6 +210,138 @@ qat/smoke_1ep/                            the 1-epoch smoke
 INT8 kernel ~1.39-1.43 ms, ~57x faster than the PyTorch fake-quant forward (~80 ms).
 Full distributions: `reports/v5_latency/`.
 
+## QAT Iteration 2 — OFAT hyperparameter sweep + build-side latency recovery
+
+Two results, both in `experiments/qat_iteration_2/`: (1) an OFAT sweep over the QAT
+knobs that produced a model **beating every precision on accuracy**, and (2) a
+build-only rebuild that **recovered most of QAT's latency penalty at zero accuracy
+cost** — no retraining in either the sweep-analysis or the recovery.
+
+### The sweep — 11 runs, verified true OFAT
+
+All from the V6 defaults (baseline = V6: `EPOCHS=50 PATIENCE=10 WORKERS=0`, full-val
+eval), each moving exactly ONE knob. **OFAT verified from ground truth** (`args.yaml`
++ `qat_provenance.json`, not just the launcher config): every run moved exactly one
+knob, all cross-run invariants (epochs/patience/imgsz/amp/seed=0/calib=42) constant,
+each a real QAT model (253 quantisers-with-scales / 608 inserted; `disable_attention`
+correctly drops to 221). No confounded runs.
+
+```text
+knob (vs V6 default)   mAP50-95   note
+batch=32               0.7801     BEST OF ANY PRECISION — beats FP32 0.7747, FP16 0.7748
+lrf=0.1                0.7671
+lr0=1e-2               0.7647     LR0 ~invariant: early-stop normalises the schedule
+lr0=1e-3 (=V6)         0.7644     (baseline point)
+lr0=1e-4/3e-4/3e-3     0.7644     all ~0.7644 -> LR0 has no lasting effect
+n_calib=32 / 512       ~0.7608    N_CALIB ~invariant (warm start only)
+disable_attention      0.7580     disabling model.10/22 quant slightly WORSE + engine bloat
+batch=8                0.7318     small batch hurts
+lrf=0.001              0.7262     too little LR decay hurts
+```
+
+**Winner: `batch=32` -> mAP50-95 0.7801.** Confirmed LR-robust: a rescaled
+`batch=32, lr0=2e-3` run gave 0.7799 (identical). Original-build latency was
+**invariant across every knob (~1.39 ms)** — expected, since the knobs change weight
+*values*, not graph *structure*, and latency depends on structure.
+
+Master table + per-knob plots: `experiments/qat_iteration_2/sweeps/master_comparison.md`
+and `*_sweep/`.
+
+### Why QAT's engine was slower than PTQ (engine verification)
+
+Full per-layer audit in `experiments/qat_iteration_2/engine_verification/`. Measured
+clean on an exclusive idle A100:
+
+```text
+engine            layers   INT8   latency    note
+PTQ INT8+FP16       189     149   1.091 ms   implicit quant, TensorRT places boundaries optimally
+V6 QAT INT8         253      —    1.398 ms   explicit Q/DQ -> ~70 more kernels, worse fusion
+FP16                231      —    1.153 ms
+FP32                355      —    2.024 ms
+```
+
+Root cause is **launch-bound**: YOLO26n (2.5M params) never saturates the A100 at
+batch 1, so latency tracks *number of kernel launches*, not arithmetic. QAT's explicit
+Q/DQ graph fuses worse than PTQ's implicit quantisation -> ~70 extra launches -> the
+~0.3 ms gap. (INT8 is only ~5% faster than FP16 here — the fingerprint of launch-bound.)
+
+### The recovery — a smarter build, no retraining
+
+The production QAT build (`build_tensorrt_int8_qdq.py`) sets only `INT8`. Rebuilding
+the SAME `best_qat.onnx` with two extra builder flags recovers most of the gap:
+
+```text
+change              engine effect                        latency (V6)
+INT8 only (prod)    112 layers FP32, 77 reformats        1.398 ms
++ FP16 flag         non-INT8 layers FP32->FP16           1.341 ms   (alone: small)
++ opt-level 5       max fusion search, reformats 77->15  1.362 ms   (alone: small)
++ FP16 + opt5       BOTH — the synergy                   1.197 ms   <- accuracy 0.7639 (held)
+```
+
+Neither flag alone helps; **together they recover ~65% of the penalty** (1.398 ->
+1.197 ms) at **no accuracy cost** (V6 0.7644 -> 0.7639, −0.0005). This **supersedes**
+the earlier "rebuilding INT8+FP16 didn't change the kernel" note below — that tested
+FP16 *alone*; the opt-level-5 pairing was the missing lever.
+
+### FINAL before/after — all 11 sweep models rebuilt (FP16+opt5)
+
+Latency re-timed in ONE exclusive idle-GPU session (median spread 0.038 ms);
+accuracy full-val 6449-img pycocotools; disk/dev-mem static engine props.
+Full table: `experiments/qat_iteration_2/rebuild_fp16_opt5/BEFORE_AFTER.md`.
+
+```text
+model              INT8  old mAP  new mAP   old ms  new ms(clean)  disk MB  dev-mem MB
+batch_32 (WINNER)   143  0.7801   0.7797    1.386   1.200          4.79     9.7
+lrf_0.1             143  0.7671   0.7671      —     1.226          4.80     9.9
+lr0_1e-2            143  0.7647   0.7641    1.560   1.203          4.81     9.8
+lr0_3e-3            144  0.7644   0.7643      —     1.209          4.78     9.9
+lr0_1e-4            143  0.7644   0.7640    1.381   1.214          4.86     9.8
+lr0_3e-4            143  0.7644   0.7641    1.382   1.212          4.78     9.7
+ncalib_32           144  0.7609   0.7610    1.518   1.207          4.81     9.8
+ncalib_512          144  0.7608   0.7614      —     1.238          4.79     9.9
+disable_attention   117  0.7580   0.7588    1.381   1.226          5.55     9.9
+batch_8             143  0.7318   0.7305    1.391   1.218          4.79     9.9
+lrf_0.001           143  0.7262   0.7259      —     1.219          4.85     9.7
+```
+
+Every model: INT8 core unchanged (143-144; `disable_attention` 117 by design),
+accuracy flat (±0.001), latency down ~0.16-0.19 ms to a tight 1.20-1.24 ms band,
+footprint ~4.8 MB disk / ~9.8 MB device scratch.
+
+### PROVEN / INFERRED / open
+
+```text
+PROVEN
+  - Clean OFAT across all 11 runs (ground-truth args.yaml + provenance).
+  - batch=32 = 0.7801 mAP50-95, best of any precision, LR-robust (0.7799 rescaled).
+  - QAT engine slower than PTQ because it has ~70 more kernels (253 vs 189), launch-bound.
+  - FP16+opt5 rebuild: 1.40 -> 1.20 ms, accuracy-neutral, holds across all 11 models.
+INFERRED
+  - The ~70 extra layers are diffuse un-fused Q/DQ-boundary ops spread across the
+    backbone/neck (model.2,4,6,8,13,16,19) — NOT concentrated hot-spots, and NOT
+    reformats (rebuilt QAT has FEWER reformats than PTQ: 24 vs 45).
+  - ~44 of the non-INT8 layers are INHERENT float (attention model.10/22, head
+    model.23, NMS) — unrecoverable; PTQ has them too.
+OPEN (only if the last ~0.11 ms is deployment-critical)
+  - Q/DQ re-placement at EXPORT to reduce the diffuse overhead toward PTQ's 189
+    layers. High-effort, diffuse, uncertain (see diagnosis in this experiment's
+    thread); ceiling is MATCHING PTQ (~1.08 ms), not beating it.
+  - CUDA graphs — cheaper alternative, attacks launch overhead directly, zero
+    accuracy risk; try before any Q/DQ surgery.
+```
+
+### Deployment candidate
+
+```text
+QAT batch_32, rebuilt FP16+opt5:  mAP50-95 0.7797  @  1.200 ms  (4.79 MB disk / 9.7 MB scratch)
+  = best accuracy of ANY precision, ~0.12 ms above the PTQ floor (1.082 ms), no retraining.
+```
+
+The "QAT is ~0.3 ms slow" story was ~60% a build artifact; recovered to ~0.12 ms.
+If latency is the sole objective and accuracy is negotiable, PTQ (1.082 ms / 0.7564)
+remains the floor — QAT's value is the accuracy, delivered at competitive latency
+once built correctly.
+
 ## Export recipe (QAT fake-quant -> Q/DQ ONNX -> TensorRT INT8)
 
 Hard-won and fragile. **Root cause of the original failure — the API, not torch.**
@@ -237,6 +369,13 @@ build is calibrator-free** (explicit Q/DQ; `set_flag(INT8)`, scales read from no
 
 ## Latency analysis -- why INT8 is NOT faster than FP16 here
 
+> **Refined in Iteration 2 (see above).** The "rebuilding INT8+FP16 didn't change the
+> kernel" claim below tested the FP16 flag *alone*. Pairing FP16 with builder
+> `optimization_level=5` DOES recover latency (1.40 -> 1.20 ms, accuracy-neutral). The
+> residual gap to PTQ is diffuse un-fused Q/DQ overhead, not FP32 fallback. Read the
+> Iteration 2 section as the current conclusion; the paragraph below is retained as the
+> original V6 reasoning.
+
 INT8 kernel (1.429 ms) > FP16 (1.137 ms). Settled: **NOT FP32 fallback** (rebuilding
 INT8+FP16 moved 56 layers FP32->FP16 but the kernel didn't change, 1.429->1.440);
 **explicit-quantization semantics** forbid TensorRT from swapping Q/DQ-dictated INT8
@@ -249,6 +388,11 @@ INT8-accelerated edge HW (Jetson/DLA) or larger compute-bound models.
 
 - **DONE** — V6 exported -> INT8 engine -> measured: mAP50-95 **0.7644** (beats PTQ),
   kernel **1.397 ms**. All artifacts committed under `models/.../qat/v6_final/`.
-- Try **histogram/percentile calibration** (vs MaxCalibrator); consider reducing warmup —
-  could close the remaining ~0.010 gap to FP16.
-- INT8+FP16 build engine kept in scratch (does not help latency; not shipped).
+- **DONE (Iteration 2)** — OFAT sweep (11 runs, verified clean): **batch=32 -> 0.7801**,
+  best of any precision. Build-side latency recovery **1.40 -> 1.20 ms** (FP16+opt5),
+  accuracy-neutral, across all 11 models. Deployment candidate: batch_32 rebuilt =
+  **0.7797 @ 1.200 ms**. See the Iteration 2 section + `experiments/qat_iteration_2/`.
+- Try **histogram/percentile calibration** (vs MaxCalibrator); the framework supports it
+  (`CALIB_METHOD`), validated by the 1-epoch percentile smoke.
+- **CUDA graphs** — untested launch-overhead lever; cheapest path to close the residual
+  ~0.11 ms to PTQ, zero accuracy risk. Try before any Q/DQ-placement surgery.

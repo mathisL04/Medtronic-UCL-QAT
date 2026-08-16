@@ -1,0 +1,1773 @@
+[
+  {
+    "name": "/model.0/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.015419199941679835
+  },
+  {
+    "name": "model.0.conv.weight + /model.0/conv/weight_quantizer/QuantizeLinear + /model.0/conv/Conv + PWN(/model.0/act/Sigmoid, /model.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.016266559921205043
+  },
+  {
+    "name": "model.1.conv.weight + /model.1/conv/weight_quantizer/QuantizeLinear + /model.1/conv/Conv + PWN(/model.1/act/Sigmoid, /model.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.012939840098842978
+  },
+  {
+    "name": "model.2.cv1.conv.weight + /model.2/cv1/conv/weight_quantizer/QuantizeLinear + /model.2/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011747520016506315
+  },
+  {
+    "name": "PWN(/model.2/cv1/act/Sigmoid, /model.2/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007333760028705001
+  },
+  {
+    "name": "/model.2/m.0/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00964767998084426
+  },
+  {
+    "name": "model.2.m.0.cv1.conv.weight + /model.2/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.2/m.0/cv1/conv/Conv + PWN(/model.2/m.0/cv1/act/Sigmoid, /model.2/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011681280061602593
+  },
+  {
+    "name": "model.2.m.0.cv2.conv.weight + /model.2/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.2/m.0/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.013331519952043892
+  },
+  {
+    "name": "/model.2/cv2/conv/input_quantizer/QuantizeLinear_clone_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00848511996679008
+  },
+  {
+    "name": "PWN(PWN(/model.2/m.0/cv2/act/Sigmoid, /model.2/m.0/cv2/act/Mul), /model.2/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0074227200355380775
+  },
+  {
+    "name": "/model.2/cv2/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0071887999959290025
+  },
+  {
+    "name": "/model.2/Concat_/model.2/Slice_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006893760017119348
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to model.2.cv2.conv.weight + /model.2/cv2/conv/weight_quantizer/QuantizeLinear + /model.2/cv2/conv/Conv + PWN(/model.2/cv2/act/Sigmoid, /model.2/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011743040001019835
+  },
+  {
+    "name": "model.2.cv2.conv.weight + /model.2/cv2/conv/weight_quantizer/QuantizeLinear + /model.2/cv2/conv/Conv + PWN(/model.2/cv2/act/Sigmoid, /model.2/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.014144320040941238
+  },
+  {
+    "name": "model.3.conv.weight + /model.3/conv/weight_quantizer/QuantizeLinear + /model.3/conv/Conv + PWN(/model.3/act/Sigmoid, /model.3/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011326399995014072
+  },
+  {
+    "name": "model.4.cv1.conv.weight + /model.4/cv1/conv/weight_quantizer/QuantizeLinear + /model.4/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009333759965375065
+  },
+  {
+    "name": "PWN(/model.4/cv1/act/Sigmoid, /model.4/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00701215997338295
+  },
+  {
+    "name": "/model.4/m.0/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010083840042352677
+  },
+  {
+    "name": "model.4.m.0.cv1.conv.weight + /model.4/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.4/m.0/cv1/conv/Conv + PWN(/model.4/m.0/cv1/act/Sigmoid, /model.4/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00996928003616631
+  },
+  {
+    "name": "model.4.m.0.cv2.conv.weight + /model.4/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.4/m.0/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010035199988633394
+  },
+  {
+    "name": "/model.4/cv2/conv/input_quantizer/QuantizeLinear_clone_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010353279951959848
+  },
+  {
+    "name": "PWN(PWN(/model.4/m.0/cv2/act/Sigmoid, /model.4/m.0/cv2/act/Mul), /model.4/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007218559952452779
+  },
+  {
+    "name": "/model.4/cv2/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009580480037257075
+  },
+  {
+    "name": "/model.4/Concat_/model.4/Slice_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006230079983361066
+  },
+  {
+    "name": "model.4.cv2.conv.weight + /model.4/cv2/conv/weight_quantizer/QuantizeLinear + /model.4/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.012199360001832247
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to PWN(/model.4/cv2/act/Sigmoid, /model.4/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "PWN(/model.4/cv2/act/Sigmoid, /model.4/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007345920009538531
+  },
+  {
+    "name": "Reformatting CopyNode for Output Tensor 0 to PWN(/model.4/cv2/act/Sigmoid, /model.4/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.5/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00988607995212078
+  },
+  {
+    "name": "model.5.conv.weight + /model.5/conv/weight_quantizer/QuantizeLinear + /model.5/conv/Conv + PWN(/model.5/act/Sigmoid, /model.5/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011744960034266115
+  },
+  {
+    "name": "model.6.cv1.conv.weight + /model.6/cv1/conv/weight_quantizer/QuantizeLinear + /model.6/cv1/conv/Conv + PWN(/model.6/cv1/act/Sigmoid, /model.6/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00851583999581635
+  },
+  {
+    "name": "model.6.m.0.cv2.conv.weight + /model.6/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/cv2/conv/Conv + PWN(/model.6/m.0/cv2/act/Sigmoid, /model.6/m.0/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007737599923275411
+  },
+  {
+    "name": "model.6.m.0.cv1.conv.weight + /model.6/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0074579200521111486
+  },
+  {
+    "name": "PWN(/model.6/m.0/cv1/act/Sigmoid, /model.6/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005901760025881231
+  },
+  {
+    "name": "Reformatting CopyNode for Output Tensor 0 to PWN(/model.6/m.0/cv1/act/Sigmoid, /model.6/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.6/m.0/m/m.0/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0085984000377357
+  },
+  {
+    "name": "model.6.m.0.m.0.cv1.conv.weight + /model.6/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/m/m.0/cv1/conv/Conv + PWN(/model.6/m.0/m/m.0/cv1/act/Sigmoid, /model.6/m.0/m/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0089718400221318
+  },
+  {
+    "name": "model.6.m.0.m.0.cv2.conv.weight + /model.6/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/m/m.0/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008747520055621863
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.6/m.0/m/m.0/cv2/act/Sigmoid, /model.6/m.0/m/m.0/cv2/act/Mul), /model.6/m.0/m/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "PWN(PWN(/model.6/m.0/m/m.0/cv2/act/Sigmoid, /model.6/m.0/m/m.0/cv2/act/Mul), /model.6/m.0/m/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006019200030714274
+  },
+  {
+    "name": "/model.6/m.0/m/m.1/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00853408000431955
+  },
+  {
+    "name": "model.6.m.0.m.1.cv1.conv.weight + /model.6/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/m/m.1/cv1/conv/Conv + PWN(/model.6/m.0/m/m.1/cv1/act/Sigmoid, /model.6/m.0/m/m.1/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008773120054975152
+  },
+  {
+    "name": "model.6.m.0.m.1.cv2.conv.weight + /model.6/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/m/m.1/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00847775997593999
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 1 to PWN(PWN(/model.6/m.0/m/m.1/cv2/act/Sigmoid, /model.6/m.0/m/m.1/cv2/act/Mul), /model.6/m.0/m/m.1/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "PWN(PWN(/model.6/m.0/m/m.1/cv2/act/Sigmoid, /model.6/m.0/m/m.1/cv2/act/Mul), /model.6/m.0/m/m.1/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006383039932698012
+  },
+  {
+    "name": "model.6.m.0.cv3.conv.weight + /model.6/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.6/m.0/cv3/conv/Conv + PWN(/model.6/m.0/cv3/act/Sigmoid, /model.6/m.0/cv3/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007857599980197846
+  },
+  {
+    "name": "/model.6/Concat_/model.6/Slice_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00581727999728173
+  },
+  {
+    "name": "/model.6/m.0/cv2/conv/input_quantizer/QuantizeLinear_output_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0057539199665188785
+  },
+  {
+    "name": "model.6.cv2.conv.weight + /model.6/cv2/conv/weight_quantizer/QuantizeLinear + /model.6/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00837247991003096
+  },
+  {
+    "name": "PWN(/model.6/cv2/act/Sigmoid, /model.6/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006234879954718053
+  },
+  {
+    "name": "/model.7/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009999040002003311
+  },
+  {
+    "name": "model.7.conv.weight + /model.7/conv/weight_quantizer/QuantizeLinear + /model.7/conv/Conv + PWN(/model.7/act/Sigmoid, /model.7/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.01091424006037414
+  },
+  {
+    "name": "model.8.cv1.conv.weight + /model.8/cv1/conv/weight_quantizer/QuantizeLinear + /model.8/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010607359977439047
+  },
+  {
+    "name": "PWN(/model.8/cv1/act/Sigmoid, /model.8/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00592640002258122
+  },
+  {
+    "name": "/model.8/m.0/cv2/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008377599930390715
+  },
+  {
+    "name": "model.8.m.0.cv2.conv.weight + /model.8/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/cv2/conv/Conv + PWN(/model.8/m.0/cv2/act/Sigmoid, /model.8/m.0/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00783679997548461
+  },
+  {
+    "name": "model.8.m.0.cv1.conv.weight + /model.8/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00758784000761807
+  },
+  {
+    "name": "PWN(/model.8/m.0/cv1/act/Sigmoid, /model.8/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005749119990505278
+  },
+  {
+    "name": "/model.8/m.0/m/m.0/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00786719996482134
+  },
+  {
+    "name": "model.8.m.0.m.0.cv1.conv.weight + /model.8/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/m/m.0/cv1/conv/Conv + PWN(/model.8/m.0/m/m.0/cv1/act/Sigmoid, /model.8/m.0/m/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009372480008751153
+  },
+  {
+    "name": "model.8.m.0.m.0.cv2.conv.weight + /model.8/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/m/m.0/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00919135995209217
+  },
+  {
+    "name": "PWN(PWN(/model.8/m.0/m/m.0/cv2/act/Sigmoid, /model.8/m.0/m/m.0/cv2/act/Mul), /model.8/m.0/m/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005893759997561574
+  },
+  {
+    "name": "/model.8/m.0/m/m.1/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007973760021850467
+  },
+  {
+    "name": "model.8.m.0.m.1.cv1.conv.weight + /model.8/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/m/m.1/cv1/conv/Conv + PWN(/model.8/m.0/m/m.1/cv1/act/Sigmoid, /model.8/m.0/m/m.1/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009163199979811907
+  },
+  {
+    "name": "model.8.m.0.m.1.cv2.conv.weight + /model.8/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/m/m.1/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008846400026232003
+  },
+  {
+    "name": "PWN(PWN(/model.8/m.0/m/m.1/cv2/act/Sigmoid, /model.8/m.0/m/m.1/cv2/act/Mul), /model.8/m.0/m/m.1/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006200320012867451
+  },
+  {
+    "name": "model.8.m.0.cv3.conv.weight + /model.8/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.8/m.0/cv3/conv/Conv + PWN(/model.8/m.0/cv3/act/Sigmoid, /model.8/m.0/cv3/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00787839996162802
+  },
+  {
+    "name": "/model.8/cv2/conv/input_quantizer/QuantizeLinear_clone_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005928000002168119
+  },
+  {
+    "name": "/model.8/cv2/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008349759904667735
+  },
+  {
+    "name": "/model.8/Concat_/model.8/Slice_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0059299200261011716
+  },
+  {
+    "name": "model.8.cv2.conv.weight + /model.8/cv2/conv/weight_quantizer/QuantizeLinear + /model.8/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00825375996530056
+  },
+  {
+    "name": "PWN(/model.8/cv2/act/Sigmoid, /model.8/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005963840028271079
+  },
+  {
+    "name": "/model.9/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010311999982222915
+  },
+  {
+    "name": "model.9.cv1.conv.weight + /model.9/cv1/conv/weight_quantizer/QuantizeLinear + /model.9/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00787391999270767
+  },
+  {
+    "name": "/model.9/m/MaxPool",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.01122751995921135
+  },
+  {
+    "name": "/model.9/m_1/MaxPool",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009080319944769145
+  },
+  {
+    "name": "/model.9/m_2/MaxPool",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008993919985368849
+  },
+  {
+    "name": "/model.9/m/input_quantizer/QuantizeLinear_output_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005693759946152568
+  },
+  {
+    "name": "/model.9/m/input_quantizer_1/QuantizeLinear_output_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007533119963482022
+  },
+  {
+    "name": "/model.9/m/input_quantizer_2/QuantizeLinear_output_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005661119953729212
+  },
+  {
+    "name": "model.9.cv2.conv.weight + /model.9/cv2/conv/weight_quantizer/QuantizeLinear + /model.9/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008373119849711657
+  },
+  {
+    "name": "PWN(PWN(/model.9/cv2/act/Sigmoid, /model.9/cv2/act/Mul), /model.9/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006431679972447455
+  },
+  {
+    "name": "model.10.cv1.conv.weight + /model.10/cv1/conv/weight_quantizer/QuantizeLinear + /model.10/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00779999999795109
+  },
+  {
+    "name": "PWN(/model.10/cv1/act/Sigmoid, /model.10/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0059411200322210785
+  },
+  {
+    "name": "/model.10/Split_547",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005472320010885596
+  },
+  {
+    "name": "/model.10/m/m.0/attn/qkv/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0087062400393188
+  },
+  {
+    "name": "model.10.m.0.attn.qkv.conv.weight + /model.10/m/m.0/attn/qkv/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/attn/qkv/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010011520013213157
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Reshape",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Split_554",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0057350399671122435
+  },
+  {
+    "name": "/model.10/m/m.0/attn/pe/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0081708799675107
+  },
+  {
+    "name": "/model.10/m/m.0/attn/Reshape_2",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to model.10.m.0.attn.pe.conv.weight + /model.10/m/m.0/attn/pe/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/attn/pe/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006656640036962927
+  },
+  {
+    "name": "model.10.m.0.attn.pe.conv.weight + /model.10/m/m.0/attn/pe/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/attn/pe/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011281279930844903
+  },
+  {
+    "name": "__myl_MoveSlicSlicTran_myl93_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005716479951515794
+  },
+  {
+    "name": "/model.10/m/m.0/attn/MatMul_myl93_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010114240078255534
+  },
+  {
+    "name": "__myl_MaxrSubExpSum_myl93_2",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0069388799462467435
+  },
+  {
+    "name": "__myl_DivMulTran_myl93_3",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007440000041387975
+  },
+  {
+    "name": "/model.10/m/m.0/attn/MatMul_1_myl93_4",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010870400108397007
+  },
+  {
+    "name": "__myl_MulAddAdd_myl93_5",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005688319951295853
+  },
+  {
+    "name": "/model.10/m/m.0/attn/proj/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008332799915224313
+  },
+  {
+    "name": "model.10.m.0.attn.proj.conv.weight + /model.10/m/m.0/attn/proj/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/attn/proj/conv/Conv + /model.10/m/m.0/Add",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008076160037890077
+  },
+  {
+    "name": "/model.10/m/m.0/ffn/ffn.0/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00851839997805655
+  },
+  {
+    "name": "model.10.m.0.ffn.0.conv.weight + /model.10/m/m.0/ffn/ffn.0/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/ffn/ffn.0/conv/Conv + PWN(/model.10/m/m.0/ffn/ffn.0/act/Sigmoid, /model.10/m/m.0/ffn/ffn.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007974720010533929
+  },
+  {
+    "name": "/model.10/cv2/conv/input_quantizer/QuantizeLinear_clone_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008236479945480824
+  },
+  {
+    "name": "model.10.m.0.ffn.1.conv.weight + /model.10/m/m.0/ffn/ffn.1/conv/weight_quantizer/QuantizeLinear + /model.10/m/m.0/ffn/ffn.1/conv/Conv + /model.10/m/m.0/Add_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008047039955854415
+  },
+  {
+    "name": "/model.10/cv2/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008360959962010384
+  },
+  {
+    "name": "/model.10/Concat_/model.10/Split_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0059299200074747205
+  },
+  {
+    "name": "model.10.cv2.conv.weight + /model.10/cv2/conv/weight_quantizer/QuantizeLinear + /model.10/cv2/conv/Conv + PWN(/model.10/cv2/act/Sigmoid, /model.10/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008299199929460883
+  },
+  {
+    "name": "/model.13/cv1/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00972223998978734
+  },
+  {
+    "name": "/model.11/Resize",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0064998399931937454
+  },
+  {
+    "name": "/model.12/Concat_/model.11/Resize_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006309439926408231
+  },
+  {
+    "name": "model.13.cv1.conv.weight + /model.13/cv1/conv/weight_quantizer/QuantizeLinear + /model.13/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011223999941721559
+  },
+  {
+    "name": "PWN(/model.13/cv1/act/Sigmoid, /model.13/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006185919963754714
+  },
+  {
+    "name": "/model.13/m.0/cv2/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009886719956994057
+  },
+  {
+    "name": "model.13.m.0.cv2.conv.weight + /model.13/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/cv2/conv/Conv + PWN(/model.13/m.0/cv2/act/Sigmoid, /model.13/m.0/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007727999975904822
+  },
+  {
+    "name": "model.13.m.0.cv1.conv.weight + /model.13/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007526720031164586
+  },
+  {
+    "name": "PWN(/model.13/m.0/cv1/act/Sigmoid, /model.13/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005912320013158024
+  },
+  {
+    "name": "Reformatting CopyNode for Output Tensor 0 to PWN(/model.13/m.0/cv1/act/Sigmoid, /model.13/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.13/m.0/m/m.0/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0086147200781852
+  },
+  {
+    "name": "model.13.m.0.m.0.cv1.conv.weight + /model.13/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/m/m.0/cv1/conv/Conv + PWN(/model.13/m.0/m/m.0/cv1/act/Sigmoid, /model.13/m.0/m/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008913599913939833
+  },
+  {
+    "name": "model.13.m.0.m.0.cv2.conv.weight + /model.13/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/m/m.0/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008770239958539604
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.13/m.0/m/m.0/cv2/act/Sigmoid, /model.13/m.0/m/m.0/cv2/act/Mul), /model.13/m.0/m/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "PWN(PWN(/model.13/m.0/m/m.0/cv2/act/Sigmoid, /model.13/m.0/m/m.0/cv2/act/Mul), /model.13/m.0/m/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005958720031194389
+  },
+  {
+    "name": "/model.13/m.0/m/m.1/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008418239941820503
+  },
+  {
+    "name": "model.13.m.0.m.1.cv1.conv.weight + /model.13/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/m/m.1/cv1/conv/Conv + PWN(/model.13/m.0/m/m.1/cv1/act/Sigmoid, /model.13/m.0/m/m.1/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00884159998036921
+  },
+  {
+    "name": "model.13.m.0.m.1.cv2.conv.weight + /model.13/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/m/m.1/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008447999861091375
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 1 to PWN(PWN(/model.13/m.0/m/m.1/cv2/act/Sigmoid, /model.13/m.0/m/m.1/cv2/act/Mul), /model.13/m.0/m/m.1/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "PWN(PWN(/model.13/m.0/m/m.1/cv2/act/Sigmoid, /model.13/m.0/m/m.1/cv2/act/Mul), /model.13/m.0/m/m.1/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006425279970280826
+  },
+  {
+    "name": "model.13.m.0.cv3.conv.weight + /model.13/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.13/m.0/cv3/conv/Conv + PWN(/model.13/m.0/cv3/act/Sigmoid, /model.13/m.0/cv3/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0078633599774912
+  },
+  {
+    "name": "/model.13/cv2/conv/input_quantizer/QuantizeLinear_clone_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006231359951198101
+  },
+  {
+    "name": "/model.13/cv2/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009898560028523207
+  },
+  {
+    "name": "/model.13/Concat_/model.13/Slice_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005985919991508127
+  },
+  {
+    "name": "model.13.cv2.conv.weight + /model.13/cv2/conv/weight_quantizer/QuantizeLinear + /model.13/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008335679862648248
+  },
+  {
+    "name": "PWN(/model.13/cv2/act/Sigmoid, /model.13/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006247359947301447
+  },
+  {
+    "name": "/model.16/cv1/conv/input_quantizer/QuantizeLinear_clone_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009970239996910095
+  },
+  {
+    "name": "/model.16/cv1/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009569280045107008
+  },
+  {
+    "name": "/model.14/Resize",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0069708799431100485
+  },
+  {
+    "name": "/model.15/Concat_/model.14/Resize_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006964479926973581
+  },
+  {
+    "name": "model.16.cv1.conv.weight + /model.16/cv1/conv/weight_quantizer/QuantizeLinear + /model.16/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.01173088001087308
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to PWN(/model.16/cv1/act/Sigmoid, /model.16/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "PWN(/model.16/cv1/act/Sigmoid, /model.16/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006534719974733889
+  },
+  {
+    "name": "Reformatting CopyNode for Output Tensor 0 to PWN(/model.16/cv1/act/Sigmoid, /model.16/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.16/m.0/cv2/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.01143775999546051
+  },
+  {
+    "name": "model.16.m.0.cv2.conv.weight + /model.16/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/cv2/conv/Conv + PWN(/model.16/m.0/cv2/act/Sigmoid, /model.16/m.0/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008373759863898158
+  },
+  {
+    "name": "Reformatting CopyNode for Output Tensor 0 to model.16.m.0.cv2.conv.weight + /model.16/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/cv2/conv/Conv + PWN(/model.16/m.0/cv2/act/Sigmoid, /model.16/m.0/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006005120007321238
+  },
+  {
+    "name": "model.16.m.0.cv1.conv.weight + /model.16/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008354559922590852
+  },
+  {
+    "name": "PWN(/model.16/m.0/cv1/act/Sigmoid, /model.16/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006706240060739219
+  },
+  {
+    "name": "/model.16/m.0/m/m.0/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010459519959986209
+  },
+  {
+    "name": "model.16.m.0.m.0.cv1.conv.weight + /model.16/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/m/m.0/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0098668800201267
+  },
+  {
+    "name": "PWN(/model.16/m.0/m/m.0/cv1/act/Sigmoid, /model.16/m.0/m/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0068288000207394365
+  },
+  {
+    "name": "model.16.m.0.m.0.cv2.conv.weight + /model.16/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/m/m.0/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.01009888008236885
+  },
+  {
+    "name": "PWN(PWN(/model.16/m.0/m/m.0/cv2/act/Sigmoid, /model.16/m.0/m/m.0/cv2/act/Mul), /model.16/m.0/m/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0072153599839657545
+  },
+  {
+    "name": "/model.16/m.0/m/m.1/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.01015200006775558
+  },
+  {
+    "name": "model.16.m.0.m.1.cv1.conv.weight + /model.16/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/m/m.1/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00962848011404276
+  },
+  {
+    "name": "PWN(/model.16/m.0/m/m.1/cv1/act/Sigmoid, /model.16/m.0/m/m.1/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0068134400574490425
+  },
+  {
+    "name": "model.16.m.0.m.1.cv2.conv.weight + /model.16/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/m/m.1/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00981984001584351
+  },
+  {
+    "name": "PWN(PWN(/model.16/m.0/m/m.1/cv2/act/Sigmoid, /model.16/m.0/m/m.1/cv2/act/Mul), /model.16/m.0/m/m.1/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007347520017065108
+  },
+  {
+    "name": "/model.16/m.0/Concat_/model.16/m.0/m/m.1/Add_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006049920050427318
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to model.16.m.0.cv3.conv.weight + /model.16/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/cv3/conv/Conv + PWN(/model.16/m.0/cv3/act/Sigmoid, /model.16/m.0/cv3/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0062697599735111
+  },
+  {
+    "name": "model.16.m.0.cv3.conv.weight + /model.16/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.16/m.0/cv3/conv/Conv + PWN(/model.16/m.0/cv3/act/Sigmoid, /model.16/m.0/cv3/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008436159836128354
+  },
+  {
+    "name": "/model.16/cv2/conv/input_quantizer/QuantizeLinear_clone_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006679360014386475
+  },
+  {
+    "name": "/model.16/cv2/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.01138079995289445
+  },
+  {
+    "name": "/model.16/Concat_/model.16/Slice_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006072640037164092
+  },
+  {
+    "name": "model.16.cv2.conv.weight + /model.16/cv2/conv/weight_quantizer/QuantizeLinear + /model.16/cv2/conv/Conv + PWN(/model.16/cv2/act/Sigmoid, /model.16/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010791040025651455
+  },
+  {
+    "name": "model.17.conv.weight + /model.17/conv/weight_quantizer/QuantizeLinear + /model.17/conv/Conv + PWN(/model.17/act/Sigmoid, /model.17/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009800960067659617
+  },
+  {
+    "name": "/model.19/cv1/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009771199999377131
+  },
+  {
+    "name": "model.19.cv1.conv.weight + /model.19/cv1/conv/weight_quantizer/QuantizeLinear + /model.19/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010512639926746488
+  },
+  {
+    "name": "PWN(/model.19/cv1/act/Sigmoid, /model.19/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0064924799464643
+  },
+  {
+    "name": "/model.19/m.0/cv2/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010109760006889701
+  },
+  {
+    "name": "model.19.m.0.cv2.conv.weight + /model.19/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/cv2/conv/Conv + PWN(/model.19/m.0/cv2/act/Sigmoid, /model.19/m.0/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008170559951104224
+  },
+  {
+    "name": "model.19.m.0.cv1.conv.weight + /model.19/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007826240076683462
+  },
+  {
+    "name": "PWN(/model.19/m.0/cv1/act/Sigmoid, /model.19/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006029760004021227
+  },
+  {
+    "name": "Reformatting CopyNode for Output Tensor 0 to PWN(/model.19/m.0/cv1/act/Sigmoid, /model.19/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.19/m.0/m/m.0/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008928320053964853
+  },
+  {
+    "name": "model.19.m.0.m.0.cv1.conv.weight + /model.19/m.0/m/m.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/m/m.0/cv1/conv/Conv + PWN(/model.19/m.0/m/m.0/cv1/act/Sigmoid, /model.19/m.0/m/m.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009132159948348999
+  },
+  {
+    "name": "model.19.m.0.m.0.cv2.conv.weight + /model.19/m.0/m/m.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/m/m.0/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008951359894126654
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.19/m.0/m/m.0/cv2/act/Sigmoid, /model.19/m.0/m/m.0/cv2/act/Mul), /model.19/m.0/m/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "PWN(PWN(/model.19/m.0/m/m.0/cv2/act/Sigmoid, /model.19/m.0/m/m.0/cv2/act/Mul), /model.19/m.0/m/m.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006174720013514161
+  },
+  {
+    "name": "/model.19/m.0/m/m.1/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008475519903004169
+  },
+  {
+    "name": "model.19.m.0.m.1.cv1.conv.weight + /model.19/m.0/m/m.1/cv1/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/m/m.1/cv1/conv/Conv + PWN(/model.19/m.0/m/m.1/cv1/act/Sigmoid, /model.19/m.0/m/m.1/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009229759946465492
+  },
+  {
+    "name": "model.19.m.0.m.1.cv2.conv.weight + /model.19/m.0/m/m.1/cv2/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/m/m.1/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008599039884284138
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 1 to PWN(PWN(/model.19/m.0/m/m.1/cv2/act/Sigmoid, /model.19/m.0/m/m.1/cv2/act/Mul), /model.19/m.0/m/m.1/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "PWN(PWN(/model.19/m.0/m/m.1/cv2/act/Sigmoid, /model.19/m.0/m/m.1/cv2/act/Mul), /model.19/m.0/m/m.1/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006397759905084967
+  },
+  {
+    "name": "model.19.m.0.cv3.conv.weight + /model.19/m.0/cv3/conv/weight_quantizer/QuantizeLinear + /model.19/m.0/cv3/conv/Conv + PWN(/model.19/m.0/cv3/act/Sigmoid, /model.19/m.0/cv3/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007839359967038035
+  },
+  {
+    "name": "/model.19/cv2/conv/input_quantizer/QuantizeLinear_clone_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006302399951964617
+  },
+  {
+    "name": "/model.19/cv2/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.01042687999084592
+  },
+  {
+    "name": "/model.19/Concat_/model.19/Slice_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006237760013900698
+  },
+  {
+    "name": "model.19.cv2.conv.weight + /model.19/cv2/conv/weight_quantizer/QuantizeLinear + /model.19/cv2/conv/Conv + PWN(/model.19/cv2/act/Sigmoid, /model.19/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008904959941282868
+  },
+  {
+    "name": "model.20.conv.weight + /model.20/conv/weight_quantizer/QuantizeLinear + /model.20/conv/Conv + PWN(/model.20/act/Sigmoid, /model.20/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.012989439964294434
+  },
+  {
+    "name": "/model.11/Resize_output_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006301759979687631
+  },
+  {
+    "name": "model.22.cv1.conv.weight + /model.22/cv1/conv/weight_quantizer/QuantizeLinear + /model.22/cv1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008759359894320369
+  },
+  {
+    "name": "PWN(/model.22/cv1/act/Sigmoid, /model.22/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006217600023373962
+  },
+  {
+    "name": "/model.22/m.0/m.0.0/cv1/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00906111995689571
+  },
+  {
+    "name": "model.22.m.0.0.cv1.conv.weight + /model.22/m.0/m.0.0/cv1/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.0/cv1/conv/Conv + PWN(/model.22/m.0/m.0.0/cv1/act/Sigmoid, /model.22/m.0/m.0.0/cv1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010445119980722666
+  },
+  {
+    "name": "model.22.m.0.0.cv2.conv.weight + /model.22/m.0/m.0.0/cv2/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.0/cv2/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009266880014911294
+  },
+  {
+    "name": "PWN(PWN(/model.22/m.0/m.0.0/cv2/act/Sigmoid, /model.22/m.0/m.0.0/cv2/act/Mul), /model.22/m.0/m.0.0/Add)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006208639922551811
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/qkv/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008759360089898109
+  },
+  {
+    "name": "model.22.m.0.1.attn.qkv.conv.weight + /model.22/m.0/m.0.1/attn/qkv/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/attn/qkv/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.012466880036517978
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/Reshape",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/Split_944",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008072319910861553
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/pe/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008998079844750463
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/Reshape_2",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0
+  },
+  {
+    "name": "Reformatting CopyNode for Input Tensor 0 to model.22.m.0.1.attn.pe.conv.weight + /model.22/m.0/m.0.1/attn/pe/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/attn/pe/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0072480000602081415
+  },
+  {
+    "name": "model.22.m.0.1.attn.pe.conv.weight + /model.22/m.0/m.0.1/attn/pe/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/attn/pe/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010149439871311188
+  },
+  {
+    "name": "__myl_MoveSlicSlicTran_myl199_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006766079971566796
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/MatMul_myl199_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0108803201187402
+  },
+  {
+    "name": "__myl_MaxrSubExpSum_myl199_2",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007327039921656251
+  },
+  {
+    "name": "__myl_DivMulTran_myl199_3",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007835840047337115
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/MatMul_1_myl199_4",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011319360062479973
+  },
+  {
+    "name": "__myl_MulAddAdd_myl199_5",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005888639944605529
+  },
+  {
+    "name": "model.23.one2one_cv3.0.0.0.conv.weight + /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/conv/Conv + PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Sigmoid, /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008535360023379325
+  },
+  {
+    "name": "model.23.one2one_cv2.0.0.conv.weight + /model.23/one2one_cv2.0/one2one_cv2.0.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.0/one2one_cv2.0.0/conv/Conv + PWN(/model.23/one2one_cv2.0/one2one_cv2.0.0/act/Sigmoid, /model.23/one2one_cv2.0/one2one_cv2.0.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.010527679836377502
+  },
+  {
+    "name": "model.23.one2one_cv2.0.1.conv.weight + /model.23/one2one_cv2.0/one2one_cv2.0.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.0/one2one_cv2.0.1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011913600098341703
+  },
+  {
+    "name": "model.23.one2one_cv3.0.0.1.conv.weight + /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/conv/Conv + PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Sigmoid, /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008755199955776333
+  },
+  {
+    "name": "PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Sigmoid, /model.23/one2one_cv2.0/one2one_cv2.0.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007066239984706044
+  },
+  {
+    "name": "model.23.one2one_cv3.0.1.0.conv.weight + /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/conv/Conv + PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Sigmoid, /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008615359803661704
+  },
+  {
+    "name": "model.23.one2one_cv2.0.2.weight + /model.23/one2one_cv2.0/one2one_cv2.0.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.0/one2one_cv2.0.2/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009648320097476244
+  },
+  {
+    "name": "model.23.one2one_cv3.0.1.1.conv.weight + /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/conv/Conv + PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Sigmoid, /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008839359944686294
+  },
+  {
+    "name": "model.23.one2one_cv3.0.2.weight + /model.23/one2one_cv3.0/one2one_cv3.0.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.0/one2one_cv3.0.2/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009146879911422729
+  },
+  {
+    "name": "model.23.one2one_cv3.1.0.0.conv.weight + /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/conv/Conv + PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Sigmoid, /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008677760064601898
+  },
+  {
+    "name": "model.23.one2one_cv2.1.0.conv.weight + /model.23/one2one_cv2.1/one2one_cv2.1.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.1/one2one_cv2.1.0/conv/Conv + PWN(/model.23/one2one_cv2.1/one2one_cv2.1.0/act/Sigmoid, /model.23/one2one_cv2.1/one2one_cv2.1.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.011145600052550435
+  },
+  {
+    "name": "model.23.one2one_cv2.1.1.conv.weight + /model.23/one2one_cv2.1/one2one_cv2.1.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.1/one2one_cv2.1.1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0101087998598814
+  },
+  {
+    "name": "model.23.one2one_cv3.1.0.1.conv.weight + /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/conv/Conv + PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Sigmoid, /model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008277439936064184
+  },
+  {
+    "name": "PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Sigmoid, /model.23/one2one_cv2.1/one2one_cv2.1.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006671039997600019
+  },
+  {
+    "name": "model.23.one2one_cv3.1.1.0.conv.weight + /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/conv/Conv + PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Sigmoid, /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008198720114305615
+  },
+  {
+    "name": "model.23.one2one_cv2.1.2.weight + /model.23/one2one_cv2.1/one2one_cv2.1.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.1/one2one_cv2.1.2/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.00936223991215229
+  },
+  {
+    "name": "model.23.one2one_cv3.1.1.1.conv.weight + /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/conv/Conv + PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Sigmoid, /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008163839946500957
+  },
+  {
+    "name": "model.23.one2one_cv3.1.2.weight + /model.23/one2one_cv3.1/one2one_cv3.1.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.1/one2one_cv3.1.2/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008905919827520847
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/attn/proj/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009195199934765697
+  },
+  {
+    "name": "model.22.m.0.1.attn.proj.conv.weight + /model.22/m.0/m.0.1/attn/proj/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/attn/proj/conv/Conv + /model.22/m.0/m.0.1/Add",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008121919920668005
+  },
+  {
+    "name": "/model.22/m.0/m.0.1/ffn/ffn.0/conv/input_quantizer/QuantizeLinear",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0089731200132519
+  },
+  {
+    "name": "model.22.m.0.1.ffn.0.conv.weight + /model.22/m.0/m.0.1/ffn/ffn.0/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/ffn/ffn.0/conv/Conv + PWN(/model.22/m.0/m.0.1/ffn/ffn.0/act/Sigmoid, /model.22/m.0/m.0.1/ffn/ffn.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007904319954104722
+  },
+  {
+    "name": "/model.22/cv2/conv/input_quantizer/QuantizeLinear_clone_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008053759895265102
+  },
+  {
+    "name": "model.22.m.0.1.ffn.1.conv.weight + /model.22/m.0/m.0.1/ffn/ffn.1/conv/weight_quantizer/QuantizeLinear + /model.22/m.0/m.0.1/ffn/ffn.1/conv/Conv + /model.22/m.0/m.0.1/Add_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008296319916844368
+  },
+  {
+    "name": "/model.22/cv2/conv/input_quantizer/QuantizeLinear_clone_2",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008953920090571046
+  },
+  {
+    "name": "/model.22/cv2/conv/input_quantizer/QuantizeLinear_clone_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008290879856795073
+  },
+  {
+    "name": "/model.22/Concat_/model.22/Slice_output_0_clone_0 copy",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006016960041597486
+  },
+  {
+    "name": "model.22.cv2.conv.weight + /model.22/cv2/conv/weight_quantizer/QuantizeLinear + /model.22/cv2/conv/Conv + PWN(/model.22/cv2/act/Sigmoid, /model.22/cv2/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008433279804885388
+  },
+  {
+    "name": "model.23.one2one_cv3.2.0.0.conv.weight + /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/conv/Conv + PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Sigmoid, /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008182720141485333
+  },
+  {
+    "name": "model.23.one2one_cv2.2.0.conv.weight + /model.23/one2one_cv2.2/one2one_cv2.2.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.2/one2one_cv2.2.0/conv/Conv + PWN(/model.23/one2one_cv2.2/one2one_cv2.2.0/act/Sigmoid, /model.23/one2one_cv2.2/one2one_cv2.2.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.012733759908005595
+  },
+  {
+    "name": "model.23.one2one_cv2.2.1.conv.weight + /model.23/one2one_cv2.2/one2one_cv2.2.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.2/one2one_cv2.2.1/conv/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008926079887896777
+  },
+  {
+    "name": "model.23.one2one_cv3.2.0.1.conv.weight + /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/conv/Conv + PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Sigmoid, /model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008176639955490828
+  },
+  {
+    "name": "PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Sigmoid, /model.23/one2one_cv2.2/one2one_cv2.2.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0063942399434745315
+  },
+  {
+    "name": "model.23.one2one_cv3.2.1.0.conv.weight + /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/conv/Conv + PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Sigmoid, /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009625599985010922
+  },
+  {
+    "name": "model.23.one2one_cv2.2.2.weight + /model.23/one2one_cv2.2/one2one_cv2.2.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv2.2/one2one_cv2.2.2/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.009278400000184775
+  },
+  {
+    "name": "model.23.one2one_cv3.2.1.1.conv.weight + /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/conv/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/conv/Conv + PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Sigmoid, /model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Mul)",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007552960091270506
+  },
+  {
+    "name": "model.23.one2one_cv3.2.2.weight + /model.23/one2one_cv3.2/one2one_cv3.2.2/weight_quantizer/QuantizeLinear + /model.23/one2one_cv3.2/one2one_cv3.2.2/Conv",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.008604799900203942
+  },
+  {
+    "name": "__myl_ReshReshReshConcSlicSlic_myl237_0",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.0054860800877213475
+  },
+  {
+    "name": "__myl_ReshReshReshConcSigmSubAddConcMulConcTranSlicMaxrReshSlic_myl237_1",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.006647040010429919
+  },
+  {
+    "name": "__myl_Topk_myl237_2",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.05745600059628487
+  },
+  {
+    "name": "__myl_CastReshCastGathResh_myl237_3",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.005479040089994669
+  },
+  {
+    "name": "__myl_Topk_myl237_4",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.01220288023352623
+  },
+  {
+    "name": "__myl_ReshCastReshDivNeqXorLtAndAddSeleSubReshCastGathCastReplGathConc_myl237_5",
+    "type": "?",
+    "precision": "?",
+    "out_dtypes": [],
+    "profile_ms": 0.007892479952424765
+  }
+]

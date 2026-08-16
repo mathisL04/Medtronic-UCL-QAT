@@ -1,0 +1,23 @@
+{
+  "version": "V2_batch32_lr2e-3",
+  "knobs": {
+    "version": "V2_batch32_lr2e-3",
+    "lr0": "2e-3",
+    "lrf": "0.01",
+    "epochs": "50",
+    "patience": "10",
+    "batch": "32",
+    "n_calib": "128",
+    "weight_axis": "0",
+    "disable_layers": "",
+    "calib_method": "max",
+    "calib_percentile": "99.99",
+    "calib_num_bins": "2048"
+  },
+  "map50": 0.9433745964763544,
+  "map50_95": 0.7798944457990581,
+  "kernel_ms": 1.397,
+  "size_mb": 4.29,
+  "qdq_pairs": 207,
+  "eval_n": 6449
+}

@@ -34,7 +34,9 @@ NFS_OUT="$OUT" RUN_NAME="$VERSION" PY="$PY_TRAIN" bash scripts/train/qat_run.sh 
 
 # --- 2. EXPORT ONNX ---
 echo "[$(stamp)] 2/5 export ONNX"
-QAT_STATE="$OUT/qat_modelopt_state_best.pt" OUT_ONNX="$OUT/best_qat.onnx" DEVICE="$DEVICE" \
+# BATCH=1 is FORCED here: export_qat_onnx.py reads $BATCH for the ONNX input shape, and the
+# training BATCH must not leak into the deployment engine (which is always batch-1).
+QAT_STATE="$OUT/qat_modelopt_state_best.pt" OUT_ONNX="$OUT/best_qat.onnx" DEVICE="$DEVICE" BATCH=1 \
   "$PY_TRAIN" -u scripts/export/export_qat_onnx.py || { echo "EXPORT FAILED"; exit 1; }
 
 # --- 3. BUILD INT8 engine ---

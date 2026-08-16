@@ -20,8 +20,8 @@
 | metric | this run | V2_baseline (=V6) | Δ |
 |---|---|---|---|
 | mAP50 | 0.9437 | 0.9321 | +0.0116 |
-| mAP50-95 | 0.7800 | 0.7644 | +0.0156 |
-| kernel ms | not measured (non-exclusive) | 1.390 | — |
-| size MB | 4.94 | — | — |
+| mAP50-95 | 0.7801 | 0.7644 | +0.0157 |
+| kernel ms | 1.386 | 1.390 | -0.0040 |
+| size MB | 4.3 | — | — |
 | Q/DQ pairs | 207 | 207 | — |
 | eval set | full (6449) | full (6449) | — |
