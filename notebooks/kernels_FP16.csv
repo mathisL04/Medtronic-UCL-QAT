@@ -1,0 +1,232 @@
+name,averageMs,medianMs,percentage,layer,subpath,has_conv,has_Q,has_SiLU,has_PWN,reformat,role,q_folded_into_conv,engine
+Reformatting CopyNode for Input Tensor 0 to /model.0/conv/Conv,0.0316186,0.03136,1.93641,model.0,conv,True,False,False,False,True,reformat,False,FP16
+/model.0/conv/Conv,0.0125891,0.01248,0.770991,model.0,conv,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))",0.0,0.0,0.0,model.0,,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))",0.00850796,0.00848,0.521051,model.0,,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.1/conv/Conv + PWN(PWN(/model.1/act/Sigmoid), PWN(/model.1/act/Mul))",0.0,0.0,0.0,model.1,conv,True,False,True,True,True,reformat,False,FP16
+"/model.1/conv/Conv + PWN(PWN(/model.1/act/Sigmoid), PWN(/model.1/act/Mul))",0.0148332,0.014688,0.908425,model.1,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.2/cv1/conv/Conv + PWN(PWN(/model.2/cv1/act/Sigmoid), PWN(/model.2/cv1/act/Mul))",0.0121199,0.01216,0.742259,model.2,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"Reformatting CopyNode for Output Tensor 0 to /model.2/cv1/conv/Conv + PWN(PWN(/model.2/cv1/act/Sigmoid), PWN(/model.2/cv1/act/Mul))",0.0,0.0,0.0,model.2,cv1,True,False,True,True,True,reformat,False,FP16
+/model.2/Split_1,0.00923447,0.009152,0.565544,model.2,,False,False,False,False,False,other,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.2/m.0/cv1/conv/Conv + PWN(PWN(/model.2/m.0/cv1/act/Sigmoid), PWN(/model.2/m.0/cv1/act/Mul))",0.0,0.0,0.0,model.2,m.0/cv1,True,False,True,True,True,reformat,False,FP16
+"/model.2/m.0/cv1/conv/Conv + PWN(PWN(/model.2/m.0/cv1/act/Sigmoid), PWN(/model.2/m.0/cv1/act/Mul))",0.0143159,0.014208,0.876746,model.2,m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"Reformatting CopyNode for Input Tensor 1 to /model.2/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.2/m.0/cv2/act/Sigmoid), PWN(/model.2/m.0/cv2/act/Mul)), PWN(/model.2/m.0/Add))",0.0,0.0,0.0,model.2,m.0/cv2,True,False,True,True,True,reformat,False,FP16
+"/model.2/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.2/m.0/cv2/act/Sigmoid), PWN(/model.2/m.0/cv2/act/Mul)), PWN(/model.2/m.0/Add))",0.0144676,0.014368,0.886033,model.2,m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.2/Split_output_0 copy,0.00911563,0.009088,0.558266,model.2,,False,False,False,False,False,other,False,FP16
+/model.2/Split_output_1 copy,0.00910415,0.009024,0.557564,model.2,,False,False,False,False,False,other,False,FP16
+/model.2/m.0/Add_output_0 copy,0.00913771,0.009056,0.559619,model.2,,False,False,False,False,False,other,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.2/cv2/conv/Conv + PWN(PWN(/model.2/cv2/act/Sigmoid), PWN(/model.2/cv2/act/Mul))",0.0,0.0,0.0,model.2,cv2,True,False,True,True,True,reformat,False,FP16
+"/model.2/cv2/conv/Conv + PWN(PWN(/model.2/cv2/act/Sigmoid), PWN(/model.2/cv2/act/Mul))",0.0132014,0.01312,0.808493,model.2,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.3/conv/Conv + PWN(PWN(/model.3/act/Sigmoid), PWN(/model.3/act/Mul))",0.0142296,0.01408,0.87146,model.3,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.4/cv1/conv/Conv + PWN(PWN(/model.4/cv1/act/Sigmoid), PWN(/model.4/cv1/act/Mul))",0.00999863,0.009952,0.612344,model.4,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.4/Split_4,0.00754519,0.00752,0.462088,model.4,,False,False,False,False,False,other,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.4/m.0/cv1/conv/Conv + PWN(PWN(/model.4/m.0/cv1/act/Sigmoid), PWN(/model.4/m.0/cv1/act/Mul))",0.0,0.0,0.0,model.4,m.0/cv1,True,False,True,True,True,reformat,False,FP16
+"/model.4/m.0/cv1/conv/Conv + PWN(PWN(/model.4/m.0/cv1/act/Sigmoid), PWN(/model.4/m.0/cv1/act/Mul))",0.0107569,0.01072,0.658783,model.4,m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"Reformatting CopyNode for Input Tensor 1 to /model.4/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.4/m.0/cv2/act/Sigmoid), PWN(/model.4/m.0/cv2/act/Mul)), PWN(/model.4/m.0/Add))",0.0,0.0,0.0,model.4,m.0/cv2,True,False,True,True,True,reformat,False,FP16
+"/model.4/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.4/m.0/cv2/act/Sigmoid), PWN(/model.4/m.0/cv2/act/Mul)), PWN(/model.4/m.0/Add))",0.0113454,0.011296,0.694821,model.4,m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.4/Split_output_0 copy,0.00754139,0.00752,0.461855,model.4,,False,False,False,False,False,other,False,FP16
+/model.4/Split_output_1 copy,0.0075046,0.007488,0.459603,model.4,,False,False,False,False,False,other,False,FP16
+/model.4/m.0/Add_output_0 copy,0.00758198,0.007456,0.464341,model.4,,False,False,False,False,False,other,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.4/cv2/conv/Conv + PWN(PWN(/model.4/cv2/act/Sigmoid), PWN(/model.4/cv2/act/Mul))",0.0,0.0,0.0,model.4,cv2,True,False,True,True,True,reformat,False,FP16
+"/model.4/cv2/conv/Conv + PWN(PWN(/model.4/cv2/act/Sigmoid), PWN(/model.4/cv2/act/Mul))",0.0119717,0.01184,0.733183,model.4,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.5/conv/Conv + PWN(PWN(/model.5/act/Sigmoid), PWN(/model.5/act/Mul))",0.0141414,0.014048,0.86606,model.5,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.6/cv1/conv/Conv + PWN(PWN(/model.6/cv1/act/Sigmoid), PWN(/model.6/cv1/act/Mul))",0.00987462,0.009824,0.604749,model.6,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.6/m.0/cv1/conv/Conv || /model.6/m.0/cv2/conv/Conv,0.0080903,0.008,0.495472,model.6,m.0/cv1,True,False,False,False,False,conv-only,False,FP16
+Reformatting CopyNode for Output Tensor 0 to /model.6/m.0/cv1/conv/Conv || /model.6/m.0/cv2/conv/Conv,0.0,0.0,0.0,model.6,m.0/cv1,True,False,False,False,True,reformat,False,FP16
+"PWN(PWN(/model.6/m.0/cv1/act/Sigmoid), PWN(/model.6/m.0/cv1/act/Mul))",0.00595449,0.00592,0.36467,model.6,m.0/cv1,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.6/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.6/m.0/m/m.0/cv1/act/Mul))",0.0,0.0,0.0,model.6,m.0/m/m.0/cv1,True,False,True,True,True,reformat,False,FP16
+"/model.6/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.6/m.0/m/m.0/cv1/act/Mul))",0.0109163,0.010912,0.668545,model.6,m.0/m/m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.6/m.0/m/m.0/cv2/conv/Conv,0.0107451,0.010496,0.658058,model.6,m.0/m/m.0/cv2,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(PWN(/model.6/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.0/cv2/act/Mul)), PWN(/model.6/m.0/m/m.0/Add))",0.0,0.0,0.0,model.6,m.0/m/m.0/cv2,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(PWN(/model.6/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.0/cv2/act/Mul)), PWN(/model.6/m.0/m/m.0/Add))",0.00593819,0.00592,0.363671,model.6,m.0/m/m.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.6/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.6/m.0/m/m.1/cv1/act/Mul))",0.0,0.0,0.0,model.6,m.0/m/m.1/cv1,True,False,True,True,True,reformat,False,FP16
+"/model.6/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.6/m.0/m/m.1/cv1/act/Mul))",0.0110688,0.010976,0.677886,model.6,m.0/m/m.1/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.6/m.0/m/m.1/cv2/conv/Conv,0.0105242,0.010432,0.64453,model.6,m.0/m/m.1/cv2,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(PWN(/model.6/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.1/cv2/act/Mul)), PWN(/model.6/m.0/m/m.1/Add))",0.0,0.0,0.0,model.6,m.0/m/m.1/cv2,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(PWN(/model.6/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.1/cv2/act/Mul)), PWN(/model.6/m.0/m/m.1/Add))",0.00622283,0.006176,0.381103,model.6,m.0/m/m.1/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"PWN(PWN(/model.6/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/cv2/act/Mul))",0.00590691,0.005888,0.361755,model.6,m.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.6/m.0/cv3/conv/Conv + PWN(PWN(/model.6/m.0/cv3/act/Sigmoid), PWN(/model.6/m.0/cv3/act/Mul))",0.0,0.0,0.0,model.6,m.0/cv3,True,False,True,True,True,reformat,False,FP16
+"/model.6/m.0/cv3/conv/Conv + PWN(PWN(/model.6/m.0/cv3/act/Sigmoid), PWN(/model.6/m.0/cv3/act/Mul))",0.00912655,0.00912,0.558935,model.6,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.6/Split_output_0 copy,0.00688233,0.006848,0.421493,model.6,,False,False,False,False,False,other,False,FP16
+/model.6/Split_output_1 copy,0.00671071,0.006688,0.410982,model.6,,False,False,False,False,False,other,False,FP16
+"/model.6/cv2/conv/Conv + PWN(PWN(/model.6/cv2/act/Sigmoid), PWN(/model.6/cv2/act/Mul))",0.00969753,0.009696,0.593903,model.6,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.7/conv/Conv + PWN(PWN(/model.7/act/Sigmoid), PWN(/model.7/act/Mul))",0.0125152,0.012512,0.766464,model.7,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.8/cv1/conv/Conv + PWN(PWN(/model.8/cv1/act/Sigmoid), PWN(/model.8/cv1/act/Mul))",0.00948359,0.009472,0.580801,model.8,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.8/m.0/cv1/conv/Conv || /model.8/m.0/cv2/conv/Conv,0.0086673,0.008832,0.530809,model.8,m.0/cv1,True,False,False,False,False,conv-only,False,FP16
+"PWN(PWN(/model.8/m.0/cv1/act/Sigmoid), PWN(/model.8/m.0/cv1/act/Mul))",0.00589033,0.005888,0.36074,model.8,m.0/cv1,False,False,True,True,False,standalone-SiLU,False,FP16
+"/model.8/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.8/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.8/m.0/m/m.0/cv1/act/Mul))",0.0109384,0.010912,0.669901,model.8,m.0/m/m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.8/m.0/m/m.0/cv2/conv/Conv,0.0105417,0.010496,0.645606,model.8,m.0/m/m.0/cv2,True,False,False,False,False,conv-only,False,FP16
+"PWN(PWN(PWN(/model.8/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.8/m.0/m/m.0/cv2/act/Mul)), PWN(/model.8/m.0/m/m.0/Add))",0.00584241,0.005824,0.357806,model.8,m.0/m/m.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"/model.8/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.8/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.8/m.0/m/m.1/cv1/act/Mul))",0.0106436,0.010624,0.651843,model.8,m.0/m/m.1/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.8/m.0/m/m.1/cv2/conv/Conv,0.0103511,0.010304,0.633928,model.8,m.0/m/m.1/cv2,True,False,False,False,False,conv-only,False,FP16
+"PWN(PWN(PWN(/model.8/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.8/m.0/m/m.1/cv2/act/Mul)), PWN(/model.8/m.0/m/m.1/Add))",0.00608526,0.005984,0.372678,model.8,m.0/m/m.1/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"PWN(PWN(/model.8/m.0/cv2/act/Sigmoid), PWN(/model.8/m.0/cv2/act/Mul))",0.00580242,0.005792,0.355356,model.8,m.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"/model.8/m.0/cv3/conv/Conv + PWN(PWN(/model.8/m.0/cv3/act/Sigmoid), PWN(/model.8/m.0/cv3/act/Mul))",0.00954005,0.009344,0.584259,model.8,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.8/Split_output_0 copy,0.00651092,0.006496,0.398747,model.8,,False,False,False,False,False,other,False,FP16
+/model.8/Split_output_1 copy,0.00626219,0.00624,0.383514,model.8,,False,False,False,False,False,other,False,FP16
+"/model.8/cv2/conv/Conv + PWN(PWN(/model.8/cv2/act/Sigmoid), PWN(/model.8/cv2/act/Mul))",0.010201,0.010112,0.624738,model.8,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.9/cv1/conv/Conv,0.00832858,0.00832,0.510065,model.9,cv1,True,False,False,False,False,conv-only,False,FP16
+Reformatting CopyNode for Output Tensor 0 to /model.9/cv1/conv/Conv,0.0,0.0,0.0,model.9,cv1,True,False,False,False,True,reformat,False,FP16
+Reformatting CopyNode for Input Tensor 0 to /model.9/m/MaxPool,0.0,0.0,0.0,model.9,,False,False,False,False,True,reformat,False,FP16
+/model.9/m/MaxPool,0.00806025,0.007904,0.493632,model.9,,False,False,False,False,False,other,False,FP16
+/model.9/m_1/MaxPool,0.00780883,0.007776,0.478234,model.9,,False,False,False,False,False,other,False,FP16
+/model.9/m_2/MaxPool,0.00780032,0.007808,0.477713,model.9,,False,False,False,False,False,other,False,FP16
+/model.9/cv1/conv/Conv_output_0 copy,0.00639255,0.006368,0.391497,model.9,cv1,True,False,False,False,False,conv-only,False,FP16
+/model.9/m/MaxPool_output_0 copy,0.00631923,0.006304,0.387007,model.9,,False,False,False,False,False,other,False,FP16
+/model.9/m_1/MaxPool_output_0 copy,0.00630422,0.006272,0.386088,model.9,,False,False,False,False,False,other,False,FP16
+/model.9/cv2/conv/Conv,0.00927599,0.009248,0.568087,model.9,cv2,True,False,False,False,False,conv-only,False,FP16
+"PWN(PWN(PWN(/model.9/cv2/act/Sigmoid), PWN(/model.9/cv2/act/Mul)), PWN(/model.9/Add))",0.00606998,0.006048,0.371743,model.9,cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"/model.10/cv1/conv/Conv + PWN(PWN(/model.10/cv1/act/Sigmoid), PWN(/model.10/cv1/act/Mul))",0.00983449,0.009824,0.602291,model.10,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.10/Split_13,0.00646536,0.006464,0.395956,model.10,,False,False,False,False,False,other,False,FP16
+/model.10/m/m.0/attn/qkv/conv/Conv,0.00822381,0.008224,0.503649,model.10,m/m.0/attn/qkv,True,False,False,False,False,attention,False,FP16
+Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Reshape,0.00600721,0.005984,0.367898,model.10,,False,False,False,False,True,reformat,False,FP16
+/model.10/m/m.0/attn/Reshape,0.0,0.0,0.0,model.10,,False,False,False,False,False,attention,False,FP16
+/model.10/m/m.0/attn/Split_18,0.00573841,0.005632,0.351436,model.10,m/m.0/attn,False,False,False,False,False,attention,False,FP16
+/model.10/m/m.0/attn/Reshape_2,0.0,0.0,0.0,model.10,,False,False,False,False,False,attention,False,FP16
+/model.10/m/m.0/attn/pe/conv/Conv,0.00671011,0.006656,0.410946,model.10,m/m.0/attn/pe,True,False,False,False,False,attention,False,FP16
+__myl_MoveSlicSlicTran_myl85_0,0.00568209,0.005664,0.347987,NMS/foreign,,False,False,False,False,False,other,False,FP16
+/model.10/m/m.0/attn/MatMul_myl85_1,0.00778704,0.007712,0.4769,model.10,,False,False,False,False,False,attention,False,FP16
+__myl_MaxrSubExpSum_myl85_2,0.00729955,0.007232,0.447045,NMS/foreign,,False,False,False,False,False,attention,False,FP16
+__myl_DivMulTran_myl85_3,0.00722715,0.0072,0.442611,NMS/foreign,,False,False,False,False,False,other,False,FP16
+/model.10/m/m.0/attn/MatMul_1_myl85_4,0.00912231,0.008992,0.558675,model.10,,False,False,False,False,False,attention,False,FP16
+__myl_Add_myl85_5,0.00551779,0.005504,0.337925,NMS/foreign,,False,False,False,False,False,other,False,FP16
+Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/proj/conv/Conv + /model.10/m/m.0/Add,0.00655994,0.006528,0.401749,model.10,m/m.0/attn/proj,True,False,False,False,True,reformat,False,FP16
+/model.10/m/m.0/attn/proj/conv/Conv + /model.10/m/m.0/Add,0.00795768,0.007936,0.487351,model.10,m/m.0/attn/proj,True,False,False,False,False,attention,False,FP16
+"/model.10/m/m.0/ffn/ffn.0/conv/Conv + PWN(PWN(/model.10/m/m.0/ffn/ffn.0/act/Sigmoid), PWN(/model.10/m/m.0/ffn/ffn.0/act/Mul))",0.00912785,0.009088,0.559015,model.10,m/m.0/ffn/ffn.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.10/m/m.0/ffn/ffn.1/conv/Conv + /model.10/m/m.0/Add_1,0.00827571,0.008192,0.506827,model.10,m/m.0/ffn/ffn.1,True,False,False,False,False,conv-only,False,FP16
+/model.10/Split_output_0 copy,0.00651922,0.006496,0.399255,model.10,,False,False,False,False,False,other,False,FP16
+/model.10/m/m.0/Add_1_output_0 copy,0.00639639,0.0064,0.391733,model.10,,False,False,False,False,False,other,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.10/cv2/conv/Conv + PWN(PWN(/model.10/cv2/act/Sigmoid), PWN(/model.10/cv2/act/Mul))",0.0,0.0,0.0,model.10,cv2,True,False,True,True,True,reformat,False,FP16
+"/model.10/cv2/conv/Conv + PWN(PWN(/model.10/cv2/act/Sigmoid), PWN(/model.10/cv2/act/Mul))",0.00998823,0.009856,0.611707,model.10,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"Reformatting CopyNode for Output Tensor 0 to /model.10/cv2/conv/Conv + PWN(PWN(/model.10/cv2/act/Sigmoid), PWN(/model.10/cv2/act/Mul))",0.0,0.0,0.0,model.10,cv2,True,False,True,True,True,reformat,False,FP16
+Reformatting CopyNode for Input Tensor 0 to /model.11/Resize,0.0,0.0,0.0,model.11,,False,False,False,False,True,reformat,False,FP16
+/model.11/Resize,0.00588982,0.005856,0.360709,model.11,,False,False,False,False,False,other,False,FP16
+/model.11/Resize_output_0 copy,0.00906668,0.008992,0.555269,model.11,,False,False,False,False,False,other,False,FP16
+"/model.13/cv1/conv/Conv + PWN(PWN(/model.13/cv1/act/Sigmoid), PWN(/model.13/cv1/act/Mul))",0.0107226,0.010656,0.656681,model.13,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.13/m.0/cv1/conv/Conv || /model.13/m.0/cv2/conv/Conv,0.00793651,0.007872,0.486054,model.13,m.0/cv1,True,False,False,False,False,conv-only,False,FP16
+Reformatting CopyNode for Output Tensor 0 to /model.13/m.0/cv1/conv/Conv || /model.13/m.0/cv2/conv/Conv,0.0,0.0,0.0,model.13,m.0/cv1,True,False,False,False,True,reformat,False,FP16
+"PWN(PWN(/model.13/m.0/cv1/act/Sigmoid), PWN(/model.13/m.0/cv1/act/Mul))",0.00593411,0.00592,0.363421,model.13,m.0/cv1,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.13/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.13/m.0/m/m.0/cv1/act/Mul))",0.0,0.0,0.0,model.13,m.0/m/m.0/cv1,True,False,True,True,True,reformat,False,FP16
+"/model.13/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.13/m.0/m/m.0/cv1/act/Mul))",0.0109282,0.010912,0.669274,model.13,m.0/m/m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.13/m.0/m/m.0/cv2/conv/Conv,0.0103942,0.010368,0.636571,model.13,m.0/m/m.0/cv2,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(PWN(/model.13/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.0/cv2/act/Mul)), PWN(/model.13/m.0/m/m.0/Add))",0.0,0.0,0.0,model.13,m.0/m/m.0/cv2,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(PWN(/model.13/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.0/cv2/act/Mul)), PWN(/model.13/m.0/m/m.0/Add))",0.00592284,0.00592,0.362731,model.13,m.0/m/m.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.13/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.13/m.0/m/m.1/cv1/act/Mul))",0.0,0.0,0.0,model.13,m.0/m/m.1/cv1,True,False,True,True,True,reformat,False,FP16
+"/model.13/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.13/m.0/m/m.1/cv1/act/Mul))",0.0106733,0.010656,0.653661,model.13,m.0/m/m.1/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.13/m.0/m/m.1/cv2/conv/Conv,0.0103509,0.01024,0.633919,model.13,m.0/m/m.1/cv2,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(PWN(/model.13/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.1/cv2/act/Mul)), PWN(/model.13/m.0/m/m.1/Add))",0.0,0.0,0.0,model.13,m.0/m/m.1/cv2,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(PWN(/model.13/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.1/cv2/act/Mul)), PWN(/model.13/m.0/m/m.1/Add))",0.00626352,0.006176,0.383595,model.13,m.0/m/m.1/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"PWN(PWN(/model.13/m.0/cv2/act/Sigmoid), PWN(/model.13/m.0/cv2/act/Mul))",0.00596189,0.005888,0.365122,model.13,m.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.13/m.0/cv3/conv/Conv + PWN(PWN(/model.13/m.0/cv3/act/Sigmoid), PWN(/model.13/m.0/cv3/act/Mul))",0.0,0.0,0.0,model.13,m.0/cv3,True,False,True,True,True,reformat,False,FP16
+"/model.13/m.0/cv3/conv/Conv + PWN(PWN(/model.13/m.0/cv3/act/Sigmoid), PWN(/model.13/m.0/cv3/act/Mul))",0.00894421,0.00896,0.547768,model.13,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.13/Split_output_0 copy,0.0068482,0.006848,0.419403,model.13,,False,False,False,False,False,other,False,FP16
+/model.13/Split_output_1 copy,0.00669122,0.006688,0.409789,model.13,,False,False,False,False,False,other,False,FP16
+"/model.13/cv2/conv/Conv + PWN(PWN(/model.13/cv2/act/Sigmoid), PWN(/model.13/cv2/act/Mul))",0.00963213,0.0096,0.589898,model.13,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.14/Resize,0.00623798,0.006176,0.382031,model.14,,False,False,False,False,False,other,False,FP16
+/model.14/Resize_output_0 copy,0.00879502,0.008736,0.538632,model.14,,False,False,False,False,False,other,False,FP16
+"/model.16/cv1/conv/Conv + PWN(PWN(/model.16/cv1/act/Sigmoid), PWN(/model.16/cv1/act/Mul))",0.0123131,0.012128,0.754086,model.16,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.16/m.0/cv1/conv/Conv || /model.16/m.0/cv2/conv/Conv,0.00941259,0.009344,0.576453,model.16,m.0/cv1,True,False,False,False,False,conv-only,False,FP16
+Reformatting CopyNode for Output Tensor 0 to /model.16/m.0/cv1/conv/Conv || /model.16/m.0/cv2/conv/Conv,0.0,0.0,0.0,model.16,m.0/cv1,True,False,False,False,True,reformat,False,FP16
+"PWN(PWN(/model.16/m.0/cv1/act/Sigmoid), PWN(/model.16/m.0/cv1/act/Mul))",0.00616864,0.006144,0.377785,model.16,m.0/cv1,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Output Tensor 0 to PWN(PWN(/model.16/m.0/cv1/act/Sigmoid), PWN(/model.16/m.0/cv1/act/Mul))",0.0,0.0,0.0,model.16,m.0/cv1,False,False,True,True,True,reformat,False,FP16
+"/model.16/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.16/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.16/m.0/m/m.0/cv1/act/Mul))",0.0108697,0.010848,0.665688,model.16,m.0/m/m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.16/m.0/m/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.16/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/m/m.0/cv2/act/Mul)), PWN(/model.16/m.0/m/m.0/Add))",0.0113163,0.011296,0.693039,model.16,m.0/m/m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.16/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.16/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.16/m.0/m/m.1/cv1/act/Mul))",0.0114663,0.011744,0.702228,model.16,m.0/m/m.1/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.16/m.0/m/m.1/cv2/conv/Conv + PWN(PWN(PWN(/model.16/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.16/m.0/m/m.1/cv2/act/Mul)), PWN(/model.16/m.0/m/m.1/Add))",0.0110728,0.01104,0.678126,model.16,m.0/m/m.1/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"PWN(PWN(/model.16/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/cv2/act/Mul))",0.00596214,0.00592,0.365138,model.16,m.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+/model.16/m.0/m/m.1/Add_output_0 copy,0.00675896,0.00672,0.413937,model.16,,False,False,False,False,False,other,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.16/m.0/cv3/conv/Conv + PWN(PWN(/model.16/m.0/cv3/act/Sigmoid), PWN(/model.16/m.0/cv3/act/Mul))",0.0,0.0,0.0,model.16,m.0/cv3,True,False,True,True,True,reformat,False,FP16
+"/model.16/m.0/cv3/conv/Conv + PWN(PWN(/model.16/m.0/cv3/act/Sigmoid), PWN(/model.16/m.0/cv3/act/Mul))",0.00949667,0.009504,0.581603,model.16,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.16/Split_output_0 copy,0.0075409,0.00752,0.461825,model.16,,False,False,False,False,False,other,False,FP16
+/model.16/Split_output_1 copy,0.00750835,0.007488,0.459832,model.16,,False,False,False,False,False,other,False,FP16
+"/model.16/cv2/conv/Conv + PWN(PWN(/model.16/cv2/act/Sigmoid), PWN(/model.16/cv2/act/Mul))",0.0111281,0.011104,0.681518,model.16,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.17/conv/Conv + PWN(PWN(/model.17/act/Sigmoid), PWN(/model.17/act/Mul))",0.0117772,0.012,0.721266,model.17,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.13/cv2/act/Mul_output_0 copy,0.00748126,0.007456,0.458173,model.13,cv2,False,False,False,False,False,other,False,FP16
+"/model.19/cv1/conv/Conv + PWN(PWN(/model.19/cv1/act/Sigmoid), PWN(/model.19/cv1/act/Mul))",0.0101325,0.010048,0.620545,model.19,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.19/m.0/cv1/conv/Conv || /model.19/m.0/cv2/conv/Conv,0.00797919,0.007968,0.488668,model.19,m.0/cv1,True,False,False,False,False,conv-only,False,FP16
+Reformatting CopyNode for Output Tensor 0 to /model.19/m.0/cv1/conv/Conv || /model.19/m.0/cv2/conv/Conv,0.0,0.0,0.0,model.19,m.0/cv1,True,False,False,False,True,reformat,False,FP16
+"PWN(PWN(/model.19/m.0/cv1/act/Sigmoid), PWN(/model.19/m.0/cv1/act/Mul))",0.00591716,0.00592,0.362383,model.19,m.0/cv1,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.19/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.19/m.0/m/m.0/cv1/act/Mul))",0.0,0.0,0.0,model.19,m.0/m/m.0/cv1,True,False,True,True,True,reformat,False,FP16
+"/model.19/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.19/m.0/m/m.0/cv1/act/Mul))",0.011144,0.011008,0.682491,model.19,m.0/m/m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.19/m.0/m/m.0/cv2/conv/Conv,0.0104988,0.010496,0.642973,model.19,m.0/m/m.0/cv2,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(PWN(/model.19/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.0/cv2/act/Mul)), PWN(/model.19/m.0/m/m.0/Add))",0.0,0.0,0.0,model.19,m.0/m/m.0/cv2,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(PWN(/model.19/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.0/cv2/act/Mul)), PWN(/model.19/m.0/m/m.0/Add))",0.00591792,0.00592,0.36243,model.19,m.0/m/m.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.19/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.19/m.0/m/m.1/cv1/act/Mul))",0.0,0.0,0.0,model.19,m.0/m/m.1/cv1,True,False,True,True,True,reformat,False,FP16
+"/model.19/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.19/m.0/m/m.1/cv1/act/Mul))",0.0111074,0.011008,0.680246,model.19,m.0/m/m.1/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.19/m.0/m/m.1/cv2/conv/Conv,0.0105661,0.010496,0.647094,model.19,m.0/m/m.1/cv2,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(PWN(/model.19/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.1/cv2/act/Mul)), PWN(/model.19/m.0/m/m.1/Add))",0.0,0.0,0.0,model.19,m.0/m/m.1/cv2,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(PWN(/model.19/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.1/cv2/act/Mul)), PWN(/model.19/m.0/m/m.1/Add))",0.00619152,0.006176,0.379186,model.19,m.0/m/m.1/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"PWN(PWN(/model.19/m.0/cv2/act/Sigmoid), PWN(/model.19/m.0/cv2/act/Mul))",0.00590974,0.00592,0.361929,model.19,m.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.19/m.0/cv3/conv/Conv + PWN(PWN(/model.19/m.0/cv3/act/Sigmoid), PWN(/model.19/m.0/cv3/act/Mul))",0.0,0.0,0.0,model.19,m.0/cv3,True,False,True,True,True,reformat,False,FP16
+"/model.19/m.0/cv3/conv/Conv + PWN(PWN(/model.19/m.0/cv3/act/Sigmoid), PWN(/model.19/m.0/cv3/act/Mul))",0.00892518,0.008928,0.546603,model.19,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.19/Split_output_0 copy,0.00690256,0.00688,0.422732,model.19,,False,False,False,False,False,other,False,FP16
+/model.19/Split_output_1 copy,0.00670791,0.006688,0.410811,model.19,,False,False,False,False,False,other,False,FP16
+"/model.19/cv2/conv/Conv + PWN(PWN(/model.19/cv2/act/Sigmoid), PWN(/model.19/cv2/act/Mul))",0.0096861,0.009664,0.593204,model.19,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.20/conv/Conv + PWN(PWN(/model.20/act/Sigmoid), PWN(/model.20/act/Mul))",0.0128029,0.012768,0.784087,model.20,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.10/cv2/act/Mul_output_0 copy,0.0067177,0.006688,0.411411,model.10,cv2,False,False,False,False,False,other,False,FP16
+"/model.22/cv1/conv/Conv + PWN(PWN(/model.22/cv1/act/Sigmoid), PWN(/model.22/cv1/act/Mul))",0.0101981,0.010208,0.624563,model.22,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.22/m.0/m.0.0/cv1/conv/Conv + PWN(PWN(/model.22/m.0/m.0.0/cv1/act/Sigmoid), PWN(/model.22/m.0/m.0.0/cv1/act/Mul))",0.0124315,0.01248,0.761342,model.22,m.0/m.0.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.22/m.0/m.0.0/cv2/conv/Conv,0.0119307,0.012192,0.730667,model.22,m.0/m.0.0/cv2,True,False,False,False,False,conv-only,False,FP16
+"PWN(PWN(PWN(/model.22/m.0/m.0.0/cv2/act/Sigmoid), PWN(/model.22/m.0/m.0.0/cv2/act/Mul)), PWN(/model.22/m.0/m.0.0/Add))",0.00624923,0.006176,0.38272,model.22,m.0/m.0.0/cv2,False,False,True,True,False,standalone-SiLU,False,FP16
+/model.22/m.0/m.0.1/attn/qkv/conv/Conv,0.00843319,0.008288,0.516472,model.22,m.0/m.0.1/attn/qkv,True,False,False,False,False,attention,False,FP16
+Reformatting CopyNode for Input Tensor 0 to /model.22/m.0/m.0.1/attn/Reshape,0.00592167,0.00592,0.36266,model.22,,False,False,False,False,True,reformat,False,FP16
+/model.22/m.0/m.0.1/attn/Reshape,0.0,0.0,0.0,model.22,,False,False,False,False,False,attention,False,FP16
+/model.22/m.0/m.0.1/attn/Split_44,0.00567761,0.005664,0.347713,model.22,m.0/m.0.1/attn,False,False,False,False,False,attention,False,FP16
+/model.22/m.0/m.0.1/attn/Reshape_2,0.0,0.0,0.0,model.22,,False,False,False,False,False,attention,False,FP16
+/model.22/m.0/m.0.1/attn/pe/conv/Conv,0.00668468,0.006656,0.409389,model.22,m.0/m.0.1/attn/pe,True,False,False,False,False,attention,False,FP16
+__myl_MoveSlicSlicTran_myl170_0,0.00568606,0.005664,0.34823,NMS/foreign,,False,False,False,False,False,other,False,FP16
+/model.22/m.0/m.0.1/attn/MatMul_myl170_1,0.00771315,0.00768,0.472375,model.22,,False,False,False,False,False,attention,False,FP16
+__myl_MaxrSubExpSum_myl170_2,0.00728113,0.007168,0.445916,NMS/foreign,,False,False,False,False,False,attention,False,FP16
+__myl_DivMulTran_myl170_3,0.00723045,0.0072,0.442813,NMS/foreign,,False,False,False,False,False,other,False,FP16
+/model.22/m.0/m.0.1/attn/MatMul_1_myl170_4,0.0090262,0.008992,0.552789,model.22,,False,False,False,False,False,attention,False,FP16
+__myl_Add_myl170_5,0.00556298,0.005408,0.340692,NMS/foreign,,False,False,False,False,False,other,False,FP16
+Reformatting CopyNode for Input Tensor 0 to /model.22/m.0/m.0.1/attn/proj/conv/Conv + /model.22/m.0/m.0.1/Add,0.00643708,0.0064,0.394224,model.22,m.0/m.0.1/attn/proj,True,False,False,False,True,reformat,False,FP16
+/model.22/m.0/m.0.1/attn/proj/conv/Conv + /model.22/m.0/m.0.1/Add,0.00798647,0.007968,0.489113,model.22,m.0/m.0.1/attn/proj,True,False,False,False,False,attention,False,FP16
+"/model.22/m.0/m.0.1/ffn/ffn.0/conv/Conv + PWN(PWN(/model.22/m.0/m.0.1/ffn/ffn.0/act/Sigmoid), PWN(/model.22/m.0/m.0.1/ffn/ffn.0/act/Mul))",0.00911346,0.009024,0.558134,model.22,m.0/m.0.1/ffn/ffn.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.22/m.0/m.0.1/ffn/ffn.1/conv/Conv + /model.22/m.0/m.0.1/Add_1,0.00829885,0.008224,0.508245,model.22,m.0/m.0.1/ffn/ffn.1,True,False,False,False,False,conv-only,False,FP16
+/model.22/Split_output_0 copy,0.00645614,0.006432,0.395392,model.22,,False,False,False,False,False,other,False,FP16
+/model.22/Split_output_1 copy,0.00621425,0.006176,0.380578,model.22,,False,False,False,False,False,other,False,FP16
+/model.22/m.0/m.0.1/Add_1_output_0 copy,0.00646589,0.006432,0.395989,model.22,,False,False,False,False,False,other,False,FP16
+"/model.22/cv2/conv/Conv + PWN(PWN(/model.22/cv2/act/Sigmoid), PWN(/model.22/cv2/act/Mul))",0.0100297,0.010016,0.61425,model.22,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.23/one2one_cv2.2/one2one_cv2.2.0/conv/Conv + PWN(PWN(/model.23/one2one_cv2.2/one2one_cv2.2.0/act/Sigmoid), PWN(/model.23/one2one_cv2.2/one2one_cv2.2.0/act/Mul))",0.0163238,0.016288,0.999714,model.23,one2one_cv2.2/one2one_cv2.2.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.23/one2one_cv2.2/one2one_cv2.2.1/conv/Conv + PWN(PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Sigmoid), PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Mul))",0.0107724,0.010752,0.659734,model.23,one2one_cv2.2/one2one_cv2.2.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.23/one2one_cv2.2/one2one_cv2.2.2/Conv,0.00747605,0.007456,0.457854,model.23,one2one_cv2.2/one2one_cv2.2.2,True,False,False,False,False,conv-only,False,FP16
+/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/conv/Conv,0.00699088,0.006944,0.428141,model.23,one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0,True,False,False,False,False,conv-only,False,FP16
+"PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Mul))",0.0059364,0.00592,0.363562,model.23,one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0,False,False,True,True,False,standalone-SiLU,False,FP16
+"/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Mul))",0.00959658,0.009504,0.587721,model.23,one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/conv/Conv,0.00631564,0.0064,0.386787,model.23,one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0,True,False,False,False,False,conv-only,False,FP16
+"PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Mul))",0.00568398,0.005664,0.348103,model.23,one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0,False,False,True,True,False,standalone-SiLU,False,FP16
+"/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Mul))",0.00880094,0.008768,0.538994,model.23,one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.23/one2one_cv3.2/one2one_cv3.2.2/Conv,0.00747827,0.007456,0.45799,model.23,one2one_cv3.2/one2one_cv3.2.2,True,False,False,False,False,conv-only,False,FP16
+"/model.23/one2one_cv2.1/one2one_cv2.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv2.1/one2one_cv2.1.0/act/Sigmoid), PWN(/model.23/one2one_cv2.1/one2one_cv2.1.0/act/Mul))",0.0124213,0.01248,0.760715,model.23,one2one_cv2.1/one2one_cv2.1.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.23/one2one_cv2.1/one2one_cv2.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Sigmoid), PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Mul))",0.0110588,0.011008,0.677271,model.23,one2one_cv2.1/one2one_cv2.1.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.23/one2one_cv2.1/one2one_cv2.1.2/Conv,0.00764114,0.007488,0.467965,model.23,one2one_cv2.1/one2one_cv2.1.2,True,False,False,False,False,conv-only,False,FP16
+/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/conv/Conv,0.00698805,0.006944,0.427967,model.23,one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0,True,False,False,False,False,conv-only,False,FP16
+"PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Mul))",0.00595102,0.00592,0.364457,model.23,one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0,False,False,True,True,False,standalone-SiLU,False,FP16
+"/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Mul))",0.00904003,0.009024,0.553637,model.23,one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/conv/Conv,0.0067215,0.006688,0.411643,model.23,one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Mul))",0.0,0.0,0.0,model.23,one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Mul))",0.00594478,0.00592,0.364075,model.23,one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Mul))",0.0,0.0,0.0,model.23,one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1,True,False,True,True,True,reformat,False,FP16
+"/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Mul))",0.00854813,0.008512,0.523511,model.23,one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.23/one2one_cv3.1/one2one_cv3.1.2/Conv,0.00773623,0.007712,0.473788,model.23,one2one_cv3.1/one2one_cv3.1.2,True,False,False,False,False,conv-only,False,FP16
+"/model.23/one2one_cv2.0/one2one_cv2.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv2.0/one2one_cv2.0.0/act/Sigmoid), PWN(/model.23/one2one_cv2.0/one2one_cv2.0.0/act/Mul))",0.0119448,0.011808,0.731531,model.23,one2one_cv2.0/one2one_cv2.0.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+"/model.23/one2one_cv2.0/one2one_cv2.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Sigmoid), PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Mul))",0.0108529,0.010816,0.664661,model.23,one2one_cv2.0/one2one_cv2.0.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.23/one2one_cv2.0/one2one_cv2.0.2/Conv,0.00786476,0.007776,0.481659,model.23,one2one_cv2.0/one2one_cv2.0.2,True,False,False,False,False,conv-only,False,FP16
+/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/conv/Conv,0.00802199,0.007968,0.491289,model.23,one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Mul))",0.0,0.0,0.0,model.23,one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Mul))",0.00641509,0.006432,0.392878,model.23,one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Mul))",0.0,0.0,0.0,model.23,one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1,True,False,True,True,True,reformat,False,FP16
+"/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Mul))",0.0101049,0.01008,0.618852,model.23,one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/conv/Conv,0.00798123,0.007968,0.488793,model.23,one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0,True,False,False,False,False,conv-only,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Mul))",0.0,0.0,0.0,model.23,one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0,False,False,True,True,True,reformat,False,FP16
+"PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Mul))",0.00626102,0.006208,0.383442,model.23,one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0,False,False,True,True,False,standalone-SiLU,False,FP16
+"Reformatting CopyNode for Input Tensor 0 to /model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Mul))",0.0,0.0,0.0,model.23,one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1,True,False,True,True,True,reformat,False,FP16
+"/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Mul))",0.00981358,0.009792,0.601011,model.23,one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,FP16
+/model.23/one2one_cv3.0/one2one_cv3.0.2/Conv,0.00806057,0.007968,0.493652,model.23,one2one_cv3.0/one2one_cv3.0.2,True,False,False,False,False,conv-only,False,FP16
+__myl_ReshReshReshConcSlicSlic_myl215_0,0.00581887,0.005664,0.356363,NMS/foreign,,False,False,False,False,False,other,False,FP16
+__myl_SubAddConcMulReshReshReshConcSigmConcTranSlicMaxrReshSlic_myl215_1,0.00655941,0.006464,0.401717,NMS/foreign,,False,False,False,False,False,other,False,FP16
+__myl_Topk_myl215_2,0.0345146,0.034336,2.11377,NMS/foreign,,False,False,False,False,False,NMS/TopK,False,FP16
+__myl_CastReshCastGathResh_myl215_3,0.00549947,0.005472,0.336803,NMS/foreign,,False,False,False,False,False,other,False,FP16
+__myl_Topk_myl215_4,0.00975871,0.009728,0.59765,NMS/foreign,,False,False,False,False,False,NMS/TopK,False,FP16
+__myl_CastReshReshGathCastReplDivNeqXorLtAndAddSeleSubReshCastGathConcCast_myl215_5,0.00574951,0.005728,0.352116,NMS/foreign,,False,False,False,False,False,other,False,FP16
