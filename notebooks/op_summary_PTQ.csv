@@ -1,0 +1,11 @@
+,sum_ms,n_kernels
+conv+SiLU fused,0.6564,70
+conv only,0.2944,32
+reformat/copy,0.2576,38
+standalone SiLU,0.1174,17
+attention,0.1149,18
+NMS/decode,0.0836,4
+resize/concat,0.0373,5
+maxpool,0.0282,3
+reshape/move,0.012,2
+TOTAL,1.6018,189

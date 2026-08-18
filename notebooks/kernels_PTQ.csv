@@ -1,190 +1,191 @@
-name,averageMs,medianMs,percentage,layer,subpath,has_conv,has_Q,has_SiLU,has_PWN,reformat,role,q_folded_into_conv,engine
-"Reformatting CopyNode for Input Tensor 0 to /model.0/conv/Conv + PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))",0.0139869,0.013792,0.869788,model.0,conv,True,False,True,True,True,reformat,False,PTQ
-"/model.0/conv/Conv + PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))",0.0166878,0.01664,1.03774,model.0,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.1/conv/Conv + PWN(PWN(/model.1/act/Sigmoid), PWN(/model.1/act/Mul))",0.0126351,0.012608,0.785721,model.1,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.2/cv1/conv/Conv + PWN(PWN(/model.2/cv1/act/Sigmoid), PWN(/model.2/cv1/act/Mul))",0.00980534,0.00976,0.609753,model.2,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.2/Split_1,0.010925,0.010784,0.679379,model.2,,False,False,False,False,False,other,False,PTQ
-"/model.2/m.0/cv1/conv/Conv + PWN(PWN(/model.2/m.0/cv1/act/Sigmoid), PWN(/model.2/m.0/cv1/act/Mul))",0.0119419,0.011936,0.742614,model.2,m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.2/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.2/m.0/cv2/act/Sigmoid), PWN(/model.2/m.0/cv2/act/Mul)), PWN(/model.2/m.0/Add))",0.0153801,0.015264,0.956423,model.2,m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.2/Split_output_0 copy,0.00877139,0.008608,0.545456,model.2,,False,False,False,False,False,other,False,PTQ
-/model.2/Split_output_1 copy,0.00707348,0.00704,0.43987,model.2,,False,False,False,False,False,other,False,PTQ
-/model.2/m.0/Add_output_0 copy,0.00705045,0.006976,0.438437,model.2,,False,False,False,False,False,other,False,PTQ
-"Reformatting CopyNode for Input Tensor 0 to /model.2/cv2/conv/Conv + PWN(PWN(/model.2/cv2/act/Sigmoid), PWN(/model.2/cv2/act/Mul))",0.00887254,0.008768,0.551746,model.2,cv2,True,False,True,True,True,reformat,False,PTQ
-"/model.2/cv2/conv/Conv + PWN(PWN(/model.2/cv2/act/Sigmoid), PWN(/model.2/cv2/act/Mul))",0.0118816,0.011808,0.738868,model.2,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.3/conv/Conv + PWN(PWN(/model.3/act/Sigmoid), PWN(/model.3/act/Mul))",0.0114725,0.011424,0.713428,model.3,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.4/cv1/conv/Conv + PWN(PWN(/model.4/cv1/act/Sigmoid), PWN(/model.4/cv1/act/Mul))",0.00911845,0.009024,0.567038,model.4,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.4/Split_4,0.00633689,0.006304,0.394065,model.4,,False,False,False,False,False,other,False,PTQ
-"/model.4/m.0/cv1/conv/Conv + PWN(PWN(/model.4/m.0/cv1/act/Sigmoid), PWN(/model.4/m.0/cv1/act/Mul))",0.0101152,0.010112,0.629023,model.4,m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.4/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.4/m.0/cv2/act/Sigmoid), PWN(/model.4/m.0/cv2/act/Mul)), PWN(/model.4/m.0/Add))",0.0114723,0.011456,0.713411,model.4,m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.4/Split_output_0 copy,0.00638285,0.006336,0.396922,model.4,,False,False,False,False,False,other,False,PTQ
-/model.4/Split_output_1 copy,0.00616572,0.006144,0.38342,model.4,,False,False,False,False,False,other,False,PTQ
-/model.4/m.0/Add_output_0 copy,0.00618346,0.006144,0.384523,model.4,,False,False,False,False,False,other,False,PTQ
-"/model.4/cv2/conv/Conv + PWN(PWN(/model.4/cv2/act/Sigmoid), PWN(/model.4/cv2/act/Mul))",0.0102132,0.010144,0.635115,model.4,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.5/conv/Conv + PWN(PWN(/model.5/act/Sigmoid), PWN(/model.5/act/Mul))",0.0121762,0.012096,0.757183,model.5,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.6/cv1/conv/Conv + PWN(PWN(/model.6/cv1/act/Sigmoid), PWN(/model.6/cv1/act/Mul))",0.00870643,0.008672,0.541416,model.6,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.6/m.0/cv1/conv/Conv + PWN(PWN(/model.6/m.0/cv1/act/Sigmoid), PWN(/model.6/m.0/cv1/act/Mul))",0.00804567,0.008032,0.500326,model.6,m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.6/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.6/m.0/m/m.0/cv1/act/Mul))",0.00934381,0.009312,0.581052,model.6,m.0/m/m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.6/m.0/m/m.0/cv2/conv/Conv,0.00918207,0.009152,0.570994,model.6,m.0/m/m.0/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.6/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.0/cv2/act/Mul)), PWN(/model.6/m.0/m/m.0/Add))",0.00667552,0.006656,0.415122,model.6,m.0/m/m.0/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"/model.6/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.6/m.0/m/m.1/cv1/act/Mul))",0.00902601,0.009024,0.561289,model.6,m.0/m/m.1/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.6/m.0/m/m.1/cv2/conv/Conv,0.00885228,0.008832,0.550486,model.6,m.0/m/m.1/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.6/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.1/cv2/act/Mul)), PWN(/model.6/m.0/m/m.1/Add))",0.00683076,0.006816,0.424776,model.6,m.0/m/m.1/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"/model.6/m.0/cv2/conv/Conv + PWN(PWN(/model.6/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/cv2/act/Mul))",0.00828661,0.008224,0.515309,model.6,m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.6/m.0/cv3/conv/Conv + PWN(PWN(/model.6/m.0/cv3/act/Sigmoid), PWN(/model.6/m.0/cv3/act/Mul))",0.00844324,0.008416,0.52505,model.6,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.6/Split_output_0 copy,0.00629146,0.006208,0.39124,model.6,,False,False,False,False,False,other,False,PTQ
-/model.6/Split_output_1 copy,0.00613908,0.006144,0.381763,model.6,,False,False,False,False,False,other,False,PTQ
-"/model.6/cv2/conv/Conv + PWN(PWN(/model.6/cv2/act/Sigmoid), PWN(/model.6/cv2/act/Mul))",0.00872302,0.008704,0.542448,model.6,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.7/conv/Conv + PWN(PWN(/model.7/act/Sigmoid), PWN(/model.7/act/Mul))",0.0110524,0.01104,0.687302,model.7,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.8/cv1/conv/Conv + PWN(PWN(/model.8/cv1/act/Sigmoid), PWN(/model.8/cv1/act/Mul))",0.00858633,0.008576,0.533948,model.8,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.8/m.0/cv1/conv/Conv + PWN(PWN(/model.8/m.0/cv1/act/Sigmoid), PWN(/model.8/m.0/cv1/act/Mul))",0.00816143,0.008064,0.507525,model.8,m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.8/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.8/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.8/m.0/m/m.0/cv1/act/Mul))",0.00945123,0.009408,0.587732,model.8,m.0/m/m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.8/m.0/m/m.0/cv2/conv/Conv,0.00959559,0.009568,0.596709,model.8,m.0/m/m.0/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.8/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.8/m.0/m/m.0/cv2/act/Mul)), PWN(/model.8/m.0/m/m.0/Add))",0.00645558,0.006432,0.401445,model.8,m.0/m/m.0/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"/model.8/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.8/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.8/m.0/m/m.1/cv1/act/Mul))",0.00945507,0.009408,0.587971,model.8,m.0/m/m.1/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.8/m.0/m/m.1/cv2/conv/Conv,0.00921369,0.009184,0.572961,model.8,m.0/m/m.1/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.8/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.8/m.0/m/m.1/cv2/act/Mul)), PWN(/model.8/m.0/m/m.1/Add))",0.0071398,0.007136,0.443994,model.8,m.0/m/m.1/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"/model.8/m.0/cv2/conv/Conv + PWN(PWN(/model.8/m.0/cv2/act/Sigmoid), PWN(/model.8/m.0/cv2/act/Mul))",0.00816196,0.008128,0.507558,model.8,m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.8/m.0/cv3/conv/Conv + PWN(PWN(/model.8/m.0/cv3/act/Sigmoid), PWN(/model.8/m.0/cv3/act/Mul))",0.0080412,0.008032,0.500048,model.8,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.8/Split_output_0 copy,0.00610785,0.006112,0.379821,model.8,,False,False,False,False,False,other,False,PTQ
-/model.8/Split_output_1 copy,0.00597581,0.005952,0.371611,model.8,,False,False,False,False,False,other,False,PTQ
-"/model.8/cv2/conv/Conv + PWN(PWN(/model.8/cv2/act/Sigmoid), PWN(/model.8/cv2/act/Mul))",0.00853446,0.008512,0.530722,model.8,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.9/cv1/conv/Conv,0.00831985,0.008256,0.517376,model.9,cv1,True,False,False,False,False,conv-only,False,PTQ
-/model.9/m/MaxPool,0.00947403,0.009472,0.58915,model.9,,False,False,False,False,False,other,False,PTQ
-/model.9/m_1/MaxPool,0.00930774,0.00928,0.578809,model.9,,False,False,False,False,False,other,False,PTQ
-/model.9/m_2/MaxPool,0.00948536,0.009472,0.589854,model.9,,False,False,False,False,False,other,False,PTQ
-/model.9/cv1/conv/Conv_output_0 copy,0.00593492,0.00592,0.369067,model.9,cv1,True,False,False,False,False,conv-only,False,PTQ
-/model.9/m/MaxPool_output_0 copy,0.00593872,0.00592,0.369304,model.9,,False,False,False,False,False,other,False,PTQ
-/model.9/m_1/MaxPool_output_0 copy,0.00597335,0.00592,0.371457,model.9,,False,False,False,False,False,other,False,PTQ
-/model.9/cv2/conv/Conv,0.00916586,0.00912,0.569986,model.9,cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.9/cv2/act/Sigmoid), PWN(/model.9/cv2/act/Mul)), PWN(/model.9/Add))",0.00722034,0.0072,0.449003,model.9,cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"/model.10/cv1/conv/Conv + PWN(PWN(/model.10/cv1/act/Sigmoid), PWN(/model.10/cv1/act/Mul))",0.00856542,0.008544,0.532647,model.10,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.10/Split_13,0.00613747,0.006048,0.381664,model.10,,False,False,False,False,False,other,False,PTQ
-/model.10/m/m.0/attn/qkv/conv/Conv,0.0104349,0.0104,0.648904,model.10,m/m.0/attn/qkv,True,False,False,False,False,attention,False,PTQ
-/model.10/m/m.0/attn/Reshape,0.0,0.0,0.0,model.10,,False,False,False,False,False,attention,False,PTQ
-Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Constant_1_output_0 + ONNXTRT_Broadcast + /model.10/m/m.0/attn/Mul,0.00594838,0.00592,0.369904,model.10,,False,False,False,False,True,reformat,False,PTQ
-/model.10/m/m.0/attn/Constant_1_output_0 + ONNXTRT_Broadcast + /model.10/m/m.0/attn/Mul,0.00648147,0.006432,0.403055,model.10,,False,False,False,False,False,attention,False,PTQ
-/model.10/m/m.0/attn/Split_16,0.00595822,0.005888,0.370516,model.10,m/m.0/attn,False,False,False,False,False,attention,False,PTQ
-/model.10/m/m.0/attn/MatMul,0.0112536,0.011232,0.699812,model.10,,False,False,False,False,False,attention,False,PTQ
-/model.10/m/m.0/attn/Softmax,0.00922741,0.009184,0.573813,model.10,,False,False,False,False,False,attention,False,PTQ
-/model.10/m/m.0/attn/Split_18,0.00601465,0.005984,0.374025,model.10,m/m.0/attn,False,False,False,False,False,attention,False,PTQ
-/model.10/m/m.0/attn/Reshape_2,0.0,0.0,0.0,model.10,,False,False,False,False,False,attention,False,PTQ
-/model.10/m/m.0/attn/MatMul_1,0.0188294,0.018784,1.17092,model.10,,False,False,False,False,False,attention,False,PTQ
-/model.10/m/m.0/attn/Reshape_1,0.0,0.0,0.0,model.10,,False,False,False,False,False,attention,False,PTQ
-/model.10/m/m.0/attn/pe/conv/Conv + /model.10/m/m.0/attn/Add,0.00902985,0.009024,0.561528,model.10,m/m.0/attn/pe,True,False,False,False,False,attention,False,PTQ
-Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/proj/conv/Conv + /model.10/m/m.0/Add,0.00878122,0.008672,0.546067,model.10,m/m.0/attn/proj,True,False,False,False,True,reformat,False,PTQ
-/model.10/m/m.0/attn/proj/conv/Conv + /model.10/m/m.0/Add,0.00831111,0.008288,0.516833,model.10,m/m.0/attn/proj,True,False,False,False,False,attention,False,PTQ
-"/model.10/m/m.0/ffn/ffn.0/conv/Conv + PWN(PWN(/model.10/m/m.0/ffn/ffn.0/act/Sigmoid), PWN(/model.10/m/m.0/ffn/ffn.0/act/Mul))",0.0082199,0.008224,0.511161,model.10,m/m.0/ffn/ffn.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.10/m/m.0/ffn/ffn.1/conv/Conv + /model.10/m/m.0/Add_1,0.0084883,0.008448,0.527851,model.10,m/m.0/ffn/ffn.1,True,False,False,False,False,conv-only,False,PTQ
-/model.10/Split_output_0 copy,0.00609946,0.006112,0.3793,model.10,,False,False,False,False,False,other,False,PTQ
-/model.10/m/m.0/Add_1_output_0 copy,0.00593624,0.00592,0.36915,model.10,,False,False,False,False,False,other,False,PTQ
-"/model.10/cv2/conv/Conv + PWN(PWN(/model.10/cv2/act/Sigmoid), PWN(/model.10/cv2/act/Mul))",0.00837545,0.008352,0.520834,model.10,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.11/Resize,0.00699623,0.006976,0.435066,model.11,,False,False,False,False,False,other,False,PTQ
-/model.11/Resize_output_0 copy,0.00675077,0.006688,0.419802,model.11,,False,False,False,False,False,other,False,PTQ
-/model.6/cv2/act/Mul_output_0 copy,0.00635609,0.006208,0.395258,model.6,cv2,False,False,False,False,False,other,False,PTQ
-"/model.13/cv1/conv/Conv + PWN(PWN(/model.13/cv1/act/Sigmoid), PWN(/model.13/cv1/act/Mul))",0.00943173,0.009408,0.586519,model.13,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.13/m.0/cv1/conv/Conv + PWN(PWN(/model.13/m.0/cv1/act/Sigmoid), PWN(/model.13/m.0/cv1/act/Mul))",0.00801064,0.008,0.498148,model.13,m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.13/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.13/m.0/m/m.0/cv1/act/Mul))",0.00939502,0.009312,0.584236,model.13,m.0/m/m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.13/m.0/m/m.0/cv2/conv/Conv,0.00917686,0.009184,0.57067,model.13,m.0/m/m.0/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.13/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.0/cv2/act/Mul)), PWN(/model.13/m.0/m/m.0/Add))",0.00668519,0.006656,0.415724,model.13,m.0/m/m.0/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"/model.13/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.13/m.0/m/m.1/cv1/act/Mul))",0.00904798,0.009024,0.562655,model.13,m.0/m/m.1/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.13/m.0/m/m.1/cv2/conv/Conv,0.00884156,0.008832,0.549819,model.13,m.0/m/m.1/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.13/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.1/cv2/act/Mul)), PWN(/model.13/m.0/m/m.1/Add))",0.00690169,0.00688,0.429187,model.13,m.0/m/m.1/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"/model.13/m.0/cv2/conv/Conv + PWN(PWN(/model.13/m.0/cv2/act/Sigmoid), PWN(/model.13/m.0/cv2/act/Mul))",0.00820581,0.008192,0.510284,model.13,m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.13/m.0/cv3/conv/Conv + PWN(PWN(/model.13/m.0/cv3/act/Sigmoid), PWN(/model.13/m.0/cv3/act/Mul))",0.00843562,0.008416,0.524576,model.13,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.13/Split_output_0 copy,0.00617231,0.006144,0.38383,model.13,,False,False,False,False,False,other,False,PTQ
-/model.13/Split_output_1 copy,0.00613027,0.006112,0.381216,model.13,,False,False,False,False,False,other,False,PTQ
-"/model.13/cv2/conv/Conv + PWN(PWN(/model.13/cv2/act/Sigmoid), PWN(/model.13/cv2/act/Mul))",0.00871018,0.008704,0.541649,model.13,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.14/Resize,0.00728903,0.0072,0.453274,model.14,,False,False,False,False,False,other,False,PTQ
-/model.14/Resize_output_0 copy,0.00732231,0.007232,0.455343,model.14,,False,False,False,False,False,other,False,PTQ
-/model.4/cv2/act/Mul_output_0 copy,0.00721243,0.0072,0.448511,model.4,cv2,False,False,False,False,False,other,False,PTQ
-"/model.16/cv1/conv/Conv + PWN(PWN(/model.16/cv1/act/Sigmoid), PWN(/model.16/cv1/act/Mul))",0.00952965,0.009536,0.592608,model.16,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.16/m.0/cv1/conv/Conv + PWN(PWN(/model.16/m.0/cv1/act/Sigmoid), PWN(/model.16/m.0/cv1/act/Mul))",0.00849258,0.008448,0.528117,model.16,m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.16/m.0/m/m.0/cv1/conv/Conv,0.0100499,0.010016,0.624961,model.16,m.0/m/m.0/cv1,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(/model.16/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.16/m.0/m/m.0/cv1/act/Mul))",0.00715497,0.007136,0.444937,model.16,m.0/m/m.0/cv1,False,False,True,True,False,standalone-SiLU,False,PTQ
-/model.16/m.0/m/m.0/cv2/conv/Conv,0.00930619,0.00928,0.578712,model.16,m.0/m/m.0/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.16/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/m/m.0/cv2/act/Mul)), PWN(/model.16/m.0/m/m.0/Add))",0.00769706,0.00768,0.478648,model.16,m.0/m/m.0/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-/model.16/m.0/m/m.1/cv1/conv/Conv,0.00929041,0.00928,0.577731,model.16,m.0/m/m.1/cv1,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(/model.16/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.16/m.0/m/m.1/cv1/act/Mul))",0.00717482,0.007136,0.446172,model.16,m.0/m/m.1/cv1,False,False,True,True,False,standalone-SiLU,False,PTQ
-/model.16/m.0/m/m.1/cv2/conv/Conv,0.00939891,0.009312,0.584478,model.16,m.0/m/m.1/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.16/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.16/m.0/m/m.1/cv2/act/Mul)), PWN(/model.16/m.0/m/m.1/Add))",0.00744603,0.007424,0.463037,model.16,m.0/m/m.1/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"Reformatting CopyNode for Input Tensor 0 to /model.16/m.0/cv2/conv/Conv + PWN(PWN(/model.16/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/cv2/act/Mul))",0.00629971,0.006336,0.391752,model.16,m.0/cv2,True,False,True,True,True,reformat,False,PTQ
-"/model.16/m.0/cv2/conv/Conv + PWN(PWN(/model.16/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/cv2/act/Mul))",0.00855929,0.00848,0.532266,model.16,m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"Reformatting CopyNode for Output Tensor 0 to /model.16/m.0/cv2/conv/Conv + PWN(PWN(/model.16/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/cv2/act/Mul))",0.00905873,0.008992,0.563324,model.16,m.0/cv2,True,False,True,True,True,reformat,False,PTQ
-"/model.16/m.0/cv3/conv/Conv + PWN(PWN(/model.16/m.0/cv3/act/Sigmoid), PWN(/model.16/m.0/cv3/act/Mul))",0.0085043,0.00848,0.528847,model.16,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.16/Split_output_0 copy,0.00638577,0.006368,0.397104,model.16,,False,False,False,False,False,other,False,PTQ
-/model.16/Split_output_1 copy,0.00619208,0.006112,0.385059,model.16,,False,False,False,False,False,other,False,PTQ
-"/model.16/cv2/conv/Conv + PWN(PWN(/model.16/cv2/act/Sigmoid), PWN(/model.16/cv2/act/Mul))",0.00907262,0.008992,0.564188,model.16,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.17/conv/Conv + PWN(PWN(/model.17/act/Sigmoid), PWN(/model.17/act/Mul))",0.00977616,0.00976,0.607938,model.17,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.13/cv2/act/Mul_output_0 copy,0.00636783,0.006368,0.395988,model.13,cv2,False,False,False,False,False,other,False,PTQ
-"/model.19/cv1/conv/Conv + PWN(PWN(/model.19/cv1/act/Sigmoid), PWN(/model.19/cv1/act/Mul))",0.00896774,0.00896,0.557666,model.19,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.19/m.0/cv1/conv/Conv + PWN(PWN(/model.19/m.0/cv1/act/Sigmoid), PWN(/model.19/m.0/cv1/act/Mul))",0.00805736,0.007968,0.501053,model.19,m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.19/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.19/m.0/m/m.0/cv1/act/Mul))",0.0092569,0.009248,0.575647,model.19,m.0/m/m.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.19/m.0/m/m.0/cv2/conv/Conv,0.00924495,0.009248,0.574905,model.19,m.0/m/m.0/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.19/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.0/cv2/act/Mul)), PWN(/model.19/m.0/m/m.0/Add))",0.00664196,0.006624,0.413035,model.19,m.0/m/m.0/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"/model.19/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.19/m.0/m/m.1/cv1/act/Mul))",0.00900263,0.008992,0.559835,model.19,m.0/m/m.1/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.19/m.0/m/m.1/cv2/conv/Conv,0.00875981,0.008736,0.544735,model.19,m.0/m/m.1/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.19/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.1/cv2/act/Mul)), PWN(/model.19/m.0/m/m.1/Add))",0.00687459,0.00688,0.427502,model.19,m.0/m/m.1/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-"/model.19/m.0/cv2/conv/Conv + PWN(PWN(/model.19/m.0/cv2/act/Sigmoid), PWN(/model.19/m.0/cv2/act/Mul))",0.00821148,0.008224,0.510637,model.19,m.0/cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.19/m.0/cv3/conv/Conv + PWN(PWN(/model.19/m.0/cv3/act/Sigmoid), PWN(/model.19/m.0/cv3/act/Mul))",0.00847602,0.00848,0.527088,model.19,m.0/cv3,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.19/Split_output_0 copy,0.00612196,0.006112,0.380699,model.19,,False,False,False,False,False,other,False,PTQ
-/model.19/Split_output_1 copy,0.00613787,0.006112,0.381688,model.19,,False,False,False,False,False,other,False,PTQ
-"/model.19/cv2/conv/Conv + PWN(PWN(/model.19/cv2/act/Sigmoid), PWN(/model.19/cv2/act/Mul))",0.00882353,0.008768,0.548698,model.19,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.20/conv/Conv + PWN(PWN(/model.20/act/Sigmoid), PWN(/model.20/act/Mul))",0.0108165,0.010816,0.672633,model.20,conv,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.10/cv2/act/Mul_output_0 copy,0.00613888,0.006112,0.381751,model.10,cv2,False,False,False,False,False,other,False,PTQ
-"/model.22/cv1/conv/Conv + PWN(PWN(/model.22/cv1/act/Sigmoid), PWN(/model.22/cv1/act/Mul))",0.00877809,0.008736,0.545872,model.22,cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.22/m.0/m.0.0/cv1/conv/Conv + PWN(PWN(/model.22/m.0/m.0.0/cv1/act/Sigmoid), PWN(/model.22/m.0/m.0.0/cv1/act/Mul))",0.0105343,0.010528,0.655084,model.22,m.0/m.0.0/cv1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.22/m.0/m.0.0/cv2/conv/Conv,0.00954557,0.009504,0.593599,model.22,m.0/m.0.0/cv2,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(PWN(/model.22/m.0/m.0.0/cv2/act/Sigmoid), PWN(/model.22/m.0/m.0.0/cv2/act/Mul)), PWN(/model.22/m.0/m.0.0/Add))",0.00722689,0.007136,0.44941,model.22,m.0/m.0.0/cv2,False,False,True,True,False,standalone-SiLU,False,PTQ
-/model.22/m.0/m.0.1/attn/qkv/conv/Conv,0.0105627,0.010528,0.656852,model.22,m.0/m.0.1/attn/qkv,True,False,False,False,False,attention,False,PTQ
-/model.22/m.0/m.0.1/attn/Reshape,0.0,0.0,0.0,model.22,,False,False,False,False,False,attention,False,PTQ
-Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Constant_1_output_0_clone_1 + ONNXTRT_Broadcast_46 + /model.22/m.0/m.0.1/attn/Mul,0.00586784,0.005856,0.364896,model.10,,False,False,False,False,True,reformat,False,PTQ
-/model.10/m/m.0/attn/Constant_1_output_0_clone_1 + ONNXTRT_Broadcast_46 + /model.22/m.0/m.0.1/attn/Mul,0.00639287,0.0064,0.397546,model.10,,False,False,False,False,False,attention,False,PTQ
-/model.22/m.0/m.0.1/attn/Split_42,0.00586468,0.005856,0.364699,model.22,m.0/m.0.1/attn,False,False,False,False,False,attention,False,PTQ
-/model.22/m.0/m.0.1/attn/MatMul,0.0113043,0.011296,0.702968,model.22,,False,False,False,False,False,attention,False,PTQ
-/model.22/m.0/m.0.1/attn/Softmax,0.00920664,0.009216,0.572522,model.22,,False,False,False,False,False,attention,False,PTQ
-/model.22/m.0/m.0.1/attn/Split_44,0.00601146,0.00592,0.373827,model.22,m.0/m.0.1/attn,False,False,False,False,False,attention,False,PTQ
-/model.22/m.0/m.0.1/attn/Reshape_2,0.0,0.0,0.0,model.22,,False,False,False,False,False,attention,False,PTQ
-/model.22/m.0/m.0.1/attn/MatMul_1,0.0188161,0.01872,1.17009,model.22,,False,False,False,False,False,attention,False,PTQ
-/model.22/m.0/m.0.1/attn/Reshape_1,0.0,0.0,0.0,model.22,,False,False,False,False,False,attention,False,PTQ
-/model.22/m.0/m.0.1/attn/pe/conv/Conv + /model.22/m.0/m.0.1/attn/Add,0.0089911,0.008992,0.559118,model.22,m.0/m.0.1/attn/pe,True,False,False,False,False,attention,False,PTQ
-Reformatting CopyNode for Input Tensor 0 to /model.22/m.0/m.0.1/attn/proj/conv/Conv + /model.22/m.0/m.0.1/Add,0.00871637,0.008736,0.542034,model.22,m.0/m.0.1/attn/proj,True,False,False,False,True,reformat,False,PTQ
-/model.22/m.0/m.0.1/attn/proj/conv/Conv + /model.22/m.0/m.0.1/Add,0.00829463,0.008224,0.515808,model.22,m.0/m.0.1/attn/proj,True,False,False,False,False,attention,False,PTQ
-"/model.22/m.0/m.0.1/ffn/ffn.0/conv/Conv + PWN(PWN(/model.22/m.0/m.0.1/ffn/ffn.0/act/Sigmoid), PWN(/model.22/m.0/m.0.1/ffn/ffn.0/act/Mul))",0.0082665,0.008224,0.514059,model.22,m.0/m.0.1/ffn/ffn.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.22/m.0/m.0.1/ffn/ffn.1/conv/Conv + /model.22/m.0/m.0.1/Add_1,0.00855458,0.00848,0.531973,model.22,m.0/m.0.1/ffn/ffn.1,True,False,False,False,False,conv-only,False,PTQ
-/model.22/Split_output_0 copy,0.0061268,0.006112,0.381,model.22,,False,False,False,False,False,other,False,PTQ
-/model.22/Split_output_1 copy,0.00608354,0.006112,0.37831,model.22,,False,False,False,False,False,other,False,PTQ
-/model.22/m.0/m.0.1/Add_1_output_0 copy,0.00607306,0.006112,0.377658,model.22,,False,False,False,False,False,other,False,PTQ
-"/model.22/cv2/conv/Conv + PWN(PWN(/model.22/cv2/act/Sigmoid), PWN(/model.22/cv2/act/Mul))",0.00877574,0.008768,0.545726,model.22,cv2,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv2.2/one2one_cv2.2.0/conv/Conv + PWN(PWN(/model.23/one2one_cv2.2/one2one_cv2.2.0/act/Sigmoid), PWN(/model.23/one2one_cv2.2/one2one_cv2.2.0/act/Mul))",0.0129605,0.012864,0.805956,model.23,one2one_cv2.2/one2one_cv2.2.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.23/one2one_cv2.2/one2one_cv2.2.1/conv/Conv,0.0111088,0.01104,0.690812,model.23,one2one_cv2.2/one2one_cv2.2.1,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Sigmoid), PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Mul))",0.00636382,0.006368,0.395739,model.23,one2one_cv2.2/one2one_cv2.2.1,False,False,True,True,False,standalone-SiLU,False,PTQ
-/model.23/one2one_cv2.2/one2one_cv2.2.2/Conv,0.00719968,0.007168,0.447718,model.23,one2one_cv2.2/one2one_cv2.2.2,True,False,False,False,False,conv-only,False,PTQ
-"/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/act/Mul))",0.00845565,0.008416,0.525821,model.23,one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/act/Mul))",0.00823992,0.008224,0.512406,model.23,one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/act/Mul))",0.00792139,0.007904,0.492598,model.23,one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/act/Mul))",0.00797185,0.007968,0.495736,model.23,one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.23/one2one_cv3.2/one2one_cv3.2.2/Conv,0.00979249,0.009728,0.608953,model.23,one2one_cv3.2/one2one_cv3.2.2,True,False,False,False,False,conv-only,False,PTQ
-"/model.23/one2one_cv2.1/one2one_cv2.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv2.1/one2one_cv2.1.0/act/Sigmoid), PWN(/model.23/one2one_cv2.1/one2one_cv2.1.0/act/Mul))",0.0107955,0.010784,0.671327,model.23,one2one_cv2.1/one2one_cv2.1.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.23/one2one_cv2.1/one2one_cv2.1.1/conv/Conv,0.0108102,0.010784,0.672242,model.23,one2one_cv2.1/one2one_cv2.1.1,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Sigmoid), PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Mul))",0.00611852,0.006112,0.380485,model.23,one2one_cv2.1/one2one_cv2.1.1,False,False,True,True,False,standalone-SiLU,False,PTQ
-/model.23/one2one_cv2.1/one2one_cv2.1.2/Conv,0.00750251,0.007456,0.46655,model.23,one2one_cv2.1/one2one_cv2.1.2,True,False,False,False,False,conv-only,False,PTQ
-"/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/act/Mul))",0.00818763,0.00816,0.509154,model.23,one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/act/Mul))",0.00824824,0.008256,0.512923,model.23,one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/act/Mul))",0.00843901,0.008416,0.524786,model.23,one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/act/Mul))",0.00790364,0.007936,0.491494,model.23,one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.23/one2one_cv3.1/one2one_cv3.1.2/Conv,0.00924491,0.009248,0.574902,model.23,one2one_cv3.1/one2one_cv3.1.2,True,False,False,False,False,conv-only,False,PTQ
-"/model.23/one2one_cv2.0/one2one_cv2.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv2.0/one2one_cv2.0.0/act/Sigmoid), PWN(/model.23/one2one_cv2.0/one2one_cv2.0.0/act/Mul))",0.0108428,0.010816,0.674268,model.23,one2one_cv2.0/one2one_cv2.0.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.23/one2one_cv2.0/one2one_cv2.0.1/conv/Conv,0.0100448,0.010048,0.624644,model.23,one2one_cv2.0/one2one_cv2.0.1,True,False,False,False,False,conv-only,False,PTQ
-"PWN(PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Sigmoid), PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Mul))",0.00716193,0.007136,0.44537,model.23,one2one_cv2.0/one2one_cv2.0.1,False,False,True,True,False,standalone-SiLU,False,PTQ
-/model.23/one2one_cv2.0/one2one_cv2.0.2/Conv,0.00957632,0.009504,0.595511,model.23,one2one_cv2.0/one2one_cv2.0.2,True,False,False,False,False,conv-only,False,PTQ
-"/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/act/Mul))",0.00848434,0.008448,0.527606,model.23,one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/act/Mul))",0.00905875,0.009024,0.563325,model.23,one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/act/Mul))",0.00871934,0.008704,0.542219,model.23,one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-"/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/conv/Conv + PWN(PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Sigmoid), PWN(/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/act/Mul))",0.00909281,0.009024,0.565444,model.23,one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1,True,False,True,True,False,"conv+SiLU (fused, Q folded in)",False,PTQ
-/model.23/one2one_cv3.0/one2one_cv3.0.2/Conv,0.00953262,0.009504,0.592793,model.23,one2one_cv3.0/one2one_cv3.0.2,True,False,False,False,False,conv-only,False,PTQ
-__myl_ReshReshReshConcSlicSlic_myl183_0,0.00588306,0.005856,0.365842,NMS/foreign,,False,False,False,False,False,other,False,PTQ
-__myl_SubAddConcMulReshReshReshConcSigmConcTranSlicMaxrReshSlic_myl183_1,0.00669326,0.006624,0.416225,NMS/foreign,,False,False,False,False,False,other,False,PTQ
-__myl_Topk_myl183_2,0.058153,0.05808,3.61629,NMS/foreign,,False,False,False,False,False,NMS/TopK,False,PTQ
-__myl_CastReshCastGathResh_myl183_3,0.00595311,0.005856,0.370199,NMS/foreign,,False,False,False,False,False,other,False,PTQ
-__myl_Topk_myl183_4,0.0130991,0.013024,0.81458,NMS/foreign,,False,False,False,False,False,NMS/TopK,False,PTQ
-__myl_CastReshReshGathCastReplDivNeqXorLtAndAddSeleSubReshCastGathConc_myl183_5,0.00613161,0.006112,0.381299,NMS/foreign,,False,False,False,False,False,other,False,PTQ
+layer,subpath,op_type,medianMs,name80
+model.0,conv,conv+SiLU fused,0.01664,"/model.0/conv/Conv + PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))"
+model.0,conv,reformat/copy,0.013792,Reformatting CopyNode for Input Tensor 0 to /model.0/conv/Conv + PWN(PWN(/model.
+model.1,conv,conv+SiLU fused,0.012608,"/model.1/conv/Conv + PWN(PWN(/model.1/act/Sigmoid), PWN(/model.1/act/Mul))"
+model.10,m,attention,0.018784,/model.10/m/m.0/attn/MatMul_1
+model.10,m,attention,0.011232,/model.10/m/m.0/attn/MatMul
+model.10,m,conv only,0.0104,/model.10/m/m.0/attn/qkv/conv/Conv
+model.10,m,attention,0.009184,/model.10/m/m.0/attn/Softmax
+model.10,m,conv only,0.009024,/model.10/m/m.0/attn/pe/conv/Conv + /model.10/m/m.0/attn/Add
+model.10,m,reformat/copy,0.008672,Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/proj/conv/Conv 
+model.10,cv1,conv+SiLU fused,0.008544,"/model.10/cv1/conv/Conv + PWN(PWN(/model.10/cv1/act/Sigmoid), PWN(/model.10/cv1/"
+model.10,m,conv only,0.008448,/model.10/m/m.0/ffn/ffn.1/conv/Conv + /model.10/m/m.0/Add_1
+model.10,cv2,conv+SiLU fused,0.008352,"/model.10/cv2/conv/Conv + PWN(PWN(/model.10/cv2/act/Sigmoid), PWN(/model.10/cv2/"
+model.10,m,conv only,0.008288,/model.10/m/m.0/attn/proj/conv/Conv + /model.10/m/m.0/Add
+model.10,m,conv+SiLU fused,0.008224,/model.10/m/m.0/ffn/ffn.0/conv/Conv + PWN(PWN(/model.10/m/m.0/ffn/ffn.0/act/Sigm
+model.10,m,attention,0.006432,/model.10/m/m.0/attn/Constant_1_output_0 + ONNXTRT_Broadcast + /model.10/m/m.0/a
+model.10,m,attention,0.0064,/model.10/m/m.0/attn/Constant_1_output_0_clone_1 + ONNXTRT_Broadcast_46 + /model
+model.10,Split_output_0,reformat/copy,0.006112,/model.10/Split_output_0 copy
+model.10,cv2,reformat/copy,0.006112,/model.10/cv2/act/Mul_output_0 copy
+model.10,Split_13,resize/concat,0.006048,/model.10/Split_13
+model.10,m,attention,0.005984,/model.10/m/m.0/attn/Split_18
+model.10,m,reformat/copy,0.00592,Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Constant_1_outp
+model.10,m,reformat/copy,0.00592,/model.10/m/m.0/Add_1_output_0 copy
+model.10,m,attention,0.005888,/model.10/m/m.0/attn/Split_16
+model.10,m,reformat/copy,0.005856,Reformatting CopyNode for Input Tensor 0 to /model.10/m/m.0/attn/Constant_1_outp
+model.10,m,attention,0.0,/model.10/m/m.0/attn/Reshape
+model.10,m,attention,0.0,/model.10/m/m.0/attn/Reshape_2
+model.10,m,attention,0.0,/model.10/m/m.0/attn/Reshape_1
+model.11,Resize,resize/concat,0.006976,/model.11/Resize
+model.11,Resize_output_0,reformat/copy,0.006688,/model.11/Resize_output_0 copy
+model.13,cv1,conv+SiLU fused,0.009408,"/model.13/cv1/conv/Conv + PWN(PWN(/model.13/cv1/act/Sigmoid), PWN(/model.13/cv1/"
+model.13,m,conv+SiLU fused,0.009312,/model.13/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.0/cv1/act/Sigmoid)
+model.13,m,conv only,0.009184,/model.13/m.0/m/m.0/cv2/conv/Conv
+model.13,m,conv+SiLU fused,0.009024,/model.13/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.13/m.0/m/m.1/cv1/act/Sigmoid)
+model.13,m,conv only,0.008832,/model.13/m.0/m/m.1/cv2/conv/Conv
+model.13,cv2,conv+SiLU fused,0.008704,"/model.13/cv2/conv/Conv + PWN(PWN(/model.13/cv2/act/Sigmoid), PWN(/model.13/cv2/"
+model.13,m,conv+SiLU fused,0.008416,"/model.13/m.0/cv3/conv/Conv + PWN(PWN(/model.13/m.0/cv3/act/Sigmoid), PWN(/model"
+model.13,m,conv+SiLU fused,0.008192,"/model.13/m.0/cv2/conv/Conv + PWN(PWN(/model.13/m.0/cv2/act/Sigmoid), PWN(/model"
+model.13,m,conv+SiLU fused,0.008,"/model.13/m.0/cv1/conv/Conv + PWN(PWN(/model.13/m.0/cv1/act/Sigmoid), PWN(/model"
+model.13,m,standalone SiLU,0.00688,"PWN(PWN(PWN(/model.13/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.1/cv2/ac"
+model.13,m,standalone SiLU,0.006656,"PWN(PWN(PWN(/model.13/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.13/m.0/m/m.0/cv2/ac"
+model.13,cv2,reformat/copy,0.006368,/model.13/cv2/act/Mul_output_0 copy
+model.13,Split_output_0,reformat/copy,0.006144,/model.13/Split_output_0 copy
+model.13,Split_output_1,reformat/copy,0.006112,/model.13/Split_output_1 copy
+model.14,Resize_output_0,reformat/copy,0.007232,/model.14/Resize_output_0 copy
+model.14,Resize,resize/concat,0.0072,/model.14/Resize
+model.16,m,conv only,0.010016,/model.16/m.0/m/m.0/cv1/conv/Conv
+model.16,cv1,conv+SiLU fused,0.009536,"/model.16/cv1/conv/Conv + PWN(PWN(/model.16/cv1/act/Sigmoid), PWN(/model.16/cv1/"
+model.16,m,conv only,0.009312,/model.16/m.0/m/m.1/cv2/conv/Conv
+model.16,m,conv only,0.00928,/model.16/m.0/m/m.0/cv2/conv/Conv
+model.16,m,conv only,0.00928,/model.16/m.0/m/m.1/cv1/conv/Conv
+model.16,m,reformat/copy,0.008992,Reformatting CopyNode for Output Tensor 0 to /model.16/m.0/cv2/conv/Conv + PWN(P
+model.16,cv2,conv+SiLU fused,0.008992,"/model.16/cv2/conv/Conv + PWN(PWN(/model.16/cv2/act/Sigmoid), PWN(/model.16/cv2/"
+model.16,m,conv+SiLU fused,0.00848,"/model.16/m.0/cv2/conv/Conv + PWN(PWN(/model.16/m.0/cv2/act/Sigmoid), PWN(/model"
+model.16,m,conv+SiLU fused,0.00848,"/model.16/m.0/cv3/conv/Conv + PWN(PWN(/model.16/m.0/cv3/act/Sigmoid), PWN(/model"
+model.16,m,conv+SiLU fused,0.008448,"/model.16/m.0/cv1/conv/Conv + PWN(PWN(/model.16/m.0/cv1/act/Sigmoid), PWN(/model"
+model.16,m,standalone SiLU,0.00768,"PWN(PWN(PWN(/model.16/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.16/m.0/m/m.0/cv2/ac"
+model.16,m,standalone SiLU,0.007424,"PWN(PWN(PWN(/model.16/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.16/m.0/m/m.1/cv2/ac"
+model.16,m,standalone SiLU,0.007136,"PWN(PWN(/model.16/m.0/m/m.0/cv1/act/Sigmoid), PWN(/model.16/m.0/m/m.0/cv1/act/Mu"
+model.16,m,standalone SiLU,0.007136,"PWN(PWN(/model.16/m.0/m/m.1/cv1/act/Sigmoid), PWN(/model.16/m.0/m/m.1/cv1/act/Mu"
+model.16,Split_output_0,reformat/copy,0.006368,/model.16/Split_output_0 copy
+model.16,m,reformat/copy,0.006336,Reformatting CopyNode for Input Tensor 0 to /model.16/m.0/cv2/conv/Conv + PWN(PW
+model.16,Split_output_1,reformat/copy,0.006112,/model.16/Split_output_1 copy
+model.17,conv,conv+SiLU fused,0.00976,"/model.17/conv/Conv + PWN(PWN(/model.17/act/Sigmoid), PWN(/model.17/act/Mul))"
+model.19,m,conv+SiLU fused,0.009248,/model.19/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.0/cv1/act/Sigmoid)
+model.19,m,conv only,0.009248,/model.19/m.0/m/m.0/cv2/conv/Conv
+model.19,m,conv+SiLU fused,0.008992,/model.19/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.19/m.0/m/m.1/cv1/act/Sigmoid)
+model.19,cv1,conv+SiLU fused,0.00896,"/model.19/cv1/conv/Conv + PWN(PWN(/model.19/cv1/act/Sigmoid), PWN(/model.19/cv1/"
+model.19,cv2,conv+SiLU fused,0.008768,"/model.19/cv2/conv/Conv + PWN(PWN(/model.19/cv2/act/Sigmoid), PWN(/model.19/cv2/"
+model.19,m,conv only,0.008736,/model.19/m.0/m/m.1/cv2/conv/Conv
+model.19,m,conv+SiLU fused,0.00848,"/model.19/m.0/cv3/conv/Conv + PWN(PWN(/model.19/m.0/cv3/act/Sigmoid), PWN(/model"
+model.19,m,conv+SiLU fused,0.008224,"/model.19/m.0/cv2/conv/Conv + PWN(PWN(/model.19/m.0/cv2/act/Sigmoid), PWN(/model"
+model.19,m,conv+SiLU fused,0.007968,"/model.19/m.0/cv1/conv/Conv + PWN(PWN(/model.19/m.0/cv1/act/Sigmoid), PWN(/model"
+model.19,m,standalone SiLU,0.00688,"PWN(PWN(PWN(/model.19/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.1/cv2/ac"
+model.19,m,standalone SiLU,0.006624,"PWN(PWN(PWN(/model.19/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.19/m.0/m/m.0/cv2/ac"
+model.19,Split_output_0,reformat/copy,0.006112,/model.19/Split_output_0 copy
+model.19,Split_output_1,reformat/copy,0.006112,/model.19/Split_output_1 copy
+model.2,m,conv+SiLU fused,0.015264,"/model.2/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.2/m.0/cv2/act/Sigmoid), PWN(/mod"
+model.2,m,conv+SiLU fused,0.011936,"/model.2/m.0/cv1/conv/Conv + PWN(PWN(/model.2/m.0/cv1/act/Sigmoid), PWN(/model.2"
+model.2,cv2,conv+SiLU fused,0.011808,"/model.2/cv2/conv/Conv + PWN(PWN(/model.2/cv2/act/Sigmoid), PWN(/model.2/cv2/act"
+model.2,Split_1,resize/concat,0.010784,/model.2/Split_1
+model.2,cv1,conv+SiLU fused,0.00976,"/model.2/cv1/conv/Conv + PWN(PWN(/model.2/cv1/act/Sigmoid), PWN(/model.2/cv1/act"
+model.2,cv2,reformat/copy,0.008768,Reformatting CopyNode for Input Tensor 0 to /model.2/cv2/conv/Conv + PWN(PWN(/mo
+model.2,Split_output_0,reformat/copy,0.008608,/model.2/Split_output_0 copy
+model.2,Split_output_1,reformat/copy,0.00704,/model.2/Split_output_1 copy
+model.2,m,reformat/copy,0.006976,/model.2/m.0/Add_output_0 copy
+model.20,conv,conv+SiLU fused,0.010816,"/model.20/conv/Conv + PWN(PWN(/model.20/act/Sigmoid), PWN(/model.20/act/Mul))"
+model.22,m,attention,0.01872,/model.22/m.0/m.0.1/attn/MatMul_1
+model.22,m,attention,0.011296,/model.22/m.0/m.0.1/attn/MatMul
+model.22,m,conv+SiLU fused,0.010528,/model.22/m.0/m.0.0/cv1/conv/Conv + PWN(PWN(/model.22/m.0/m.0.0/cv1/act/Sigmoid)
+model.22,m,conv only,0.010528,/model.22/m.0/m.0.1/attn/qkv/conv/Conv
+model.22,m,conv only,0.009504,/model.22/m.0/m.0.0/cv2/conv/Conv
+model.22,m,attention,0.009216,/model.22/m.0/m.0.1/attn/Softmax
+model.22,m,conv only,0.008992,/model.22/m.0/m.0.1/attn/pe/conv/Conv + /model.22/m.0/m.0.1/attn/Add
+model.22,cv2,conv+SiLU fused,0.008768,"/model.22/cv2/conv/Conv + PWN(PWN(/model.22/cv2/act/Sigmoid), PWN(/model.22/cv2/"
+model.22,cv1,conv+SiLU fused,0.008736,"/model.22/cv1/conv/Conv + PWN(PWN(/model.22/cv1/act/Sigmoid), PWN(/model.22/cv1/"
+model.22,m,reformat/copy,0.008736,Reformatting CopyNode for Input Tensor 0 to /model.22/m.0/m.0.1/attn/proj/conv/C
+model.22,m,conv only,0.00848,/model.22/m.0/m.0.1/ffn/ffn.1/conv/Conv + /model.22/m.0/m.0.1/Add_1
+model.22,m,conv only,0.008224,/model.22/m.0/m.0.1/attn/proj/conv/Conv + /model.22/m.0/m.0.1/Add
+model.22,m,conv+SiLU fused,0.008224,/model.22/m.0/m.0.1/ffn/ffn.0/conv/Conv + PWN(PWN(/model.22/m.0/m.0.1/ffn/ffn.0/
+model.22,m,standalone SiLU,0.007136,"PWN(PWN(PWN(/model.22/m.0/m.0.0/cv2/act/Sigmoid), PWN(/model.22/m.0/m.0.0/cv2/ac"
+model.22,Split_output_0,reformat/copy,0.006112,/model.22/Split_output_0 copy
+model.22,Split_output_1,reformat/copy,0.006112,/model.22/Split_output_1 copy
+model.22,m,reformat/copy,0.006112,/model.22/m.0/m.0.1/Add_1_output_0 copy
+model.22,m,attention,0.00592,/model.22/m.0/m.0.1/attn/Split_44
+model.22,m,attention,0.005856,/model.22/m.0/m.0.1/attn/Split_42
+model.22,m,attention,0.0,/model.22/m.0/m.0.1/attn/Reshape
+model.22,m,attention,0.0,/model.22/m.0/m.0.1/attn/Reshape_2
+model.22,m,attention,0.0,/model.22/m.0/m.0.1/attn/Reshape_1
+model.23,one2one_cv2,conv+SiLU fused,0.012864,/model.23/one2one_cv2.2/one2one_cv2.2.0/conv/Conv + PWN(PWN(/model.23/one2one_cv
+model.23,one2one_cv2,conv only,0.01104,/model.23/one2one_cv2.2/one2one_cv2.2.1/conv/Conv
+model.23,one2one_cv2,conv+SiLU fused,0.010816,/model.23/one2one_cv2.0/one2one_cv2.0.0/conv/Conv + PWN(PWN(/model.23/one2one_cv
+model.23,one2one_cv2,conv+SiLU fused,0.010784,/model.23/one2one_cv2.1/one2one_cv2.1.0/conv/Conv + PWN(PWN(/model.23/one2one_cv
+model.23,one2one_cv2,conv only,0.010784,/model.23/one2one_cv2.1/one2one_cv2.1.1/conv/Conv
+model.23,one2one_cv2,conv only,0.010048,/model.23/one2one_cv2.0/one2one_cv2.0.1/conv/Conv
+model.23,one2one_cv3,conv only,0.009728,/model.23/one2one_cv3.2/one2one_cv3.2.2/Conv
+model.23,one2one_cv2,conv only,0.009504,/model.23/one2one_cv2.0/one2one_cv2.0.2/Conv
+model.23,one2one_cv3,conv only,0.009504,/model.23/one2one_cv3.0/one2one_cv3.0.2/Conv
+model.23,one2one_cv3,conv only,0.009248,/model.23/one2one_cv3.1/one2one_cv3.1.2/Conv
+model.23,one2one_cv3,conv+SiLU fused,0.009024,/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.1/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.009024,/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.1/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.008704,/model.23/one2one_cv3.0/one2one_cv3.0.1/one2one_cv3.0.1.0/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.008448,/model.23/one2one_cv3.0/one2one_cv3.0.0/one2one_cv3.0.0.0/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.008416,/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.0/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.008416,/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.0/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.008256,/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.1/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.008224,/model.23/one2one_cv3.2/one2one_cv3.2.0/one2one_cv3.2.0.1/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.00816,/model.23/one2one_cv3.1/one2one_cv3.1.0/one2one_cv3.1.0.0/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.007968,/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.1/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.007936,/model.23/one2one_cv3.1/one2one_cv3.1.1/one2one_cv3.1.1.1/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv3,conv+SiLU fused,0.007904,/model.23/one2one_cv3.2/one2one_cv3.2.1/one2one_cv3.2.1.0/conv/Conv + PWN(PWN(/m
+model.23,one2one_cv2,conv only,0.007456,/model.23/one2one_cv2.1/one2one_cv2.1.2/Conv
+model.23,one2one_cv2,conv only,0.007168,/model.23/one2one_cv2.2/one2one_cv2.2.2/Conv
+model.23,one2one_cv2,standalone SiLU,0.007136,"PWN(PWN(/model.23/one2one_cv2.0/one2one_cv2.0.1/act/Sigmoid), PWN(/model.23/one2"
+model.23,one2one_cv2,standalone SiLU,0.006368,"PWN(PWN(/model.23/one2one_cv2.2/one2one_cv2.2.1/act/Sigmoid), PWN(/model.23/one2"
+model.23,one2one_cv2,standalone SiLU,0.006112,"PWN(PWN(/model.23/one2one_cv2.1/one2one_cv2.1.1/act/Sigmoid), PWN(/model.23/one2"
+model.3,conv,conv+SiLU fused,0.011424,"/model.3/conv/Conv + PWN(PWN(/model.3/act/Sigmoid), PWN(/model.3/act/Mul))"
+model.4,m,conv+SiLU fused,0.011456,"/model.4/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.4/m.0/cv2/act/Sigmoid), PWN(/mod"
+model.4,cv2,conv+SiLU fused,0.010144,"/model.4/cv2/conv/Conv + PWN(PWN(/model.4/cv2/act/Sigmoid), PWN(/model.4/cv2/act"
+model.4,m,conv+SiLU fused,0.010112,"/model.4/m.0/cv1/conv/Conv + PWN(PWN(/model.4/m.0/cv1/act/Sigmoid), PWN(/model.4"
+model.4,cv1,conv+SiLU fused,0.009024,"/model.4/cv1/conv/Conv + PWN(PWN(/model.4/cv1/act/Sigmoid), PWN(/model.4/cv1/act"
+model.4,cv2,reformat/copy,0.0072,/model.4/cv2/act/Mul_output_0 copy
+model.4,Split_output_0,reformat/copy,0.006336,/model.4/Split_output_0 copy
+model.4,Split_4,resize/concat,0.006304,/model.4/Split_4
+model.4,Split_output_1,reformat/copy,0.006144,/model.4/Split_output_1 copy
+model.4,m,reformat/copy,0.006144,/model.4/m.0/Add_output_0 copy
+model.5,conv,conv+SiLU fused,0.012096,"/model.5/conv/Conv + PWN(PWN(/model.5/act/Sigmoid), PWN(/model.5/act/Mul))"
+model.6,m,conv+SiLU fused,0.009312,"/model.6/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.0/cv1/act/Sigmoid), "
+model.6,m,conv only,0.009152,/model.6/m.0/m/m.0/cv2/conv/Conv
+model.6,m,conv+SiLU fused,0.009024,"/model.6/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.6/m.0/m/m.1/cv1/act/Sigmoid), "
+model.6,m,conv only,0.008832,/model.6/m.0/m/m.1/cv2/conv/Conv
+model.6,cv2,conv+SiLU fused,0.008704,"/model.6/cv2/conv/Conv + PWN(PWN(/model.6/cv2/act/Sigmoid), PWN(/model.6/cv2/act"
+model.6,cv1,conv+SiLU fused,0.008672,"/model.6/cv1/conv/Conv + PWN(PWN(/model.6/cv1/act/Sigmoid), PWN(/model.6/cv1/act"
+model.6,m,conv+SiLU fused,0.008416,"/model.6/m.0/cv3/conv/Conv + PWN(PWN(/model.6/m.0/cv3/act/Sigmoid), PWN(/model.6"
+model.6,m,conv+SiLU fused,0.008224,"/model.6/m.0/cv2/conv/Conv + PWN(PWN(/model.6/m.0/cv2/act/Sigmoid), PWN(/model.6"
+model.6,m,conv+SiLU fused,0.008032,"/model.6/m.0/cv1/conv/Conv + PWN(PWN(/model.6/m.0/cv1/act/Sigmoid), PWN(/model.6"
+model.6,m,standalone SiLU,0.006816,"PWN(PWN(PWN(/model.6/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.1/cv2/act/"
+model.6,m,standalone SiLU,0.006656,"PWN(PWN(PWN(/model.6/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/m/m.0/cv2/act/"
+model.6,Split_output_0,reformat/copy,0.006208,/model.6/Split_output_0 copy
+model.6,cv2,reformat/copy,0.006208,/model.6/cv2/act/Mul_output_0 copy
+model.6,Split_output_1,reformat/copy,0.006144,/model.6/Split_output_1 copy
+model.7,conv,conv+SiLU fused,0.01104,"/model.7/conv/Conv + PWN(PWN(/model.7/act/Sigmoid), PWN(/model.7/act/Mul))"
+model.8,m,conv only,0.009568,/model.8/m.0/m/m.0/cv2/conv/Conv
+model.8,m,conv+SiLU fused,0.009408,"/model.8/m.0/m/m.0/cv1/conv/Conv + PWN(PWN(/model.8/m.0/m/m.0/cv1/act/Sigmoid), "
+model.8,m,conv+SiLU fused,0.009408,"/model.8/m.0/m/m.1/cv1/conv/Conv + PWN(PWN(/model.8/m.0/m/m.1/cv1/act/Sigmoid), "
+model.8,m,conv only,0.009184,/model.8/m.0/m/m.1/cv2/conv/Conv
+model.8,cv1,conv+SiLU fused,0.008576,"/model.8/cv1/conv/Conv + PWN(PWN(/model.8/cv1/act/Sigmoid), PWN(/model.8/cv1/act"
+model.8,cv2,conv+SiLU fused,0.008512,"/model.8/cv2/conv/Conv + PWN(PWN(/model.8/cv2/act/Sigmoid), PWN(/model.8/cv2/act"
+model.8,m,conv+SiLU fused,0.008128,"/model.8/m.0/cv2/conv/Conv + PWN(PWN(/model.8/m.0/cv2/act/Sigmoid), PWN(/model.8"
+model.8,m,conv+SiLU fused,0.008064,"/model.8/m.0/cv1/conv/Conv + PWN(PWN(/model.8/m.0/cv1/act/Sigmoid), PWN(/model.8"
+model.8,m,conv+SiLU fused,0.008032,"/model.8/m.0/cv3/conv/Conv + PWN(PWN(/model.8/m.0/cv3/act/Sigmoid), PWN(/model.8"
+model.8,m,standalone SiLU,0.007136,"PWN(PWN(PWN(/model.8/m.0/m/m.1/cv2/act/Sigmoid), PWN(/model.8/m.0/m/m.1/cv2/act/"
+model.8,m,standalone SiLU,0.006432,"PWN(PWN(PWN(/model.8/m.0/m/m.0/cv2/act/Sigmoid), PWN(/model.8/m.0/m/m.0/cv2/act/"
+model.8,Split_output_0,reformat/copy,0.006112,/model.8/Split_output_0 copy
+model.8,Split_output_1,reformat/copy,0.005952,/model.8/Split_output_1 copy
+model.9,m,maxpool,0.009472,/model.9/m/MaxPool
+model.9,m_2,maxpool,0.009472,/model.9/m_2/MaxPool
+model.9,m_1,maxpool,0.00928,/model.9/m_1/MaxPool
+model.9,cv2,conv only,0.00912,/model.9/cv2/conv/Conv
+model.9,cv1,conv only,0.008256,/model.9/cv1/conv/Conv
+model.9,cv2,standalone SiLU,0.0072,"PWN(PWN(PWN(/model.9/cv2/act/Sigmoid), PWN(/model.9/cv2/act/Mul)), PWN(/model.9/"
+model.9,cv1,reformat/copy,0.00592,/model.9/cv1/conv/Conv_output_0 copy
+model.9,m,reformat/copy,0.00592,/model.9/m/MaxPool_output_0 copy
+model.9,m_1,reformat/copy,0.00592,/model.9/m_1/MaxPool_output_0 copy
+other/glue,,NMS/decode,0.05808,__myl_Topk_myl183_2
+other/glue,,NMS/decode,0.013024,__myl_Topk_myl183_4
+other/glue,,NMS/decode,0.006624,__myl_SubAddConcMulReshReshReshConcSigmConcTranSlicMaxrReshSlic_myl183_1
+other/glue,,reshape/move,0.006112,__myl_CastReshReshGathCastReplDivNeqXorLtAndAddSeleSubReshCastGathConc_myl183_5
+other/glue,,NMS/decode,0.005856,__myl_ReshReshReshConcSlicSlic_myl183_0
+other/glue,,reshape/move,0.005856,__myl_CastReshCastGathResh_myl183_3
+TOTAL,,189 kernels,1.6017599999999999,
