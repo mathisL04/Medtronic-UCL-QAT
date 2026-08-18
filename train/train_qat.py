@@ -442,7 +442,7 @@ overrides = dict(
 print("\n[QAT] amp=False (deviation from V1 -- see docs/06)")
 trainer = QATTrainer(overrides=overrides)
 trainer.add_callback("on_fit_epoch_end", save_best_qat)
-trainer.train()
+trainer.train()                                                        # calls theentire training loop - optimiser, backprogration, LR & scheduling => BaseTrainer.train()
 
 # -----------------------------
 # Post-run: save + verify

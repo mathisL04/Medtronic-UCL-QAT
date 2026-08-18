@@ -180,3 +180,9 @@ __pycache__/
 datasets/utenn_yolo/
 datasets/sanoscience_yolo_full_nonexpert_stereo/
 datasets/
+notebooks/layer_comparison_common.csv
+*.png
+*.png
+*.csv
+__pycache__/
+*.pyc
