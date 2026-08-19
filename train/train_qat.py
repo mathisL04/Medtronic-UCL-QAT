@@ -19,10 +19,10 @@ import torch
 # Invoked through scripts/train/qat_run.sh, which supplies PROJECT (local scratch, so
 # per-epoch checkpoint churn stays off the 50 GB NFS quota) and copies the final
 # artifacts back to NFS on exit.
-MODEL_PATH = Path(
+MODEL_PATH = Path(os.environ.get(
+    "MODEL_PATH",                              # override to QAT a different baseline (e.g. Week-8 frozen)
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/baseline/best.pt"
-)
+    "models/yolo26n_sanoscience_full_left/baseline/best.pt"))
 DATA_YAML = Path(
     "/home/zcemml1/medtronic_qat_data/datasets/"
     "sanoscience_yolo_full_nonexpert_stereo/sanoscience_yolo.yaml"

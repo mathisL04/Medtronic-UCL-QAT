@@ -30,7 +30,8 @@ from time import perf_counter
 # output; we replicate that (eval + requires_grad off + Detect.export/format)
 # to get a clean single [1,300,6] graph -- faster and simpler for TensorRT.
 REPO = Path("/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT")
-BASE_MODEL = REPO / "models/yolo26n_sanoscience_full_left/baseline/best.pt"
+BASE_MODEL = Path(os.environ.get(                          # override for a non-default base (e.g. Week-8 frozen)
+    "BASE_MODEL", str(REPO / "models/yolo26n_sanoscience_full_left/baseline/best.pt")))
 QAT_STATE = Path(os.environ.get(
     "QAT_STATE", str(REPO / "models/yolo26n_sanoscience_full_left/qat/v6_final/qat_modelopt_state_best.pt")))
 OUT_ONNX = Path(os.environ.get(

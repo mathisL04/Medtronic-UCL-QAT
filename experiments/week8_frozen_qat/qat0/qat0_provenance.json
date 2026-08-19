@@ -1,0 +1,17 @@
+{
+  "timestamp_utc": "2026-08-19T11:44:30.596726+00:00",
+  "stage": "week8_qat_0iter",
+  "source_frozen": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/runs_week8/week8_frozen_head/weights/best.pt",
+  "source_sha256": "2772e2870e24bac444602fff48e0bd712d8c31b85e42c8f6371c5f85d1dc0e0f",
+  "epochs": 0,
+  "training": "NONE (calibration only)",
+  "quant_config": "INT8_DEFAULT_CFG",
+  "n_calib_frames": 128,
+  "calib_seed": 42,
+  "calib_method": "max",
+  "quantizers_inserted": 608,
+  "quantizers_with_scales": 253,
+  "reload_gate": "PASSED",
+  "modelopt": "0.33.1",
+  "torch": "2.7.0+cu128"
+}
