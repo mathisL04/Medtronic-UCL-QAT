@@ -18,10 +18,9 @@ from ultralytics import YOLO
 # -----------------------------
 # The FP32 baseline checkpoint -- the exact .pt used for the latency/accuracy
 # baseline. We do not modify it; export writes a sibling .onnx.
-MODEL_PATH = Path(
+MODEL_PATH = Path(os.environ.get("MODEL_PATH",       # override to export a different .pt (e.g. Week-8 frozen)
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/baseline/best.pt"
-)
+    "models/yolo26n_sanoscience_full_left/baseline/best.pt"))
 
 # imgsz is taken from the baseline, NOT assumed: scripts/benchmark/benchmark_latency.py
 # uses IMG_SIZE (default 640) and the baseline runs used 640.

@@ -14,10 +14,9 @@ from time import perf_counter
 # -----------------------------
 # Source ONNX -- the validated FP32 export from docs/02. We do not modify it;
 # the build writes a sibling .engine named for its precision.
-ONNX_PATH = Path(
+ONNX_PATH = Path(os.environ.get("ONNX_PATH",         # override to build from a different ONNX (e.g. Week-8 frozen)
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/baseline/best.onnx"
-)
+    "models/yolo26n_sanoscience_full_left/baseline/best.onnx"))
 
 # Precision baked into the engine. This is a BUILD-time choice -- the engine
 # cannot be re-precisioned afterwards. Each precision is a separate build/file.

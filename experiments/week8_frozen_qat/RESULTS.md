@@ -31,3 +31,20 @@ frozen + 0-iter QAT (INT8)     0.6906   0.4892     1.503 ms
 
 Reused unchanged: export_qat_onnx.py, build_tensorrt_int8_qdq.py, benchmark_latency_trt.py,
 evaluate_engine_map.py (+ MODEL_PATH/BASE_MODEL env overrides for the frozen source).
+
+## UPDATE — both models DEPLOYED (ONNX -> TensorRT -> engine mAP + latency)
+Each model deployed and benchmarked on an idle A100 (full val, pycocotools conf 0.001; kernel-median latency).
+
+```
+model                    precision  engine mAP50  engine mAP50-95  kernel latency  size
+frozen baseline           FP16        0.7419        0.5313          1.253 ms        7.0 MB
+frozen + 0-iter QAT       INT8        0.6906        0.4892          1.503 ms        4.2 MB
+Δ (QAT INT8 vs FP16)                 -0.051        -0.042          +0.250 ms       -2.8 MB
+```
+
+Verdict: 0-iteration QAT (INT8) on the frozen model is WORSE on both axes vs FP16 — it loses
+0.042 mAP50-95 (no fine-tune to recover quant loss) AND is 0.25 ms slower (explicit-Q/DQ INT8 has
+more kernels; launch-bound A100 favours FP16). INT8's payoff needs edge/DLA HW or compute-bound
+models, not this launch-bound case. Frozen-baseline FP16 engine mAP 0.531 ≈ PyTorch 0.546 (normal
+export drop). Deploy path reuses export_onnx.py + build_tensorrt_engine.py (MODEL_PATH/ONNX_PATH
+env overrides) + the shared eval/benchmark scripts.
