@@ -9,7 +9,7 @@ trained) behave differently under QAT than the fully-trained baseline?
    (1 class). → export ONNX → TensorRT → latency + accuracy.
    `train_frozen_baseline.py`  (Ultralytics `freeze=23`).
 2. **QAT on the frozen baseline** — standard QAT (patience early-stop, same
-   framework as `scripts/train/train_qat.py`) starting from step-1's `best.pt`.
+   framework as `train/train_qat.py`) starting from step-1's `best.pt`.
    → TensorRT → latency + accuracy.
 3. **Compare** QAT vs the frozen baseline (accuracy + latency).
 
@@ -22,7 +22,7 @@ trained) behave differently under QAT than the fully-trained baseline?
 cd ~/medtronic_qat/Medtronics-UCL-QAT
 source ~/venvs/medtronic-qat-p311/bin/activate     # training venv
 # Step 1: frozen baseline (DEVICE required, WORKERS=0 fork-guard)
-nohup env DEVICE=2 python -u scripts/train/week8_freeze_qat/train_frozen_baseline.py \
+nohup env DEVICE=2 python -u train/week8_freeze_qat/train_frozen_baseline.py \
   > runs_week8/train_frozen_head.log 2>&1 &
 # monitor:  tail -f runs_week8/train_frozen_head.log   |   watch -n1 nvidia-smi
 ```
