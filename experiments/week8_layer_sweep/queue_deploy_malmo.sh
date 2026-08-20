@@ -16,25 +16,29 @@
 #                     records what was actually resident (latency_exclusivity),
 #                     so a contended reading is flagged, not hidden.
 #                     Set 0 to skip the wait entirely.
-#   OPT_LEVEL=1       TensorRT builder depth. MEASURED on this box, layer 0,
-#                     3 trtexec repeats each (spread <0.4%):
-#                       level 0:  build  59 s   graph 1.390 ms   no-graph 1.65 ms
-#                       level 1:  build 346 s   graph 0.765 ms   no-graph 1.041 ms
-#                       level 3:  >28 min, abandoned unfinished
-#                     (geneva A100 at level 3 was 257 s / 0.832 ms graph.)
-#                     Level 1 already beats the A100 level-3 reading on H100, so
-#                     level 3's extra half hour per layer buys little; level 0
-#                     saves 5 min of build but costs 82% on latency. Level 1 is
-#                     the knee. Every layer uses the SAME level either way, so
-#                     the layer-to-layer RANKING -- the point of the sweep -- is
-#                     unaffected by this choice; only absolute latency moves.
+#   OPT_LEVEL=3       TensorRT builder depth. MEASURED on this box (malmo GPU 1),
+#                     layer 0, 3 trtexec repeats each, spread <0.4%,
+#                     --noDataTransfers so this is pure GPU compute:
+#                       level 1:  graph 0.762 ms   no-graph 1.048 ms
+#                       level 3:  graph 0.735 ms   no-graph 0.969 ms   build  257 s
+#                       level 5:  graph 0.686 ms   no-graph 0.864 ms   build 1531 s
+#                     Level 3 is the knee: it is FASTER to build than level 1 and
+#                     4% quicker at inference, while level 5 costs 6x the build
+#                     (+6 h over 24 layers) for a further 7%. An earlier attempt
+#                     here measured level 3 as ">28 min, unfinished" and switched
+#                     to level 1 on that basis -- that build was competing with
+#                     the training pass for the same GPU and the reading was an
+#                     artefact of self-contention, not of the builder level.
+#                     Every layer builds at the SAME level regardless, so the
+#                     layer-to-layer RANKING -- the point of the sweep -- is
+#                     unaffected; only absolute latency moves.
 #   DRY_RUN=1         print the plan and exit without waiting or launching.
 set -u
 SWEEP=/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/week8_layer_sweep
 GPU=${GPU:-1}
 EPOCHS=${EPOCHS:-6}
 PATIENCE=${PATIENCE:-3}
-OPT_LEVEL=${OPT_LEVEL:-1}
+OPT_LEVEL=${OPT_LEVEL:-3}
 IDLE_WAIT_MIN=${IDLE_WAIT_MIN:-45}
 DRY_RUN=${DRY_RUN:-0}
 # All 24. The 18 trainable layers deploy their QAT state; the 6 param-free ones
