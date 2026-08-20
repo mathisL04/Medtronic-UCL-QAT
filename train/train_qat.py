@@ -23,10 +23,21 @@ MODEL_PATH = Path(os.environ.get(
     "MODEL_PATH",                              # override to QAT a different baseline (e.g. Week-8 frozen)
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
     "models/yolo26n_sanoscience_full_left/baseline/best.pt"))
-DATA_YAML = Path(
+# Optional override for the split used by PER-EPOCH validation. The default is
+# unchanged, so every earlier run reproduces byte-for-byte.
+#
+# The week-8 layer sweep does NOT set this: pointing per-epoch validation at the
+# 100-image subset was proposed to shorten the sweep and then rejected, because
+# best-checkpoint selection is driven by that fitness signal and a noisier signal
+# perturbs the very layer ranking the sweep exists to produce. Every layer in
+# that sweep validates on the full 6,449-image val set. Reported accuracy is a
+# separate measurement anyway -- taken after training, through the TensorRT
+# engine, on full val at conf=0.001.
+DATA_YAML = Path(os.environ.get(
+    "DATA_YAML",
     "/home/zcemml1/medtronic_qat_data/datasets/"
     "sanoscience_yolo_full_nonexpert_stereo/sanoscience_yolo.yaml"
-)
+))
 
 # Warm-start frames for the INITIAL quantiser scales.
 #
@@ -79,6 +90,11 @@ BATCH = int(os.environ.get("BATCH", 16))
 # of how much RAM is actually free. Default low; raise only when the box is
 # quiet. workers=0 loads data in-process (slowest, but forks nothing).
 WORKERS = int(os.environ.get("WORKERS", 4))
+CACHE = os.environ.get("CACHE", "")               # 'ram'/'disk'/'' -> feed GPU without fork-workers (Geneva)
+# FREEZE_EXCEPT=L -> freeze the WHOLE network except model.L (per-layer QAT sensitivity sweep).
+# Unset -> default behaviour unchanged (no freeze). Ultralytics freeze accepts a list of indices.
+FREEZE_EXCEPT = os.environ.get("FREEZE_EXCEPT")
+N_LAYERS = int(os.environ.get("N_LAYERS", 24))    # model.0 .. model.23
 
 # Single-GPU, to match V1's training conditions. DDP would add a second variable
 # and would also wrap the model in a way the quantised modules have not been
@@ -437,7 +453,15 @@ overrides = dict(
     # V1's lr0=0.01) and let Ultralytics' scheduler decay it (lrf = decay tail).
     lr0=float(os.environ.get("LR0", 1e-3)),
     lrf=float(os.environ.get("LRF", 0.01)),
+    cache=(CACHE if CACHE else False),   # RAM/disk cache -> feed GPU without fork-based dataloader workers
 )
+
+# Per-layer sweep: freeze all layers EXCEPT model.FREEZE_EXCEPT (train only that one).
+if FREEZE_EXCEPT is not None:
+    _keep = int(FREEZE_EXCEPT)
+    overrides["freeze"] = [i for i in range(N_LAYERS) if i != _keep]
+    print(f"[QAT] FREEZE_EXCEPT={_keep}: freezing all layers except model.{_keep} "
+          f"(freeze list len {len(overrides['freeze'])})")
 
 print("\n[QAT] amp=False (deviation from V1 -- see docs/06)")
 trainer = QATTrainer(overrides=overrides)

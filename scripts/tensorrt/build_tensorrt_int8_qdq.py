@@ -70,8 +70,16 @@ config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, int(WORKSPACE_GB * (1
 # Explicit Q/DQ -> INT8. TensorRT reads per-tensor/per-channel scales from the
 # QuantizeLinear/DequantizeLinear nodes; layers without Q/DQ run in FP32.
 config.set_flag(trt.BuilderFlag.INT8)
+# Optional deployment-quality knobs (backward-compatible: default off = original behaviour).
+if os.environ.get("FP16", "0") == "1":              # non-INT8 layers fall back to FP16, not FP32
+    config.set_flag(trt.BuilderFlag.FP16)
+if os.environ.get("OPT_LEVEL"):                     # 5 = max fusion search
+    config.builder_optimization_level = int(os.environ["OPT_LEVEL"])
+if os.environ.get("DETAILED", "0") == "1":          # per-layer metadata for inspection
+    config.profiling_verbosity = trt.ProfilingVerbosity.DETAILED
 
-print("building INT8 engine (reading scales from Q/DQ nodes) ...")
+print(f"building INT8 engine  (FP16={os.environ.get('FP16','0')} "
+      f"OPT_LEVEL={os.environ.get('OPT_LEVEL','default')} DETAILED={os.environ.get('DETAILED','0')}) ...")
 _t0 = perf_counter()
 serialized = builder.build_serialized_network(network, config)
 build_seconds = perf_counter() - _t0
