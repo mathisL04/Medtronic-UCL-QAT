@@ -7,9 +7,13 @@ import numpy as np
 import yaml
 import imageio_ffmpeg
 
-# --------------------------------------------------
-# Configuration
-# --------------------------------------------------
+
+# ==========================================================
+# USER CONFIGURATION
+# Modify this section when adapting the pipeline to a new
+# dataset, task, class definition, sampling strategy or split.
+# ==========================================================
+
 REPO_ID = "nvidia/PhysicalAI-Robotics-Open-H-Embodiment"
 
 ROOT = (
@@ -18,35 +22,57 @@ ROOT = (
 )
 
 LOCAL_CACHE = "/workspace/sanoscience_cache"
-DATASET_DIR = Path("/workspace/datasets/sanoscience_yolo_full_nonexpert_stereo")
+DATASET_DIR = Path(
+    "/workspace/datasets/sanoscience_yolo_full_nonexpert_stereo"
+)
 
 MAX_EPISODES = 1602
 
-# Optional sharding for parallel preprocessing
-START_EPISODE_INDEX = int(os.environ.get("START_EPISODE_INDEX", "0"))
-END_EPISODE_INDEX = int(os.environ.get("END_EPISODE_INDEX", str(MAX_EPISODES)))
-SHARD_NAME = os.environ.get("SHARD_NAME", f"{START_EPISODE_INDEX}_{END_EPISODE_INDEX}")
+# Optional preprocessing sharding.
+# Change these when splitting dataset construction across workers/GPUs/nodes.
+START_EPISODE_INDEX = int(
+    os.environ.get("START_EPISODE_INDEX", "0")
+)
+END_EPISODE_INDEX = int(
+    os.environ.get(
+        "END_EPISODE_INDEX",
+        str(MAX_EPISODES)
+    )
+)
+SHARD_NAME = os.environ.get(
+    "SHARD_NAME",
+    f"{START_EPISODE_INDEX}_{END_EPISODE_INDEX}"
+)
+
+# Frame sampling rate.
 TARGET_FPS = 5
 
-USE_VIEW = "left"  # first experiment: left camera only
+# Camera/view selection.
+# Change or remove for monocular/non-stereo datasets.
+USE_VIEW = "left"
 
-FFMPEG_BINARY = imageio_ffmpeg.get_ffmpeg_exe()
-
+# Detection classes.
+# Modify when changing task or number of classes.
 CLASS_NAMES = {
     0: "surgical_tool",
 }
 
-# Quantized RGB colours identified from the segmentation masks.
-# These correspond to the green surgical tools in your screenshots.
+# Dataset-specific segmentation encoding.
+# Replace for another colour map, mask format or class definition.
 TOOL_COLOURS_RGB = [
     (96, 240, 0),
     (96, 240, 112),
 ]
 
+# Annotation filtering.
 MIN_AREA = 150
 MIN_BOX_SIZE = 8
 SAVE_EMPTY_IMAGES = False
+
+# Number of labelled samples saved for visual verification.
 MAX_DEBUG_IMAGES = 300
+
+FFMPEG_BINARY = imageio_ffmpeg.get_ffmpeg_exe()
 
 
 def download(path: str) -> str:
@@ -62,20 +88,37 @@ def video_info(path: str):
     cap = cv2.VideoCapture(path)
 
     if not cap.isOpened():
-        raise RuntimeError(f"Could not open video: {path}")
+        raise RuntimeError(
+            f"Could not open video: {path}"
+        )
 
-    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    fps = float(cap.get(cv2.CAP_PROP_FPS))
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    frame_count = int(
+        cap.get(cv2.CAP_PROP_FRAME_COUNT)
+    )
+    fps = float(
+        cap.get(cv2.CAP_PROP_FPS)
+    )
+    width = int(
+        cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+    )
+    height = int(
+        cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    )
 
     cap.release()
 
     return frame_count, fps, width, height
 
 
-def extract_frame_ffmpeg(video_path: str, frame_idx: int, out_path: Path):
-    out_path.parent.mkdir(parents=True, exist_ok=True)
+def extract_frame_ffmpeg(
+    video_path: str,
+    frame_idx: int,
+    out_path: Path
+):
+    out_path.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
     cmd = [
         FFMPEG_BINARY,
@@ -92,12 +135,20 @@ def extract_frame_ffmpeg(video_path: str, frame_idx: int, out_path: Path):
         str(out_path),
     ]
 
-    subprocess.run(cmd, check=True)
+    subprocess.run(
+        cmd,
+        check=True
+    )
 
-    frame = cv2.imread(str(out_path))
+    frame = cv2.imread(
+        str(out_path)
+    )
 
     if frame is None:
-        raise RuntimeError(f"Could not read extracted frame: {out_path}")
+        raise RuntimeError(
+            f"Could not read extracted frame: "
+            f"{out_path}"
+        )
 
     return frame
 
@@ -116,77 +167,192 @@ def split_stereo(frame, view: str):
     if view == "right":
         return frame[:, mid:]
 
-    raise ValueError(f"Unknown view: {view}")
+    raise ValueError(
+        f"Unknown view: {view}"
+    )
 
 
 def segmentation_to_boxes(seg_bgr):
-    """
-    Convert segmentation image into YOLO boxes.
 
-    We quantize colours to reduce MP4 compression noise.
-    Then we select the green surgical tool classes.
-    """
-    seg_rgb = cv2.cvtColor(seg_bgr, cv2.COLOR_BGR2RGB)
+    # Dataset-specific annotation conversion.
+    # Replace this function if the new dataset provides:
+    # - class-ID masks,
+    # - polygons,
+    # - binary masks,
+    # - existing bounding boxes,
+    # - another segmentation colour encoding.
 
-    # Quantize to match the colours printed by exploration script
-    seg_q = (seg_rgb // 16) * 16
+    seg_rgb = cv2.cvtColor(
+        seg_bgr,
+        cv2.COLOR_BGR2RGB
+    )
 
-    mask = np.zeros(seg_q.shape[:2], dtype=bool)
+    seg_q = (
+        seg_rgb // 16
+    ) * 16
+
+    mask = np.zeros(
+        seg_q.shape[:2],
+        dtype=bool
+    )
 
     for colour in TOOL_COLOURS_RGB:
-        colour_arr = np.array(colour, dtype=np.uint8)
-        mask |= np.all(seg_q == colour_arr, axis=-1)
 
-    mask_u8 = mask.astype(np.uint8) * 255
+        colour_arr = np.array(
+            colour,
+            dtype=np.uint8
+        )
 
-    # Clean tiny compression fragments
-    kernel = np.ones((3, 3), dtype=np.uint8)
-    mask_u8 = cv2.morphologyEx(mask_u8, cv2.MORPH_OPEN, kernel)
+        mask |= np.all(
+            seg_q == colour_arr,
+            axis=-1
+        )
 
-    num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(mask_u8, connectivity=8)
+    mask_u8 = (
+        mask.astype(np.uint8)
+        * 255
+    )
+
+    kernel = np.ones(
+        (3, 3),
+        dtype=np.uint8
+    )
+
+    mask_u8 = cv2.morphologyEx(
+        mask_u8,
+        cv2.MORPH_OPEN,
+        kernel
+    )
+
+    (
+        num_labels,
+        labels,
+        stats,
+        _,
+    ) = cv2.connectedComponentsWithStats(
+        mask_u8,
+        connectivity=8
+    )
 
     boxes = []
 
-    img_h, img_w = mask_u8.shape[:2]
+    img_h, img_w = (
+        mask_u8.shape[:2]
+    )
 
-    for label_id in range(1, num_labels):
-        x, y, w, h, area = stats[label_id]
+    for label_id in range(
+        1,
+        num_labels
+    ):
+
+        x, y, w, h, area = (
+            stats[label_id]
+        )
 
         if area < MIN_AREA:
             continue
 
-        if w < MIN_BOX_SIZE or h < MIN_BOX_SIZE:
+        if (
+            w < MIN_BOX_SIZE
+            or h < MIN_BOX_SIZE
+        ):
             continue
 
-        x_center = (x + w / 2) / img_w
-        y_center = (y + h / 2) / img_h
+        x_center = (
+            x + w / 2
+        ) / img_w
+
+        y_center = (
+            y + h / 2
+        ) / img_h
+
         box_w = w / img_w
         box_h = h / img_h
 
-        boxes.append((0, x_center, y_center, box_w, box_h, x, y, w, h, area))
+        # Current single-class mapping.
+        # Replace class ID assignment for multi-class detection.
+        boxes.append(
+            (
+                0,
+                x_center,
+                y_center,
+                box_w,
+                box_h,
+                x,
+                y,
+                w,
+                h,
+                area,
+            )
+        )
 
     return boxes, mask_u8
 
 
-def save_yolo_label(label_path: Path, boxes):
-    label_path.parent.mkdir(parents=True, exist_ok=True)
+def save_yolo_label(
+    label_path: Path,
+    boxes
+):
+    label_path.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
-    with open(label_path, "w") as f:
+    with open(
+        label_path,
+        "w"
+    ) as f:
+
         for box in boxes:
-            class_id, x_center, y_center, box_w, box_h, *_ = box
+
+            (
+                class_id,
+                x_center,
+                y_center,
+                box_w,
+                box_h,
+                *_,
+            ) = box
+
             f.write(
                 f"{class_id} "
-                f"{x_center:.6f} {y_center:.6f} "
-                f"{box_w:.6f} {box_h:.6f}\n"
+                f"{x_center:.6f} "
+                f"{y_center:.6f} "
+                f"{box_w:.6f} "
+                f"{box_h:.6f}\n"
             )
 
 
-def save_debug_image(debug_path: Path, image, boxes):
+def save_debug_image(
+    debug_path: Path,
+    image,
+    boxes
+):
     debug = image.copy()
 
     for box in boxes:
-        _, _, _, _, _, x, y, w, h, area = box
-        cv2.rectangle(debug, (x, y), (x + w, y + h), (0, 255, 255), 2)
+
+        (
+            _,
+            _,
+            _,
+            _,
+            _,
+            x,
+            y,
+            w,
+            h,
+            area,
+        ) = box
+
+        cv2.rectangle(
+            debug,
+            (x, y),
+            (x + w, y + h),
+            (0, 255, 255),
+            2
+        )
+
         cv2.putText(
             debug,
             f"tool {area}",
@@ -194,23 +360,64 @@ def save_debug_image(debug_path: Path, image, boxes):
             cv2.FONT_HERSHEY_SIMPLEX,
             0.5,
             (0, 255, 255),
-            1,
+            1
         )
 
-    debug_path.parent.mkdir(parents=True, exist_ok=True)
-    cv2.imwrite(str(debug_path), debug)
+    debug_path.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    cv2.imwrite(
+        str(debug_path),
+        debug
+    )
 
 
 def prepare_dirs():
-    for split in ["train", "val"]:
-        (DATASET_DIR / "images" / split).mkdir(parents=True, exist_ok=True)
-        (DATASET_DIR / "labels" / split).mkdir(parents=True, exist_ok=True)
 
-    (DATASET_DIR / "debug").mkdir(parents=True, exist_ok=True)
+    # Modify if using different dataset split names.
+    for split in [
+        "train",
+        "val"
+    ]:
+
+        (
+            DATASET_DIR
+            / "images"
+            / split
+        ).mkdir(
+            parents=True,
+            exist_ok=True
+        )
+
+        (
+            DATASET_DIR
+            / "labels"
+            / split
+        ).mkdir(
+            parents=True,
+            exist_ok=True
+        )
+
+    (
+        DATASET_DIR
+        / "debug"
+    ).mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
 
 def write_yaml():
-    yaml_path = DATASET_DIR / "sanoscience_yolo.yaml"
+
+    # Modify filename/class structure if changing dataset
+    # or training framework.
+
+    yaml_path = (
+        DATASET_DIR
+        / "sanoscience_yolo.yaml"
+    )
 
     data = {
         "path": str(DATASET_DIR),
@@ -219,108 +426,301 @@ def write_yaml():
         "names": CLASS_NAMES,
     }
 
-    with open(yaml_path, "w") as f:
-        yaml.safe_dump(data, f, sort_keys=False)
+    with open(
+        yaml_path,
+        "w"
+    ) as f:
 
-    print(f"\nYOLO yaml written to: {yaml_path}")
+        yaml.safe_dump(
+            data,
+            f,
+            sort_keys=False
+        )
+
+    print(
+        f"\nYOLO yaml written to: "
+        f"{yaml_path}"
+    )
 
 
 def main():
-    print("=" * 80)
-    print("Build Sanoscience YOLO tool dataset")
-    print("=" * 80)
 
     prepare_dirs()
 
-    episodes = [f"episode_{i:06d}" for i in range(MAX_EPISODES)]
+    episodes = [
+        f"episode_{i:06d}"
+        for i in range(
+            MAX_EPISODES
+        )
+    ]
 
-    train_cutoff = int(0.8 * len(episodes))
-    train_episodes = set(episodes[:train_cutoff])
+    # Current split policy: first 80% of episodes for training,
+    # remaining 20% for validation.
+    # Change here if using another split ratio or random/grouped split.
+    train_cutoff = int(
+        0.8 * len(episodes)
+    )
+
+    train_episodes = set(
+        episodes[:train_cutoff]
+    )
 
     total_images = 0
     total_boxes = 0
     debug_count = 0
 
-    tmp_dir = DATASET_DIR / f"_tmp_frames_{SHARD_NAME}"
-    tmp_dir.mkdir(parents=True, exist_ok=True)
+    tmp_dir = (
+        DATASET_DIR
+        / f"_tmp_frames_{SHARD_NAME}"
+    )
 
-    for ep_idx, episode in enumerate(episodes):
-        if ep_idx < START_EPISODE_INDEX or ep_idx >= END_EPISODE_INDEX:
+    tmp_dir.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    for ep_idx, episode in enumerate(
+        episodes
+    ):
+
+        if (
+            ep_idx < START_EPISODE_INDEX
+            or ep_idx >= END_EPISODE_INDEX
+        ):
             continue
 
-        chunk = f"chunk-{ep_idx // 1000:03d}"
-        split = "train" if episode in train_episodes else "val"
+        # Dataset-specific chunking rule.
+        # Change if the source repository organizes episodes differently.
+        chunk = (
+            f"chunk-"
+            f"{ep_idx // 1000:03d}"
+        )
 
-        print(f"\n[{ep_idx + 1}/{len(episodes)}] Processing {episode} → {split}")
+        split = (
+            "train"
+            if episode in train_episodes
+            else "val"
+        )
 
-        color_video = f"{ROOT}/videos/{chunk}/observation.images.color/{episode}.mp4"
-        seg_video = f"{ROOT}/videos/{chunk}/observation.images.segmentation/{episode}.mp4"
+        print(
+            f"\n[{ep_idx + 1}/"
+            f"{len(episodes)}] "
+            f"Processing {episode} "
+            f"-> {split}"
+        )
 
-        color_path = download(color_video)
-        seg_path = download(seg_video)
+        # Dataset-specific source paths.
+        # Change these when RGB and annotation streams use
+        # another directory structure or format.
+        color_video = (
+            f"{ROOT}/videos/{chunk}/"
+            f"observation.images.color/"
+            f"{episode}.mp4"
+        )
 
-        frame_count, fps, width, height = video_info(color_path)
-        seg_frame_count, seg_fps, seg_width, seg_height = video_info(seg_path)
+        seg_video = (
+            f"{ROOT}/videos/{chunk}/"
+            f"observation.images.segmentation/"
+            f"{episode}.mp4"
+        )
 
-        if frame_count != seg_frame_count:
-            print("  WARNING: color/segmentation frame count mismatch, skipping")
+        color_path = download(
+            color_video
+        )
+
+        seg_path = download(
+            seg_video
+        )
+
+        (
+            frame_count,
+            fps,
+            width,
+            height,
+        ) = video_info(
+            color_path
+        )
+
+        (
+            seg_frame_count,
+            seg_fps,
+            seg_width,
+            seg_height,
+        ) = video_info(
+            seg_path
+        )
+
+        if (
+            frame_count
+            != seg_frame_count
+        ):
+            print(
+                "WARNING: color/segmentation "
+                "frame count mismatch, skipping"
+            )
             continue
 
-        if (width, height) != (seg_width, seg_height):
-            print("  WARNING: color/segmentation resolution mismatch, skipping")
+        if (
+            width,
+            height,
+        ) != (
+            seg_width,
+            seg_height,
+        ):
+            print(
+                "WARNING: color/segmentation "
+                "resolution mismatch, skipping"
+            )
             continue
 
-        stride = max(1, round(fps / TARGET_FPS))
-        frame_indices = list(range(0, frame_count, stride))
+        stride = max(
+            1,
+            round(
+                fps / TARGET_FPS
+            )
+        )
 
-        print(f"  frames: {frame_count}, fps: {fps:.1f}, stride: {stride}, sampled: {len(frame_indices)}")
+        frame_indices = list(
+            range(
+                0,
+                frame_count,
+                stride
+            )
+        )
 
         for frame_idx in frame_indices:
-            color_tmp = tmp_dir / f"{episode}_color_{frame_idx:05d}.png"
-            seg_tmp = tmp_dir / f"{episode}_seg_{frame_idx:05d}.png"
 
-            color_frame = extract_frame_ffmpeg(color_path, frame_idx, color_tmp)
-            seg_frame = extract_frame_ffmpeg(seg_path, frame_idx, seg_tmp)
+            color_tmp = (
+                tmp_dir
+                / f"{episode}_color_"
+                  f"{frame_idx:05d}.png"
+            )
 
-            # Delete temporary extracted PNGs immediately after loading them into memory.
-            color_tmp.unlink(missing_ok=True)
-            seg_tmp.unlink(missing_ok=True)
+            seg_tmp = (
+                tmp_dir
+                / f"{episode}_seg_"
+                  f"{frame_idx:05d}.png"
+            )
 
-            color_view = split_stereo(color_frame, USE_VIEW)
-            seg_view = split_stereo(seg_frame, USE_VIEW)
+            color_frame = (
+                extract_frame_ffmpeg(
+                    color_path,
+                    frame_idx,
+                    color_tmp
+                )
+            )
 
-            boxes, mask = segmentation_to_boxes(seg_view)
+            seg_frame = (
+                extract_frame_ffmpeg(
+                    seg_path,
+                    frame_idx,
+                    seg_tmp
+                )
+            )
 
-            if len(boxes) == 0 and not SAVE_EMPTY_IMAGES:
+            color_tmp.unlink(
+                missing_ok=True
+            )
+
+            seg_tmp.unlink(
+                missing_ok=True
+            )
+
+            color_view = split_stereo(
+                color_frame,
+                USE_VIEW
+            )
+
+            seg_view = split_stereo(
+                seg_frame,
+                USE_VIEW
+            )
+
+            boxes, mask = (
+                segmentation_to_boxes(
+                    seg_view
+                )
+            )
+
+            if (
+                len(boxes) == 0
+                and not SAVE_EMPTY_IMAGES
+            ):
                 continue
 
-            stem = f"{episode}_{USE_VIEW}_{frame_idx:05d}"
+            stem = (
+                f"{episode}_"
+                f"{USE_VIEW}_"
+                f"{frame_idx:05d}"
+            )
 
-            image_out = DATASET_DIR / "images" / split / f"{stem}.jpg"
-            label_out = DATASET_DIR / "labels" / split / f"{stem}.txt"
+            image_out = (
+                DATASET_DIR
+                / "images"
+                / split
+                / f"{stem}.jpg"
+            )
 
-            cv2.imwrite(str(image_out), color_view)
-            save_yolo_label(label_out, boxes)
+            label_out = (
+                DATASET_DIR
+                / "labels"
+                / split
+                / f"{stem}.txt"
+            )
+
+            cv2.imwrite(
+                str(image_out),
+                color_view
+            )
+
+            save_yolo_label(
+                label_out,
+                boxes
+            )
 
             total_images += 1
             total_boxes += len(boxes)
 
-            if debug_count < MAX_DEBUG_IMAGES:
-                debug_out = DATASET_DIR / "debug" / f"{stem}_debug.jpg"
-                save_debug_image(debug_out, color_view, boxes)
+            if (
+                debug_count
+                < MAX_DEBUG_IMAGES
+            ):
+
+                debug_out = (
+                    DATASET_DIR
+                    / "debug"
+                    / f"{stem}_debug.jpg"
+                )
+
+                save_debug_image(
+                    debug_out,
+                    color_view,
+                    boxes
+                )
+
                 debug_count += 1
 
     write_yaml()
 
-    print("\n" + "=" * 80)
-    print("Dataset build complete")
-    print("=" * 80)
-    print(f"Dataset dir: {DATASET_DIR}")
-    print(f"Images saved: {total_images}")
-    print(f"Boxes saved: {total_boxes}")
-    print(f"Debug images: {debug_count}")
-    print("\nOpen debug images here:")
-    print(f"  {DATASET_DIR / 'debug'}")
+    print(
+        "\nDataset build complete"
+    )
+
+    print(
+        f"Dataset dir: {DATASET_DIR}"
+    )
+
+    print(
+        f"Images saved: {total_images}"
+    )
+
+    print(
+        f"Boxes saved: {total_boxes}"
+    )
+
+    print(
+        f"Debug images: {debug_count}"
+    )
 
 
 if __name__ == "__main__":
