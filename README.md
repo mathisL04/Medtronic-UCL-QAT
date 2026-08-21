@@ -8,9 +8,12 @@ The question the project set out to answer: **how far can INT8 quantisation be p
 before accuracy breaks, and does quantisation-aware training (QAT) actually pay for
 itself over post-training quantisation (PTQ)?**
 
-Short answer, established over four stages: **QAT wins on accuracy and loses on
-latency.** On this model the latency loss is a build-and-launch artifact, not an
+Short answer, established across the precision ladder (FP32, FP16, INT8 PTQ, INT8
+QAT): **QAT wins on accuracy and loses on latency.** On this model the latency loss is a build-and-launch artifact, not an
 arithmetic one, and most of it is recoverable. Detail below.
+
+**Documentation index: [`docs/README.md`](docs/README.md)** — nine documents, one per
+stage, plus the environment and access notes.
 
 ```text
 Open-H Sanoscience surgical videos
@@ -28,12 +31,16 @@ Week 8: per-layer QAT sensitivity sweep (freeze-all-but-one)
 
 ## 1. Infrastructure
 
-Two shared multi-GPU boxes. **Which box a number came from matters** — see §2.
+Three shared UCL boxes. **Which box a number came from matters** — see §2.
+Latency is never comparable across them.
 
 | host | GPUs | used for |
 |---|---|---|
-| `geneva.ee.ucl.ac.uk` | 4× A100-SXM4-80GB | FP32/FP16/PTQ baselines, QAT V5/V6, Iteration-2 sweep, per-kernel profiling |
-| `malmo.ee.ucl.ac.uk` | 4× H100 NVL (95 GB), driver 595.71.05 | Week-8 per-layer sweep (train + deploy) |
+| `cork.ee.ucl.ac.uk` | Tesla V100-PCIE-16GB | dataset build, YOLO26n baseline training, ONNX export (stages 1–2) |
+| `geneva.ee.ucl.ac.uk` | 4× A100-SXM4-80GB | FP32/FP16/PTQ baselines, QAT V5/V6, Iteration-2 sweep, per-kernel profiling (stages 3–7) |
+| `malmo.ee.ucl.ac.uk` | 4× H100 NVL (95 GB), driver 595.71.05 | Week-8 per-layer sweep, train + deploy (stage 8) |
+
+Access, ssh flags and the full environment notes: **[`docs/00_environment_and_access.md`](docs/00_environment_and_access.md)**.
 
 Storage: NFS home is capped at a **50 GB quota** and runs near-full. On malmo, `/tmp`
 is local NVMe with ~1.3 TB free — Ultralytics `PROJECT` points there during training
@@ -48,7 +55,8 @@ Four venvs, deliberately split because the QAT and TensorRT stacks have incompat
 |---|---|---|---|
 | `~/venvs/medtronic-qat-p311` | 3.11.13 | `nvidia-modelopt 0.33.1`, `torch 2.7.0+cu128`, `onnx 1.17.0`, `numpy 1.26.4`, `ultralytics 8.4.90`, `pycocotools 2.0.11` | QAT fine-tune + Q/DQ ONNX export |
 | `~/venvs/medtronic-trt` | 3.9.25 | `tensorrt 10.16.1.11`, `pycocotools 2.0.11` | engine build, mAP eval, latency |
-| `~/venvs/medtronic-qat`, `~/venvs/medtronic-qats` | 3.9.25 | `nvidia-modelopt 0.29.0`, `torch 2.8.0` | legacy / pre-0.33 experiments |
+| `~/venvs/medtronic-qats` | 3.9.25 | `nvidia-modelopt 0.29.0`, `torch 2.8.0` | stage-1 training, dataset build, ONNX export, notebooks |
+| `~/venvs/medtronic-qat` | 3.9.25 | `nvidia-modelopt 0.29.0` | superseded; kept only to reproduce pre-0.33 runs |
 
 **The pins are load-bearing** — each fixes a real failure:
 
@@ -466,8 +474,18 @@ experiments/  the runs themselves
 scripts/      all tooling: train/, tensorrt/, export/, evaluate/, benchmark/, data/
 configs/      dataset YAMLs consumed by Ultralytics
 notebooks/    qat_vs_ptq_kernel_profiling.ipynb (week-8 plots live under experiments/week8/)
+records/      the deterministic INT8 calibration set manifest (500 frames, seed 42)
 Per_kernel_json_file/   trtexec per-kernel profiles (FP16 / PTQ / QAT)
+.devcontainer/          TensorRT container definition. NOTE: the intended environment,
+                        not the one any result came from -- every number here was
+                        produced by the venvs above. See docs/00.
 ```
+
+Superseded work is **not on `main`**: it lives on the **`archive/legacy-scripts`**
+branch -- the old `scripts/archive/` dead ends, the superseded QAT versions
+(`qat/smoke_1ep`, `qat/v5_10ep`), the iteration-2 pre-run design documents, and
+`CLAUDE.md` as it stood at handover. `git checkout archive/legacy-scripts` to read
+them. Don't build on archived work.
 
 ### Documentation
 
