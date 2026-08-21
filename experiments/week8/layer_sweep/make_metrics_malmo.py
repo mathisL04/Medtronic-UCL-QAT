@@ -21,7 +21,7 @@ OPT_LEVEL = os.environ.get("OPT_LEVEL", "3")   # TensorRT builder search depth
 DEVICE = os.environ.get("GPU", "1")
 ENGINE = OUT / os.environ.get("ENGINE_NAME", "engine_int8_h100.engine")
 REPO = Path("/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT")
-SWEEP = REPO / "experiments/week8_layer_sweep"
+SWEEP = REPO / "experiments/week8/layer_sweep"
 
 # The flag the whole H100 latency column has to be read through. Malmo GPU 1 is
 # shared and other users' jobs come and go mid-sweep, so exclusivity is a fact

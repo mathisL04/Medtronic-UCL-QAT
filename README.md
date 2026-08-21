@@ -394,14 +394,14 @@ Caveat: early stopping cut some layers to 4–5 epochs (`model.2` to 4). `best_e
 0-indexed, so `model.2`'s best was its *first* epoch. The effect is small but it does
 slightly confound layer-vs-layer comparison.
 
-Full write-up: **`experiments/week8_layer_sweep/RECAP.md`**. Source of every number:
+Full write-up: **`experiments/week8/layer_sweep/RECAP.md`**. Source of every number:
 `results_master_malmo_h100.csv`.
 
-**Plots: `notebooks/week8_layer_sweep_plots.ipynb`** — accuracy per layer against the V0 /
+**Plots: `experiments/week8/week8_layer_sweep_plots.ipynb`** — accuracy per layer against the V0 /
 V1 / FP16 / FP32 references, the flat CUDA-graph latency axis, and the two against each
-other. Figures are also written to `reports/week8_layer_sweep/` as PNGs.
+other. Figures are also written to `experiments/week8/figures/` as PNGs.
 
-![accuracy by layer](reports/week8_layer_sweep/fig1_accuracy_by_layer.png)
+![accuracy by layer](experiments/week8/figures/fig1_accuracy_by_layer.png)
 
 ---
 
@@ -441,14 +441,15 @@ Its value is the ordering, and the ordering is clean enough to act on:
 ## 8. Repository layout
 
 ```text
-scripts/      tooling: train/ (train_qat.py), tensorrt/, export/, evaluate/, benchmark/, data/
-train/        training launchers (qat_run.sh) + week8_freeze_qat, full-dataset trainers
-configs/      YAML configuration
+scripts/      all tooling. train/ (train_qat.py, qat_run.sh, the full-dataset trainers),
+              tensorrt/, export/, evaluate/, benchmark/, data/
+configs/      dataset YAMLs consumed by Ultralytics
 models/       checkpoints, model cards, provenance sidecars
-experiments/  fusion_demo, fusion_fix, qat_iteration_2, week8_frozen_qat, week8_layer_sweep
-docs/         stage-by-stage documentation
-reports/      training metrics, plots, latency summaries
-notebooks/    kernel-comparison analysis + week-8 sweep plots
+experiments/  week8/ (frozen baseline + per-layer sweep + plots),
+              qat_iteration_2/ (hyperparameter study), fusion_demo/ (Q/DQ fusion test)
+docs/         stage-by-stage documentation, 01 -> 07
+reports/      training metrics, plots, latency summaries for stages 1-7
+notebooks/    qat_vs_ptq_kernel_profiling.ipynb (week-8 plots live under experiments/week8/)
 Per_kernel_json_file/   trtexec per-kernel profiles (FP16 / PTQ / QAT)
 ```
 
@@ -462,7 +463,8 @@ docs/04_tensorrt_fp16.md                TensorRT FP16 engine (V3)
 docs/05_tensorrt_int8_ptq.md            INT8 post-training quantisation
 docs/06_qat.md                          QAT: V5/V6, Iteration 2, latency dissection
 docs/07_pytorch_latency.md              PyTorch-side latency methodology
-experiments/week8_layer_sweep/RECAP.md  Week-8 per-layer sweep, full recap
+experiments/week8/README.md             Week 8 index: frozen baseline + per-layer sweep
+experiments/week8/layer_sweep/RECAP.md  Week-8 per-layer sweep, full recap
 experiments/fusion_demo/RESULTS.md      controlled Q/DQ fusion experiment
 ```
 
@@ -497,8 +499,8 @@ ENGINE_PATH=$ENG DEVICE=<idle_gpu> BENCHMARK_REPEATS=10 \
   python scripts/benchmark/benchmark_latency_trt.py
 
 # Per-layer sweep (malmo)
-PHASE=train  bash experiments/week8_layer_sweep/run_sweep_malmo.sh
-PHASE=deploy bash experiments/week8_layer_sweep/run_sweep_malmo.sh
+PHASE=train  bash experiments/week8/layer_sweep/run_sweep_malmo.sh
+PHASE=deploy bash experiments/week8/layer_sweep/run_sweep_malmo.sh
 ```
 
 ### Provenance

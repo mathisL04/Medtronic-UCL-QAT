@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 REPO = Path("/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT")
 FROZEN = Path(os.environ.get("MODEL_PATH", str(REPO/"runs_week8/week8_frozen_head/weights/best.pt")))
 TRAIN_IMAGES = Path("/home/zcemml1/medtronic_qat_data/datasets/sanoscience_yolo_full_nonexpert_stereo/images/train")
-OUT = Path(os.environ.get("OUT", str(REPO/"experiments/week8_frozen_qat/qat0")))
+OUT = Path(os.environ.get("OUT", str(REPO/"experiments/week8/frozen_baseline/qat0")))
 N_CALIB = int(os.environ.get("N_CALIB", 128)); CALIB_SEED = int(os.environ.get("CALIB_SEED", 42))
 IMG_SIZE = int(os.environ.get("IMG_SIZE", 640))
 DEVICE = os.environ.get("DEVICE")

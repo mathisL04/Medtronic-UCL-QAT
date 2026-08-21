@@ -21,7 +21,7 @@ PATIENCE=${PATIENCE:-3}
 OPT_LEVEL=${OPT_LEVEL:-3}
 WORKERS=${WORKERS:-4}
 REPO=/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT
-SWEEP=$REPO/experiments/week8_layer_sweep
+SWEEP=$REPO/experiments/week8/layer_sweep
 LOCK=$SWEEP/.sweep_malmo.lock
 JOURNAL=$SWEEP/sweep_malmo_log.txt
 st(){ date '+%Y-%m-%d %H:%M:%S'; }

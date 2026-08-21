@@ -34,7 +34,7 @@
 #                     unaffected; only absolute latency moves.
 #   DRY_RUN=1         print the plan and exit without waiting or launching.
 set -u
-SWEEP=/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/week8_layer_sweep
+SWEEP=/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/week8/layer_sweep
 GPU=${GPU:-1}
 EPOCHS=${EPOCHS:-6}
 PATIENCE=${PATIENCE:-3}

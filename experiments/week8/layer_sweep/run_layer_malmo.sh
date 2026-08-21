@@ -52,7 +52,7 @@ BATCH=${BATCH:-16}
 
 REPO=/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT
 FROZEN=$REPO/runs_week8/week8_frozen_head/weights/best.pt
-SWEEP=$REPO/experiments/week8_layer_sweep
+SWEEP=$REPO/experiments/week8/layer_sweep
 LL=$(printf %02d "$L")
 OUT=$SWEEP/layer_$LL
 mkdir -p "$OUT"

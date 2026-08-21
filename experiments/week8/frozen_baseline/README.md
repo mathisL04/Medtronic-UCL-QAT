@@ -22,7 +22,7 @@ trained) behave differently under QAT than the fully-trained baseline?
 cd ~/medtronic_qat/Medtronics-UCL-QAT
 source ~/venvs/medtronic-qat-p311/bin/activate     # training venv
 # Step 1: frozen baseline (DEVICE required, WORKERS=0 fork-guard)
-nohup env DEVICE=2 python -u train/week8_freeze_qat/train_frozen_baseline.py \
+nohup env DEVICE=2 python -u experiments/week8/frozen_baseline/train_frozen_baseline.py \
   > runs_week8/train_frozen_head.log 2>&1 &
 # monitor:  tail -f runs_week8/train_frozen_head.log   |   watch -n1 nvidia-smi
 ```
