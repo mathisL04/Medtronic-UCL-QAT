@@ -1,0 +1,1 @@
+{"layer": 10, "epochs": 6, "patience": 3, "batch": 16, "workers": 4, "trained_on": "malmo / H100 NVL", "train_wall_s": 3192, "val_during_training": "full_val_6449"}

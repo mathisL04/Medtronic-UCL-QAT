@@ -1,0 +1,4 @@
+[03:41:18] === layer 6  phase=deploy epochs=6 patience=3 workers=4 gpu=1 opt=3 (malmo/H100) ===
+[03:48:05] latency: no_graph=0.969986 ms  cuda_graph=0.759163 ms
+[metrics] layer 6: status=ok mAP50-95=0.652468172055766 lat_ng=0.969986 lat_g=0.759163 kernels=238 epochs=6
+[03:48:07] === layer 6 DEPLOY DONE ===

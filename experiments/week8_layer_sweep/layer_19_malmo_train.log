@@ -1,0 +1,3 @@
+[23:37:19] === layer 19  phase=train epochs=6 patience=3 workers=4 gpu=1 opt=3 (malmo/H100) ===
+[00:31:14] QAT state: /tmp/zcemml1_qat_sweep/layer_19/layer_19/qat_modelopt_state_best.pt  (train wall 53 min)
+[00:31:14] === layer 19 TRAIN DONE ===

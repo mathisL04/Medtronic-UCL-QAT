@@ -1,0 +1,50 @@
+{
+  "trained_layer": "model.15",
+  "layer": 15,
+  "status": "no_trainable_params",
+  "map50": null,
+  "map50_95": null,
+  "delta_vs_V1": null,
+  "latency_no_graph_ms": null,
+  "latency_graph_ms": null,
+  "fps": null,
+  "kernel_count": null,
+  "engine_size_mb": null,
+  "gpu_mem_mb": null,
+  "epochs_config": 6,
+  "patience_config": 3,
+  "builder_optimization_level": 3,
+  "accuracy_source": null,
+  "val_during_training": "unknown",
+  "accuracy_eval_set": "full_val_6449_conf0.001",
+  "epochs_trained": null,
+  "best_epoch": null,
+  "hardware": {
+    "host": "malmo.ee.ucl.ac.uk",
+    "gpu": "NVIDIA H100 NVL 94GB",
+    "device_index": 1,
+    "tensorrt": null,
+    "previous_box": "geneva / A100-SXM4-80GB",
+    "trained_on": "malmo / H100 NVL",
+    "engine_built_on": "malmo / H100 NVL"
+  },
+  "latency_exclusivity": "NOT exclusive - 1 other compute process(es) on GPU 1 holding 754 MiB at metrics time (util 0%)",
+  "latency_comparable_to_a100_scorecard": false,
+  "accuracy_comparable_to_a100_scorecard": true,
+  "gpu_state_at_metrics": {
+    "index": 1,
+    "gpu_name": "NVIDIA H100 NVL",
+    "util_pct": 0,
+    "mem_used_mb": 923,
+    "temp_c": 33,
+    "compute_procs": [
+      "2792943, 754"
+    ],
+    "foreign_compute_procs": [
+      [
+        2792943,
+        754
+      ]
+    ]
+  }
+}

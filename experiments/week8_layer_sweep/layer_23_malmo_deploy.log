@@ -1,0 +1,4 @@
+[04:54:50] === layer 23  phase=deploy epochs=6 patience=3 workers=4 gpu=1 opt=3 (malmo/H100) ===
+[05:01:38] latency: no_graph=0.97316 ms  cuda_graph=0.758514 ms
+[metrics] layer 23: status=ok mAP50-95=0.5024703127700512 lat_ng=0.97316 lat_g=0.758514 kernels=238 epochs=5
+[05:01:39] === layer 23 DEPLOY DONE ===
