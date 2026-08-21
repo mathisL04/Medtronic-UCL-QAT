@@ -89,7 +89,7 @@ ENGINE_PATH = Path(
     os.environ.get(
         "ENGINE_PATH",
         "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-        "models/yolo26n_sanoscience_full_left/"
+        "results/models/yolo26n_sanoscience_full_left/"
         "baseline/fp32/best_fp32.engine",
     )
 )

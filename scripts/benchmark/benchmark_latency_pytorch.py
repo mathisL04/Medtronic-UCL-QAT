@@ -38,7 +38,7 @@ MODEL_PATH = Path(
         "MODEL_PATH",
         str(
             REPO
-            / "models/yolo26n_sanoscience_full_left/"
+            / "results/models/yolo26n_sanoscience_full_left/"
               "baseline/best.pt"
         ),
     )
@@ -52,7 +52,7 @@ QAT_STATE = Path(
         "QAT_STATE",
         str(
             REPO
-            / "models/yolo26n_sanoscience_full_left/"
+            / "results/models/yolo26n_sanoscience_full_left/"
               "qat/v6_final/qat_modelopt_state_best.pt"
         ),
     )

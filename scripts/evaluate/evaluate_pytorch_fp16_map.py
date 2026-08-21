@@ -18,7 +18,7 @@ MODEL_PATH = Path(os.environ.get(
     "MODEL_PATH",
     str(
         REPO
-        / "models/yolo26n_sanoscience_full_left/"
+        / "results/models/yolo26n_sanoscience_full_left/"
           "baseline/best.pt"
     )
 ))

@@ -57,10 +57,10 @@ The QAT model uses **dedicated** export/build scripts — NOT the baseline
 `export_onnx.py` / `build_tensorrt_engine.py`. Reason (see "Export recipe" below):
 the QAT model is a modelopt fake-quant state and its ONNX carries Q/DQ nodes, so it
 needs modelopt's blessed export and a calibrator-free INT8 build. Defaults point at
-`models/yolo26n_sanoscience_full_left/4_qat_iteration1/`; override with the env vars shown.
+`results/models/yolo26n_sanoscience_full_left/4_qat_iteration1/`; override with the env vars shown.
 
 ```bash
-M=models/yolo26n_sanoscience_full_left/4_qat_iteration1
+M=results/models/yolo26n_sanoscience_full_left/4_qat_iteration1
 
 # 1) QAT state -> Q/DQ ONNX      (Py3.11 export venv; CPU is fine -- it is a trace)
 DEVICE=cpu ~/venvs/medtronic-qat-p311/bin/python scripts/export/export_qat_onnx.py
@@ -193,11 +193,11 @@ Ultralytics noise; the engine faithfully reproduces the model. **Latency is unch
 from V5 (~1.4 ms kernel, graph-determined) — still slower than FP16 on A100** (Q/DQ
 reformat overhead; INT8's speed payoff is on edge HW / DLA, not A100).
 
-**Evolution graph:** `reports/4_qat_training/qat_v5_v6_accuracy.png`
+**Evolution graph:** `results/reports/4_qat_training/qat_v5_v6_accuracy.png`
 (mAP50-95 vs epoch, both runs, best epochs marked, patience window shaded, precision
-bars overlaid). Full per-epoch tables + stats: `reports/4_qat_training/README.md`.
+bars overlaid). Full per-epoch tables + stats: `results/reports/4_qat_training/README.md`.
 
-**Artifacts (force-added to git under `models/yolo26n_sanoscience_full_left/`):**
+**Artifacts (force-added to git under `results/models/yolo26n_sanoscience_full_left/`):**
 ```text
 4_qat_iteration1/qat_modelopt_state_best.pt   ep25 best, the V6 deployable model
 4_qat_iteration1/                             + its Q/DQ ONNX, INT8 engine, args, results, sidecars
@@ -205,18 +205,18 @@ bars overlaid). Full per-epoch tables + stats: `reports/4_qat_training/README.md
 
 V5 (`qat/v5_10ep/`) and the 1-epoch smoke (`qat/smoke_1ep/`) were superseded by V6 and
 are **no longer on `main`**: they live on the `archive/legacy-scripts` branch.
-`reports/5_qat_v5_latency/` still carries V5's measured distributions.
+`results/reports/5_qat_v5_latency/` still carries V5's measured distributions.
 
 Training writes raw output to `runs_qat/<RUN_NAME>/`, which is gitignored; the best of
-each run is curated into `models/yolo26n_sanoscience_full_left/`.
+each run is curated into `results/models/yolo26n_sanoscience_full_left/`.
 
 **Latency** is unchanged between V5 and V6 (graph-determined, not weight-dependent):
 INT8 kernel ~1.39-1.43 ms, ~57x faster than the PyTorch fake-quant forward (~80 ms).
-Full distributions: `reports/5_qat_v5_latency/`.
+Full distributions: `results/reports/5_qat_v5_latency/`.
 
 ## QAT Iteration 2 — OFAT hyperparameter sweep + build-side latency recovery
 
-Two results, both in `experiments/qat_iteration_2/`: (1) an OFAT sweep over the QAT
+Two results, both in `results/experiments/qat_iteration_2/`: (1) an OFAT sweep over the QAT
 knobs that produced a model **beating every precision on accuracy**, and (2) a
 build-only rebuild that **recovered most of QAT's latency penalty at zero accuracy
 cost** — no retraining in either the sweep-analysis or the recovery.
@@ -248,12 +248,12 @@ lrf=0.001              0.7262     too little LR decay hurts
 **invariant across every knob (~1.39 ms)** — expected, since the knobs change weight
 *values*, not graph *structure*, and latency depends on structure.
 
-Master table + per-knob plots: `experiments/qat_iteration_2/sweeps/master_comparison.md`
+Master table + per-knob plots: `results/experiments/qat_iteration_2/sweeps/master_comparison.md`
 and `*_sweep/`.
 
 ### Why QAT's engine was slower than PTQ (engine verification)
 
-Full per-layer audit in `experiments/qat_iteration_2/engine_verification/`. Measured
+Full per-layer audit in `results/experiments/qat_iteration_2/engine_verification/`. Measured
 clean on an exclusive idle A100:
 
 ```text
@@ -291,7 +291,7 @@ FP16 *alone*; the opt-level-5 pairing was the missing lever.
 
 Latency re-timed in ONE exclusive idle-GPU session (median spread 0.038 ms);
 accuracy full-val 6449-img pycocotools; disk/dev-mem static engine props.
-Full table: `experiments/qat_iteration_2/rebuild_fp16_opt5/BEFORE_AFTER.md`.
+Full table: `results/experiments/qat_iteration_2/rebuild_fp16_opt5/BEFORE_AFTER.md`.
 
 ```text
 model              INT8  old mAP  new mAP   old ms  new ms(clean)  disk MB  dev-mem MB
@@ -392,11 +392,11 @@ INT8-accelerated edge HW (Jetson/DLA) or larger compute-bound models.
 
 - **DONE** — V6 exported -> INT8 engine -> measured: mAP50-95 **0.7644** (beats PTQ),
   kernel **1.397 ms**. All artifacts committed under
-  `models/yolo26n_sanoscience_full_left/4_qat_iteration1/`.
+  `results/models/yolo26n_sanoscience_full_left/4_qat_iteration1/`.
 - **DONE (Iteration 2)** — OFAT sweep (11 runs, verified clean): **batch=32 -> 0.7801**,
   best of any precision. Build-side latency recovery **1.40 -> 1.20 ms** (FP16+opt5),
   accuracy-neutral, across all 11 models. Deployment candidate: batch_32 rebuilt =
-  **0.7797 @ 1.200 ms**. See the Iteration 2 section + `experiments/qat_iteration_2/`.
+  **0.7797 @ 1.200 ms**. See the Iteration 2 section + `results/experiments/qat_iteration_2/`.
 - Try **histogram/percentile calibration** (vs MaxCalibrator); the framework supports it
   (`CALIB_METHOD`), validated by the 1-epoch percentile smoke.
 - **CUDA graphs** — untested launch-overhead lever; cheapest path to close the residual

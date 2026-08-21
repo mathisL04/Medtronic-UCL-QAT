@@ -25,7 +25,7 @@ MODEL_PATH = Path(
     os.environ.get(
         "MODEL_PATH",
         "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-        "models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.pt",
+        "results/models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.pt",
     )
 )
 

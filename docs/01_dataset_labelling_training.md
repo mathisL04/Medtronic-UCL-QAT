@@ -237,7 +237,7 @@ Final Cork checkpoints:
 The best checkpoint was copied into this repository:
 
 ```text
-models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.pt
+results/models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.pt
 ```
 
 Validation set:

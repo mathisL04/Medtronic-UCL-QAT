@@ -17,7 +17,7 @@ everything  ENG=...best_fp32.engine  ->  ENG=...best_fp16.engine
 
 ```bash
 source ~/venvs/medtronic-trt/bin/activate
-ENG=models/yolo26n_sanoscience_full_left/2_fp16/best_fp16.engine
+ENG=results/models/yolo26n_sanoscience_full_left/2_fp16/best_fp16.engine
 
 PRECISION=fp16 DEVICE=0 python scripts/tensorrt/build_tensorrt_engine.py
 ENGINE_PATH=$ENG DEVICE=0 python scripts/evaluate/validate_engine_parity.py            # expected FAIL, see below

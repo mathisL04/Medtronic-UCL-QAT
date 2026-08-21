@@ -91,14 +91,14 @@ MODEL_PATH = Path(
     os.environ.get(
         "MODEL_PATH",
         "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-        "models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.pt",
+        "results/models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.pt",
     )
 )
 
 
 # MODIFY: benchmark/evaluation images.
 #
-# Keep the same image set when comparing several models/precisions.
+# Keep the same image set when comparing several results/models/precisions.
 IMG_DIR = Path(
     os.environ.get(
         "IMG_DIR",

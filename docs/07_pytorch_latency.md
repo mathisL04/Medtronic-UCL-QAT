@@ -7,7 +7,7 @@ costs, so the TensorRT speedup can be attributed to the conversion, not the
 precision.
 
 Script: `scripts/benchmark/benchmark_latency_pytorch.py` (`MODEL_MODE={fp32|fp16|qat}`).
-Sidecars: `reports/2_pytorch_latency/*.provenance.json`.
+Sidecars: `results/reports/2_pytorch_latency/*.provenance.json`.
 
 ## Method
 

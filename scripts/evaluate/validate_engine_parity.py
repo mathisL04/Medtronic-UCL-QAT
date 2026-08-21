@@ -22,13 +22,13 @@ import cv2
 ENGINE_PATH = Path(os.environ.get(
     "ENGINE_PATH",
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/1_fp32/best_fp32.engine",
+    "results/models/yolo26n_sanoscience_full_left/1_fp32/best_fp32.engine",
 ))
 
 ONNX_PATH = Path(os.environ.get(
     "ONNX_PATH",
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.onnx",
+    "results/models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.onnx",
 ))
 
 

@@ -251,8 +251,8 @@ The ~0.3 ms QAT-vs-PTQ gap was not accepted as a property of QAT. It was profile
 --separateProfileRun --noDataTransfers` on an exclusive idle A100, cross-checked against
 the TensorRT Python `IProfiler`. The exported JSONs were parsed per kernel, tagged by
 region (backbone / neck / attention / head / NMS) and by precision, and ranked by time —
-see `notebooks/qat_vs_ptq_kernel_profiling.ipynb`, `Per_kernel_json_file/` and
-`experiments/qat_iteration_2/profiling_exports/`.
+see `results/notebooks/qat_vs_ptq_kernel_profiling.ipynb`, `results/profiles/` and
+`results/experiments/qat_iteration_2/profiling_exports/`.
 
 **What the profiles showed:**
 
@@ -270,7 +270,7 @@ fusion, accounting for the +0.127 ms.
 
 **A controlled experiment falsified the obvious explanation.** A tiny CNN
 (3× Conv3×3→SiLU + 1×1 head) was built in three variants — FP16, INT8 PTQ, INT8
-explicit Q/DQ — differing *only* in quantisation scheme (`experiments/fusion_demo/`).
+explicit Q/DQ — differing *only* in quantisation scheme (`results/experiments/fusion_demo/`).
 Explicit Q/DQ did **not** break conv+SiLU fusion: all three blocks fused in every
 variant, the Q/DQ variant had *fewer* kernels than FP16 (5 vs 6) and was the *fastest*.
 
@@ -402,14 +402,14 @@ Caveat: early stopping cut some layers to 4–5 epochs (`model.2` to 4). `best_e
 0-indexed, so `model.2`'s best was its *first* epoch. The effect is small but it does
 slightly confound layer-vs-layer comparison.
 
-Full write-up: **`experiments/week8/layer_sweep/RECAP.md`**. Source of every number:
+Full write-up: **`results/experiments/week8/layer_sweep/RECAP.md`**. Source of every number:
 `results_master_malmo_h100.csv`.
 
-**Plots: `experiments/week8/week8_layer_sweep_plots.ipynb`** — accuracy per layer against the V0 /
+**Plots: `results/experiments/week8/week8_layer_sweep_plots.ipynb`** — accuracy per layer against the V0 /
 V1 / FP16 / FP32 references, the flat CUDA-graph latency axis, and the two against each
-other. Figures are also written to `experiments/week8/figures/` as PNGs.
+other. Figures are also written to `results/experiments/week8/figures/` as PNGs.
 
-![accuracy by layer](experiments/week8/figures/fig1_accuracy_by_layer.png)
+![accuracy by layer](results/experiments/week8/figures/fig1_accuracy_by_layer.png)
 
 ---
 
@@ -448,38 +448,54 @@ Its value is the ordering, and the ordering is clean enough to act on:
 
 ## 8. Repository layout
 
+The tree is segmented by what a thing is *for*. Four directories at the root:
+**read it**, **run it**, **configure it**, **what it produced**.
+
 ```text
-docs/         stage-by-stage documentation, 00 -> 08. Start at docs/README.md
-
-models/yolo26n_sanoscience_full_left/     artifacts, in precision-ladder order
-  0_baseline_pytorch/   best.pt, best.onnx            stages 1-2
-  1_fp32/               V2 engine provenance          stage 3
-  2_fp16/               V3                            stage 4
-  3_int8_ptq/           V4 + entropy calibration      stage 5
-  4_qat_iteration1/     V6 final                      stage 6
-  5_qat_iteration2/     the deployment candidate      stage 7
-
-reports/      everything MEASURED, same order
-  1_training/           baseline training curves
-  2_pytorch_latency/    eager-mode timing sidecars
-  3_engine_accuracy/    per-stage mAP + ONNX/engine parity
-  4_qat_training/       V5 vs V6 accuracy curves
-  5_qat_v5_latency/     fake-quant vs INT8-kernel distributions
-
-experiments/  the runs themselves
-  week8/                frozen baseline + per-layer sweep + plots      stage 8
-  qat_iteration_2/      OFAT hyperparameter study + build recovery     stage 7
-  fusion_demo/          controlled Q/DQ fusion test
-
-scripts/      all tooling: train/, tensorrt/, export/, evaluate/, benchmark/, data/
+docs/         READ IT -- stage-by-stage write-up, 00 -> 08. Start at docs/README.md
+scripts/      RUN IT  -- all tooling. Nothing here is a result
+                train/ tensorrt/ export/ evaluate/ benchmark/ data/ utils/
 configs/      dataset YAMLs consumed by Ultralytics
-notebooks/    qat_vs_ptq_kernel_profiling.ipynb (week-8 plots live under experiments/week8/)
-records/      the deterministic INT8 calibration set manifest (500 frames, seed 42)
-Per_kernel_json_file/   trtexec per-kernel profiles (FP16 / PTQ / QAT)
-.devcontainer/          TensorRT container definition. NOTE: the intended environment,
-                        not the one any result came from -- every number here was
-                        produced by the venvs above. See docs/00.
+results/      WHAT IT PRODUCED -- nothing here is needed to run the pipeline
 ```
+
+Everything produced lives under `results/`, in the order the stages happened:
+
+```text
+results/
+  models/yolo26n_sanoscience_full_left/     the artifacts, in precision-ladder order
+    0_baseline_pytorch/   best.pt, best.onnx                    stages 1-2
+    1_fp32/               V2 engine provenance                  stage 3
+    2_fp16/               V3                                    stage 4
+    3_int8_ptq/           V4 + entropy calibration cache        stage 5
+    4_qat_iteration1/     V6 final                              stage 6
+    5_qat_iteration2/     the deployment candidate              stage 7
+
+  reports/                everything MEASURED, same order
+    1_training/           baseline training curves
+    2_pytorch_latency/    eager-mode timing sidecars
+    3_engine_accuracy/    per-stage mAP + ONNX/engine parity
+    4_qat_training/       V5 vs V6 accuracy curves
+    5_qat_v5_latency/     fake-quant vs INT8-kernel distributions
+
+  experiments/            the runs themselves
+    week8/                frozen baseline + per-layer sweep + plots   stage 8
+    qat_iteration_2/      OFAT hyperparameter study + build recovery  stage 7
+    fusion_demo/          controlled Q/DQ fusion test
+
+  notebooks/              qat_vs_ptq_kernel_profiling.ipynb
+                          (the week-8 plots live with week 8, in experiments/week8/)
+  profiles/               trtexec per-kernel profiles (FP16 / PTQ / QAT)
+  calibration/            the deterministic INT8 calibration manifest, 500 frames seed 42
+
+.devcontainer/  TensorRT container definition. NOTE: the intended environment, not the
+                one any result came from -- every number here was produced by the venvs
+                above. See docs/00.
+```
+
+**The split is the point.** To reproduce anything you need `scripts/` and `configs/`
+only. `results/` is the record: delete it and the pipeline still runs, read it and you
+never have to run anything.
 
 Superseded work is **not on `main`**: it lives on the **`archive/legacy-scripts`**
 branch -- the old `scripts/archive/` dead ends, the superseded QAT versions
@@ -501,9 +517,9 @@ docs/05_tensorrt_int8_ptq.md            INT8 post-training quantisation
 docs/06_qat.md                          QAT: V5/V6, Iteration 2, latency dissection
 docs/07_pytorch_latency.md              PyTorch-side latency methodology
 docs/08_week8_layer_sensitivity.md      frozen baseline + per-layer QAT sweep
-experiments/week8/README.md             Week 8 data index
-experiments/week8/layer_sweep/RECAP.md  Week-8 per-layer sweep, full recap
-experiments/fusion_demo/RESULTS.md      controlled Q/DQ fusion experiment
+results/experiments/week8/README.md             Week 8 data index
+results/experiments/week8/layer_sweep/RECAP.md  Week-8 per-layer sweep, full recap
+results/experiments/fusion_demo/RESULTS.md      controlled Q/DQ fusion experiment
 ```
 
 ### Shared TensorRT tooling
@@ -537,8 +553,8 @@ ENGINE_PATH=$ENG DEVICE=<idle_gpu> BENCHMARK_REPEATS=10 \
   python scripts/benchmark/benchmark_latency_trt.py
 
 # Per-layer sweep (malmo)
-PHASE=train  bash experiments/week8/layer_sweep/run_sweep_malmo.sh
-PHASE=deploy bash experiments/week8/layer_sweep/run_sweep_malmo.sh
+PHASE=train  bash results/experiments/week8/layer_sweep/run_sweep_malmo.sh
+PHASE=deploy bash results/experiments/week8/layer_sweep/run_sweep_malmo.sh
 ```
 
 ### Provenance

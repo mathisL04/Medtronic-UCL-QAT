@@ -28,7 +28,7 @@ ONNX_PATH = Path(
         "ONNX_PATH",
         str(
             REPO
-            / "models/yolo26n_sanoscience_full_left/"
+            / "results/models/yolo26n_sanoscience_full_left/"
               "qat/v6_final/best_qat.onnx"
         ),
     )
@@ -42,7 +42,7 @@ ENGINE_PATH = Path(
         "ENGINE_PATH",
         str(
             REPO
-            / "models/yolo26n_sanoscience_full_left/"
+            / "results/models/yolo26n_sanoscience_full_left/"
               "qat/v6_final/best_qat_int8.engine"
         ),
     )

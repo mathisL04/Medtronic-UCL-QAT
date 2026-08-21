@@ -27,7 +27,7 @@ BASE_MODEL = Path(
         "BASE_MODEL",
         str(
             REPO
-            / "models/yolo26n_sanoscience_full_left"
+            / "results/models/yolo26n_sanoscience_full_left"
             / "baseline/best.pt"
         ),
     )
@@ -40,7 +40,7 @@ QAT_STATE = Path(
         "QAT_STATE",
         str(
             REPO
-            / "models/yolo26n_sanoscience_full_left"
+            / "results/models/yolo26n_sanoscience_full_left"
             / "qat/v6_final/qat_modelopt_state_best.pt"
         ),
     )
@@ -52,7 +52,7 @@ OUT_ONNX = Path(
         "OUT_ONNX",
         str(
             REPO
-            / "models/yolo26n_sanoscience_full_left"
+            / "results/models/yolo26n_sanoscience_full_left"
             / "qat/v6_final/best_qat.onnx"
         ),
     )

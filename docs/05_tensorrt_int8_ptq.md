@@ -193,7 +193,7 @@ CLOSED 1 -- FULL-6449 mAP ON V4. Ran 2026-07-21, once the box freed.
   So the PTQ cost against FP32 is -0.0043 mAP50 and -0.0176 mAP50-95, measured
   rather than estimated. These are the figures the precision ladder and every
   QAT comparison now quote. Do NOT quote V4 accuracy as "val100-only" any more.
-  Sidecar: reports/3_engine_accuracy/3_int8_ptq/best_int8.engine.map_full.json.
+  Sidecar: results/reports/3_engine_accuracy/3_int8_ptq/best_int8.engine.map_full.json.
   The val100 discussion below is retained because it is what motivated the
   full-set run, not because the number is still open.
 
@@ -207,7 +207,7 @@ OPEN 2 -- MIN/MAX CALIBRATOR A/B NEVER RAN.
   mechanism as inferred rather than measured -- do not let it harden into a
   stated cause through repetition.
   STILL OPEN as of the week-8 handover. NOTE: do not mistake
-  experiments/qat_iteration_2/ptq_baseline/best_int8_fp16_max.engine for this
+  results/experiments/qat_iteration_2/ptq_baseline/best_int8_fp16_max.engine for this
   test. That "max" is maximal QUANTIZATION EXTENT (more layers pushed off FP16),
   not the min/max CALIBRATOR. It scored 0.7513 against entropy's 0.7564, i.e.
   quantising harder cost accuracy -- which says nothing about calibrator choice.
@@ -243,7 +243,7 @@ OPEN 2 -- MIN/MAX CALIBRATOR A/B NEVER RAN.
 
 ```bash
 source ~/venvs/medtronic-trt/bin/activate
-ENG=models/yolo26n_sanoscience_full_left/3_int8_ptq/best_int8.engine
+ENG=results/models/yolo26n_sanoscience_full_left/3_int8_ptq/best_int8.engine
 
 # calibration set (images are regenerable; only the manifest is committed)
 N_EPISODES=500 SEED=42 python scripts/data/make_calib_set.py

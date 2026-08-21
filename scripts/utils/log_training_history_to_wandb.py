@@ -4,7 +4,7 @@ import wandb
 
 RESULTS_CSV = Path(
     "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "reports/1_training/results.csv"
+    "results/reports/1_training/results.csv"
 )
 
 run = wandb.init(

@@ -4,7 +4,7 @@ Machine and environment: **malmo** (H100 NVL), `~/venvs/medtronic-qat-p311` to t
 `~/venvs/medtronic-trt` to build and measure. See
 [`00_environment_and_access.md`](00_environment_and_access.md).
 
-Data, provenance and the full recap: [`experiments/week8/`](../experiments/week8/).
+Data, provenance and the full recap: [`results/experiments/week8/`](../results/experiments/week8/).
 This document is the method and the reasoning; that folder holds the tables and the
 per-layer sidecars.
 

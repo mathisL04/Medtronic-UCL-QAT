@@ -39,11 +39,16 @@ Open-H Sanoscience video ──▶ segmentation-derived YOLO labels ──▶ YO
 
 ## Where the numbers live
 
+The repository is segmented by purpose: `scripts/` and `configs/` are everything you
+need to **run** the pipeline, and `results/` is everything it **produced** -- nothing
+under `results/` is required to reproduce anything.
+
 | | |
 |---|---|
-| `models/` | artifacts, in ladder order: `0_baseline_pytorch` → `1_fp32` → `2_fp16` → `3_int8_ptq` → `4_qat_iteration1` → `5_qat_iteration2` |
-| `reports/` | everything measured, in the same order |
-| `experiments/` | the runs themselves: `qat_iteration_2/`, `week8/`, `fusion_demo/` |
+| `results/models/` | artifacts, in ladder order: `0_baseline_pytorch` → `1_fp32` → `2_fp16` → `3_int8_ptq` → `4_qat_iteration1` → `5_qat_iteration2` |
+| `results/reports/` | everything measured, in the same order |
+| `results/experiments/` | the runs themselves: `qat_iteration_2/`, `week8/`, `fusion_demo/` |
+| `results/notebooks/`, `results/profiles/`, `results/calibration/` | analysis, trtexec per-kernel profiles, the INT8 calibration manifest |
 
 Engines, ONNX and checkpoints are gitignored; their `*.provenance.json` sidecars are
 committed and carry the sha256 plus the full build configuration, so a cleared
