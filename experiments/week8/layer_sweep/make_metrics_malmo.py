@@ -80,7 +80,7 @@ def gpu_state(idx):
         return {"error": f"{type(e).__name__}: {e}"}
 
 
-# ---- accuracy (full val, conf=0.001 -- see CLAUDE.md; never conf=0.25) -------
+# ---- accuracy (full val, conf=0.001 -- the project standard; never conf=0.25) ----
 # STRICT: only an accuracy file produced by an engine built on THIS box counts.
 # The previous fallback to "*.map_full.json" would silently adopt the Geneva/A100
 # engine's mAP for layers 0/13/16/17 and stamp it with an H100 hardware record --

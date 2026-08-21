@@ -130,7 +130,7 @@ mlruns/
 # Engines, ONNX and checkpoints are NOT committed -- their *.provenance.json
 # sidecars are, and they carry the sha256 plus the full build configuration, so
 # any artifact here is identifiable and rebuildable. A handful of files are
-# deliberate exceptions, force-added with `git add -f`; see CLAUDE.md.
+# deliberate exceptions, force-added with `git add -f`; see the README.
 
 *.pt
 *.pth
