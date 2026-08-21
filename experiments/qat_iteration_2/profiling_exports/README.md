@@ -1,6 +1,12 @@
 # QAT / PTQ trtexec profiling exports
 
-> **Note:** the three per-kernel profile JSONs (`qat_batch32_`, `ptq_int8_`, `fp16_per_kernel_profile.json`) now live in `../Per_kernel_json_file/`. The `*_layer_info.json` / `*_layers.json` and analysis files remain here.
+> **Note:** the three per-kernel profile JSONs (`qat_batch32_`, `ptq_int8_`,
+> `fp16_per_kernel_profile.json`) live in the repo-root `Per_kernel_json_file/`, not
+> here. The `*_layer_info.json` and the analysis files remain in this folder.
+>
+> Per-KERNEL and per-LAYER are different exports and are not interchangeable:
+> `--exportProfile` gives a flat list of ~232 timed kernels, `--exportLayerInfo` gives
+> the engine's layer/binding structure with the datatypes precision is read from.
 
 
 Raw profiling JSONs for the production TensorRT engines, for inspection/download.
@@ -16,7 +22,7 @@ Engine: `experiments/qat_iteration_2/rebuild_fp16_opt5/V2_batch_32.engine`
 
 | file | what it is |
 |---|---|
-| `qat_batch32_per_kernel_profile.json` | **trtexec `--exportProfile`** — per-kernel timing (245 kernels): `name`, `timeMs` (total), `averageMs` (per-inference), `medianMs`, `percentage`. First element is `{"count": N}`. |
+| `../../../Per_kernel_json_file/qat_batch32_per_kernel_profile.json` | **trtexec `--exportProfile`** — per-kernel timing (245 kernels): `name`, `timeMs` (total), `averageMs` (per-inference), `medianMs`, `percentage`. First element is `{"count": N}`. |
 | `qat_batch32_layer_info.json` | **trtexec `--exportLayerInfo`** — per-layer structure: `Name`, `LayerType`, `Inputs`/`Outputs` with `Format/Datatype` (this is where precision — INT8/FP16/FP32 — is read from). |
 | `qat_batch32_per_layer_ranked.json` | our parse: every kernel ranked by time, with region (backbone/neck/attention/head/NMS) + precision + ms + %. |
 | `qat_batch32_region_map_trtexec.json` | region-level latency aggregation (from the trtexec profile). |
@@ -29,7 +35,7 @@ Engine: `experiments/qat_iteration_2/ptq_baseline/best_int8_fp16.engine`
 
 | file | what it is |
 |---|---|
-| `ptq_int8_per_kernel_profile.json` | trtexec `--exportProfile` — per-kernel timing (189 kernels). |
+| `../../../Per_kernel_json_file/ptq_int8_per_kernel_profile.json` | trtexec `--exportProfile` — per-kernel timing (189 kernels). |
 | `ptq_int8_layer_info.json` | trtexec `--exportLayerInfo` — per-layer structure/precision. |
 
 ## Comparison
@@ -53,5 +59,5 @@ flags as the QAT/PTQ profiles.
 
 | file | what it is |
 |---|---|
-| `fp16_per_kernel_profile.json` | trtexec `--exportProfile` — per-kernel timing (231 kernels). Same schema as QAT/PTQ. |
-| `fp16_layers.json` | trtexec `--exportLayerInfo` — per-layer structure/precision (FP16). |
+| `../../../Per_kernel_json_file/fp16_per_kernel_profile.json` | trtexec `--exportProfile` — per-kernel timing (231 kernels). Same schema as QAT/PTQ. |
+| FP16 per-layer structure | Not duplicated here. It is byte-identical to `../engine_verification/FP16/layer_info.json`, which is one of a complete six-engine set written by `../engine_verification/verify_engines.py`. Use that. |
