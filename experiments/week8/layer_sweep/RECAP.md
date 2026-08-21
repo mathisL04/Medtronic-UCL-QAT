@@ -115,7 +115,8 @@ byte-exact provenance use the pre-merge commit:
 | what | where |
 |---|---|
 | tree as it ran the sweep | `bb32730` |
-| `train_qat.py`, `build_tensorrt_int8_qdq.py` as they ran | `git show bb32730:train/train_qat.py` etc. |
+| `train_qat.py` as it ran | `git show bb32730:train/train_qat.py` (it lived at `train/` then; it is at `scripts/train/` now) |
+| `build_tensorrt_int8_qdq.py` as it ran | `git show bb32730:scripts/tensorrt/build_tensorrt_int8_qdq.py` |
 | sweep runners | `run_layer_malmo.sh`, `run_sweep_malmo.sh`, `queue_deploy_malmo.sh`, `make_metrics_malmo.py` |
 
 The ONNX and engine sha256 in each `*.provenance.json` are unaffected by the refactor —
