@@ -1,0 +1,20 @@
+============================================================
+Week-8: 0-iteration QAT (quantize+calibrate, NO training)
+============================================================
+frozen model: /home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/runs_week8/week8_frozen_head/weights/best.pt
+device: 3 N_CALIB: 128
+calibration: 128 frames across 128 episodes (seed 42)
+quantizing (mtq.quantize + max calibration) ...
+Inserted 608 quantizers
+  calibrated 32/128
+  calibrated 64/128
+  calibrated 96/128
+  calibrated 128/128
+inserted 608 TensorQuantizers (253 with scales)
+saved state: experiments/week8_frozen_qat/qat0/qat_modelopt_state_best.pt
+Inserted 608 quantizers
+/home/zcemml1/venvs/medtronic-qat-p311/lib64/python3.11/site-packages/modelopt/torch/quantization/nn/modules/quant_module.py:77: UserWarning: Could not identify the device and dtype for TensorQuantizer states of model.9.m. Please move the model to the right device and dtype now. This can be done by calling `model.to(device, dtype)`.
+  warnings.warn(
+reload gate PASSED: 608 quantizers, 253 with scales
+provenance: experiments/week8_frozen_qat/qat0/qat0_provenance.json
+DONE -- 0-iteration QAT state ready for export.

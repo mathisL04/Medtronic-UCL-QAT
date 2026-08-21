@@ -1,0 +1,14 @@
+============================================================
+TensorRT INT8 engine from Q/DQ ONNX (QAT, no calibrator)
+============================================================
+tensorrt: 10.16.1.11  device: 3
+onnx:    experiments/week8_frozen_qat/qat0/best_qat.onnx
+engine:  experiments/week8_frozen_qat/qat0/best_qat_int8.engine
+parsed: 2246 layers, 1 inputs, 1 outputs
+building INT8 engine (reading scales from Q/DQ nodes) ...
+engine built + saved: experiments/week8_frozen_qat/qat0/best_qat_int8.engine (4.2 MB, 71.1 s)
+deserialised OK. I/O tensors:
+  INPUT  x          [1, 3, 640, 640] FLOAT
+  OUTPUT out        [1, 300, 6] FLOAT
+provenance: experiments/week8_frozen_qat/qat0/best_qat_int8.engine.provenance.json
+DONE -- INT8 engine built from Q/DQ ONNX and deserialised cleanly.

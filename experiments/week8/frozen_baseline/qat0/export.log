@@ -1,0 +1,27 @@
+No CUDA runtime is found, using CUDA_HOME='/usr/local/cuda'
+============================================================
+QAT model -> ONNX (Q/DQ) export
+============================================================
+modelopt: 0.33.1  torch: 2.7.0+cu128
+base model: /home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/runs_week8/week8_frozen_head/weights/best.pt
+qat state:  experiments/week8_frozen_qat/qat0/qat_modelopt_state_best.pt
+out onnx:   experiments/week8_frozen_qat/qat0/best_qat.onnx
+imgsz: 640  batch: 1  opset: 17  device: cpu
+Inserted 608 quantizers
+/home/zcemml1/venvs/medtronic-qat-p311/lib64/python3.11/site-packages/modelopt/torch/quantization/nn/modules/quant_module.py:77: UserWarning: Could not identify the device and dtype for TensorQuantizer states of model.9.m. Please move the model to the right device and dtype now. This can be done by calling `model.to(device, dtype)`.
+  warnings.warn(
+
+[export] restored 608 TensorQuantizers (253 with scales)
+[export] set export mode on 1 Detect head(s) -> single deployment output
+
+[export] exporting via modelopt get_onnx_bytes_and_metadata() ...
+/home/zcemml1/venvs/medtronic-qat-p311/lib64/python3.11/site-packages/torch/onnx/symbolic_opset9.py:5350: UserWarning: Exporting aten::index operator of advanced indexing in opset 17 is achieved by combination of multiple ONNX operators, including Reshape, Transpose, Concat, and Gather. If indices include negative values, the exported graph will produce incorrect results.
+  warnings.warn(
+Writing onnx model to path: experiments/week8_frozen_qat/qat0/_qat_onnx_tmp
+[export] saved: experiments/week8_frozen_qat/qat0/best_qat.onnx  (3.7 s)
+
+[export] ONNX: 1477 nodes, QuantizeLinear=207, DequantizeLinear=207
+[export]   inputs:  [('x', [1, 3, 640, 640])]
+[export]   outputs: [('out', [1, 300, 6])]
+[export] provenance: experiments/week8_frozen_qat/qat0/best_qat.onnx.provenance.json
+[export] DONE -- 207 Q / 207 DQ nodes, 1 output(s). Ready for TRT INT8 build.

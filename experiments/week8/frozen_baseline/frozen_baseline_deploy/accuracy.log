@@ -1,0 +1,42 @@
+============================================================
+mAP on val100  (MODE=engine)
+============================================================
+Target:  /home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/runs_week8/week8_frozen_head/weights/best_fp16.engine
+Images:  /home/zcemml1/medtronic_qat_data/datasets/sanoscience_yolo_full_nonexpert_stereo/images/val
+Labels:  /home/zcemml1/medtronic_qat_data/datasets/sanoscience_yolo_full_nonexpert_stereo/labels/val
+conf:    0.001   imgsz: 640   max_dets: 300
+DEVICE:  3
+
+Ground truth: 6449 images, 14517 boxes
+Detections:   268858 above conf 0.001
+Max dets on any image: 147  (cap 300, not binding)
+creating index...
+index created!
+Loading and preparing results...
+DONE (t=0.57s)
+creating index...
+index created!
+
+Running per image evaluation...
+Evaluate annotation type *bbox*
+DONE (t=9.14s).
+Accumulating evaluation results...
+DONE (t=2.15s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = -1.000
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=300 ] = 0.742
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=300 ] = 0.603
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=300 ] = 0.356
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=300 ] = 0.485
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=300 ] = 0.628
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.292
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.717
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=300 ] = 0.768
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=300 ] = 0.447
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=300 ] = 0.731
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=300 ] = 0.855
+
+------------------------------------------------------------
+mAP50           0.7419
+mAP50-95        0.5313
+------------------------------------------------------------
+mAP record: /home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/runs_week8/week8_frozen_head/weights/best_fp16.engine.map_full.json
