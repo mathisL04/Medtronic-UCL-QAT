@@ -32,12 +32,12 @@ PROFILE_ITERS = int(os.environ.get("PROFILE_ITERS", "100"))
 DO_TIMING = DEVICE >= 0
 
 ENGINES = [
-    ("FP32",          "models/yolo26n_sanoscience_full_left/baseline/fp32/best_fp32.engine"),
-    ("FP16",          "models/yolo26n_sanoscience_full_left/baseline/fp16/best_fp16.engine"),
-    ("V4_int8_ptq",   "models/yolo26n_sanoscience_full_left/baseline/int8_ptq/best_int8.engine"),
+    ("FP32",          "models/yolo26n_sanoscience_full_left/1_fp32/best_fp32.engine"),
+    ("FP16",          "models/yolo26n_sanoscience_full_left/2_fp16/best_fp16.engine"),
+    ("V4_int8_ptq",   "models/yolo26n_sanoscience_full_left/3_int8_ptq/best_int8.engine"),
     ("PTQ_int8_fp16", "experiments/qat_iteration_2/ptq_baseline/best_int8_fp16.engine"),
     ("PTQ_maxfp16",   "experiments/qat_iteration_2/ptq_baseline/best_int8_fp16_max.engine"),
-    ("V6_qat",        "models/yolo26n_sanoscience_full_left/qat/v6_final/best_qat_int8.engine"),
+    ("V6_qat",        "models/yolo26n_sanoscience_full_left/4_qat_iteration1/best_qat_int8.engine"),
 ]
 
 LOGGER = trt.Logger(trt.Logger.ERROR)

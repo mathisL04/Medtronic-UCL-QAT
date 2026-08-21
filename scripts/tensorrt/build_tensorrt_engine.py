@@ -21,7 +21,7 @@ ONNX_PATH = Path(
     os.environ.get(
         "ONNX_PATH",
         "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-        "models/yolo26n_sanoscience_full_left/baseline/best.onnx",
+        "models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.onnx",
     )
 )
 

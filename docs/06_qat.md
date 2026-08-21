@@ -57,10 +57,10 @@ The QAT model uses **dedicated** export/build scripts — NOT the baseline
 `export_onnx.py` / `build_tensorrt_engine.py`. Reason (see "Export recipe" below):
 the QAT model is a modelopt fake-quant state and its ONNX carries Q/DQ nodes, so it
 needs modelopt's blessed export and a calibrator-free INT8 build. Defaults point at
-`models/yolo26n_sanoscience_full_left/qat/v6_final/`; override with the env vars shown.
+`models/yolo26n_sanoscience_full_left/4_qat_iteration1/`; override with the env vars shown.
 
 ```bash
-M=models/yolo26n_sanoscience_full_left/qat/v6_final
+M=models/yolo26n_sanoscience_full_left/4_qat_iteration1
 
 # 1) QAT state -> Q/DQ ONNX      (Py3.11 export venv; CPU is fine -- it is a trace)
 DEVICE=cpu ~/venvs/medtronic-qat-p311/bin/python scripts/export/export_qat_onnx.py
@@ -193,9 +193,9 @@ Ultralytics noise; the engine faithfully reproduces the model. **Latency is unch
 from V5 (~1.4 ms kernel, graph-determined) — still slower than FP16 on A100** (Q/DQ
 reformat overhead; INT8's speed payoff is on edge HW / DLA, not A100).
 
-**Evolution graph:** `reports/qat_training/qat_v5_v6_accuracy.png`
+**Evolution graph:** `reports/4_qat_training/qat_v5_v6_accuracy.png`
 (mAP50-95 vs epoch, both runs, best epochs marked, patience window shaded, precision
-bars overlaid). Full per-epoch tables + stats: `reports/qat_training/README.md`.
+bars overlaid). Full per-epoch tables + stats: `reports/4_qat_training/README.md`.
 
 **Artifacts (force-added to git under `models/yolo26n_sanoscience_full_left/`):**
 ```text
@@ -208,7 +208,7 @@ qat/smoke_1ep/                            the 1-epoch smoke
 
 **Latency** is unchanged between V5 and V6 (graph-determined, not weight-dependent):
 INT8 kernel ~1.39-1.43 ms, ~57x faster than the PyTorch fake-quant forward (~80 ms).
-Full distributions: `reports/v5_latency/`.
+Full distributions: `reports/5_qat_v5_latency/`.
 
 ## QAT Iteration 2 — OFAT hyperparameter sweep + build-side latency recovery
 

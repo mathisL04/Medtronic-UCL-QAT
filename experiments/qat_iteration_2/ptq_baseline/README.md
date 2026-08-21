@@ -16,7 +16,8 @@ PY=/home/zcemml1/venvs/medtronic-trt/bin/python
 # 2. build INT8+FP16 engine
 set -a; source experiments/qat_iteration_2/configs/ptq_int8fp16.env; set +a
 DEVICE=<idle> $PY scripts/tensorrt/build_tensorrt_engine.py
-#    -> writes models/.../baseline/best_int8.engine; relocated here as best_int8_fp16.engine
+#    -> writes models/yolo26n_sanoscience_full_left/3_int8_ptq/best_int8.engine;
+#       relocated here as best_int8_fp16.engine
 
 # 3. accuracy (full val, conf 0.001)
 MODE=engine EVAL_SET=full DEVICE=<idle> \

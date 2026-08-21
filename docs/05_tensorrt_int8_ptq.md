@@ -213,7 +213,7 @@ OPEN 2 -- MIN/MAX CALIBRATOR A/B NEVER RAN.
 
 ```bash
 source ~/venvs/medtronic-trt/bin/activate
-ENG=models/yolo26n_sanoscience_full_left/baseline/int8_ptq/best_int8.engine
+ENG=models/yolo26n_sanoscience_full_left/3_int8_ptq/best_int8.engine
 
 # calibration set (images are regenerable; only the manifest is committed)
 N_EPISODES=500 SEED=42 python scripts/data/make_calib_set.py

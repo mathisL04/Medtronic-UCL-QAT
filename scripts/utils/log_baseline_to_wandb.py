@@ -5,10 +5,10 @@ import wandb
 REPO = Path("/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT")
 RUNS = Path("/home/zcemml1/medtronic_qat_data/runs_sanoscience")
 
-MODEL = REPO / "models/yolo26n_sanoscience_full_left/baseline/best.pt"
+MODEL = REPO / "models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.pt"
 MODEL_CARD = REPO / "models/yolo26n_sanoscience_full_left/model_card.md"
 
-REPORTS = REPO / "reports/yolo26n_sanoscience_full_left"
+REPORTS = REPO / "reports/1_training"
 RESULTS_CSV = REPORTS / "results.csv"
 RESULTS_PNG = REPORTS / "results.png"
 REPORT_CONFUSION = REPORTS / "confusion_matrix.png"

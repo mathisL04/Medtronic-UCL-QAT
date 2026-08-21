@@ -122,7 +122,7 @@ import tensorrt as trt                                      # build venv
 
 ### 4b. `train_qat.py` — fixed constants
 ```text
-MODEL_PATH   models/yolo26n_sanoscience_full_left/baseline/best.pt
+MODEL_PATH   models/yolo26n_sanoscience_full_left/0_baseline_pytorch/best.pt
 DATA_YAML    .../sanoscience_yolo_full_nonexpert_stereo/sanoscience_yolo.yaml
 TRAIN_IMAGES .../images/train                    (warm-start source)
 QUANT CONFIG mtq.INT8_DEFAULT_CFG

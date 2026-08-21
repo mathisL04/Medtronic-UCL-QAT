@@ -47,7 +47,7 @@ Engine: `experiments/qat_iteration_2/ptq_baseline/best_int8_fp16.engine`
 
 ## FP16 engine (same-architecture, NO Q/DQ baseline — mAP50-95 0.7748)
 
-Engine: `models/yolo26n_sanoscience_full_left/baseline/fp16/best_fp16.engine`
+Engine: `models/yolo26n_sanoscience_full_left/2_fp16/best_fp16.engine`
 Median GPU compute this session: **1.127 ms** (batch=1, no CUDA graph). Same trtexec
 flags as the QAT/PTQ profiles.
 

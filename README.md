@@ -441,21 +441,40 @@ Its value is the ordering, and the ordering is clean enough to act on:
 ## 8. Repository layout
 
 ```text
-scripts/      all tooling. train/ (train_qat.py, qat_run.sh, the full-dataset trainers),
-              tensorrt/, export/, evaluate/, benchmark/, data/
+docs/         stage-by-stage documentation, 00 -> 08. Start at docs/README.md
+
+models/yolo26n_sanoscience_full_left/     artifacts, in precision-ladder order
+  0_baseline_pytorch/   best.pt, best.onnx            stages 1-2
+  1_fp32/               V2 engine provenance          stage 3
+  2_fp16/               V3                            stage 4
+  3_int8_ptq/           V4 + entropy calibration      stage 5
+  4_qat_iteration1/     V6 final                      stage 6
+  5_qat_iteration2/     the deployment candidate      stage 7
+
+reports/      everything MEASURED, same order
+  1_training/           baseline training curves
+  2_pytorch_latency/    eager-mode timing sidecars
+  3_engine_accuracy/    per-stage mAP + ONNX/engine parity
+  4_qat_training/       V5 vs V6 accuracy curves
+  5_qat_v5_latency/     fake-quant vs INT8-kernel distributions
+
+experiments/  the runs themselves
+  week8/                frozen baseline + per-layer sweep + plots      stage 8
+  qat_iteration_2/      OFAT hyperparameter study + build recovery     stage 7
+  fusion_demo/          controlled Q/DQ fusion test
+
+scripts/      all tooling: train/, tensorrt/, export/, evaluate/, benchmark/, data/
 configs/      dataset YAMLs consumed by Ultralytics
-models/       checkpoints, model cards, provenance sidecars
-experiments/  week8/ (frozen baseline + per-layer sweep + plots),
-              qat_iteration_2/ (hyperparameter study), fusion_demo/ (Q/DQ fusion test)
-docs/         stage-by-stage documentation, 01 -> 07
-reports/      training metrics, plots, latency summaries for stages 1-7
 notebooks/    qat_vs_ptq_kernel_profiling.ipynb (week-8 plots live under experiments/week8/)
 Per_kernel_json_file/   trtexec per-kernel profiles (FP16 / PTQ / QAT)
 ```
 
 ### Documentation
 
+Index: **[`docs/README.md`](docs/README.md)**
+
 ```text
+docs/00_environment_and_access.md       machines, ssh, venvs, the idle-GPU rule
 docs/01_dataset_labelling_training.md   dataset creation and YOLO26n training
 docs/02_onnx_export.md                  ONNX export + PyTorch/ONNX parity
 docs/03_tensorrt_fp32.md                TensorRT FP32 engine (V2 baseline)
@@ -463,7 +482,8 @@ docs/04_tensorrt_fp16.md                TensorRT FP16 engine (V3)
 docs/05_tensorrt_int8_ptq.md            INT8 post-training quantisation
 docs/06_qat.md                          QAT: V5/V6, Iteration 2, latency dissection
 docs/07_pytorch_latency.md              PyTorch-side latency methodology
-experiments/week8/README.md             Week 8 index: frozen baseline + per-layer sweep
+docs/08_week8_layer_sensitivity.md      frozen baseline + per-layer QAT sweep
+experiments/week8/README.md             Week 8 data index
 experiments/week8/layer_sweep/RECAP.md  Week-8 per-layer sweep, full recap
 experiments/fusion_demo/RESULTS.md      controlled Q/DQ fusion experiment
 ```
