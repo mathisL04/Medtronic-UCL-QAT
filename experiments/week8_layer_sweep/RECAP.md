@@ -105,5 +105,21 @@ above), per-layer `metrics.json`, `train/results.csv`, `train/args.yaml`,
 `best_qat.onnx.provenance.json`, `engine_int8_h100.engine.provenance.json`,
 `*.map_full.json`, and the per-layer train/deploy logs.
 
+### Exact code that produced these numbers
+
+`main-consolidate` was later merged with a documentation refactor of the script tree, so
+the scripts as they stand today are *formatted* differently from the ones that ran. The
+behaviour is unchanged, and every env knob the sweep relies on was carried across, but for
+byte-exact provenance use the pre-merge commit:
+
+| what | where |
+|---|---|
+| tree as it ran the sweep | `bb32730` |
+| `train_qat.py`, `build_tensorrt_int8_qdq.py` as they ran | `git show bb32730:train/train_qat.py` etc. |
+| sweep runners | `run_layer_malmo.sh`, `run_sweep_malmo.sh`, `queue_deploy_malmo.sh`, `make_metrics_malmo.py` |
+
+The ONNX and engine sha256 in each `*.provenance.json` are unaffected by the refactor —
+they identify the exact artifacts that were measured.
+
 `results_master.csv` and `results_master_a100_geneva.csv` are **not** results — they are the
 abandoned partial geneva A100 run, mostly empty rows. They are deliberately untracked.
