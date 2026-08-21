@@ -243,7 +243,7 @@ The ~0.3 ms QAT-vs-PTQ gap was not accepted as a property of QAT. It was profile
 --separateProfileRun --noDataTransfers` on an exclusive idle A100, cross-checked against
 the TensorRT Python `IProfiler`. The exported JSONs were parsed per kernel, tagged by
 region (backbone / neck / attention / head / NMS) and by precision, and ranked by time —
-see `qat_vs_ptq_kernel_profiling.ipynb`, `Per_kernel_json_file/` and
+see `notebooks/qat_vs_ptq_kernel_profiling.ipynb`, `Per_kernel_json_file/` and
 `experiments/qat_iteration_2/profiling_exports/`.
 
 **What the profiles showed:**

@@ -21,8 +21,21 @@ in `scripts/` — no framework code is copied or duplicated here.
 |---|---|
 | `ptq_baseline/` | The INT8+FP16 PTQ baseline: engine (gitignored) + committed provenance / accuracy / latency sidecars + comparison. |
 | `configs/` | Env-var config sets (the "knobs") that drive the reused Phase-1 scripts. No script copies. |
-| `sweeps/` | *(next phase)* QAT hyperparameter runs. |
-| `analysis/` | *(next phase)* Plots + quantified hyperparameter dependencies. |
+| `sweeps/` | The 13 OFAT hyperparameter runs + `master_comparison.md`. |
+| `rebuild_fp16_opt5/` | All 11 sweep engines rebuilt at FP16+opt5 and **re-timed in one exclusive idle-GPU session** -- the comparable latency table. Start at `BEFORE_AFTER.md`. |
+| `engine_verification/` | Per-layer precision breakdown for FP32 / FP16 / PTQ / V4 / V6, from `verify_engines.py`. |
+| `profiling_exports/` | Per-kernel and per-region profiles behind `notebooks/qat_vs_ptq_kernel_profiling.ipynb`. |
+
+## Method references
+
+`01_qat_framework_deep_dive.md`, `05_library_stack_explained.md`,
+`06_qdq_placement_deep_dive.md` and `qat_method_reference.md` explain the method itself and
+are the intended starting point for anyone picking this up.
+
+The pre-run design documents (`02_monitoring_scheme.md`, `03_sweep_action_plan.md`,
+`04_per_sweep_monitoring.md`) recorded intent rather than findings -- and the
+`monitoring/qat_monitor.py` that `02` specified was never built. They live on the
+**`archive/legacy-scripts`** branch; nothing on `main` depends on them.
 
 ## Reused Phase-1 scripts (not duplicated)
 
