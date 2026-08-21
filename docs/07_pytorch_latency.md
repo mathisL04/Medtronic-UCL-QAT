@@ -87,8 +87,8 @@ Both are correct; they answer different questions.
 
 This is the original single-frame PyTorch measurement: the **8.642 ms** figure that
 stages 3-6 quote as the pre-conversion reference. It predates the same-session table
-above and is deliberately kept separate from it, for the reason given under
-*Session seam* at the end. It lived in `docs/01` until the documentation was
+above and is deliberately kept separate from it, for the reason given in
+*Session seam* immediately above. It lived in `docs/01` until the documentation was
 reorganised; nothing about the measurement has changed.
 
 **Deployment latency (batch=1, Geneva A100) — reported baseline.** Single-frame inference timed with `scripts/benchmark/benchmark_latency.py`: one image per `model.predict()` call (batch=1), wall-clock around each call, the 100-frame validation subset preloaded to RAM, warmup, then pooled per-stage **medians** over 10 repeats × 100 frames (1000 samples) on a verified-idle A100.

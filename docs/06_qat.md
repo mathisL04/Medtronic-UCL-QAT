@@ -199,12 +199,16 @@ bars overlaid). Full per-epoch tables + stats: `reports/4_qat_training/README.md
 
 **Artifacts (force-added to git under `models/yolo26n_sanoscience_full_left/`):**
 ```text
-qat/v6_final/qat_modelopt_state_best.pt   ep25 best (the V6 deployable model) + state/results/args
-qat/v5_10ep/                              the V5 run + its Q/DQ ONNX + INT8 engine + sidecars
-qat/smoke_1ep/                            the 1-epoch smoke
-(training writes raw output to runs_qat/<RUN_NAME>/ which is gitignored; the best of each
- run is curated into models/.../qat/<run>/)
+4_qat_iteration1/qat_modelopt_state_best.pt   ep25 best, the V6 deployable model
+4_qat_iteration1/                             + its Q/DQ ONNX, INT8 engine, args, results, sidecars
 ```
+
+V5 (`qat/v5_10ep/`) and the 1-epoch smoke (`qat/smoke_1ep/`) were superseded by V6 and
+are **no longer on `main`**: they live on the `archive/legacy-scripts` branch.
+`reports/5_qat_v5_latency/` still carries V5's measured distributions.
+
+Training writes raw output to `runs_qat/<RUN_NAME>/`, which is gitignored; the best of
+each run is curated into `models/yolo26n_sanoscience_full_left/`.
 
 **Latency** is unchanged between V5 and V6 (graph-determined, not weight-dependent):
 INT8 kernel ~1.39-1.43 ms, ~57x faster than the PyTorch fake-quant forward (~80 ms).
@@ -387,7 +391,8 @@ INT8-accelerated edge HW (Jetson/DLA) or larger compute-bound models.
 ## Open items
 
 - **DONE** — V6 exported -> INT8 engine -> measured: mAP50-95 **0.7644** (beats PTQ),
-  kernel **1.397 ms**. All artifacts committed under `models/.../qat/v6_final/`.
+  kernel **1.397 ms**. All artifacts committed under
+  `models/yolo26n_sanoscience_full_left/4_qat_iteration1/`.
 - **DONE (Iteration 2)** — OFAT sweep (11 runs, verified clean): **batch=32 -> 0.7801**,
   best of any precision. Build-side latency recovery **1.40 -> 1.20 ms** (FP16+opt5),
   accuracy-neutral, across all 11 models. Deployment candidate: batch_32 rebuilt =

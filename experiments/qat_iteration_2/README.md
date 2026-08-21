@@ -4,7 +4,7 @@
 affect the model's accuracy and latency.**
 
 This is an **additive** experimental phase. It does **not** modify Phase 1 — the validated reference
-pipeline (`docs/01`–`docs/07`, `models/`, `scripts/`) stays exactly as it is. This folder holds
+pipeline (`docs/00`–`docs/08`, `models/`, `scripts/`) stays exactly as it is. This folder holds
 **only** the new phase's configs, results, and analysis. It **reuses the existing pipeline scripts**
 in `scripts/` — no framework code is copied or duplicated here.
 

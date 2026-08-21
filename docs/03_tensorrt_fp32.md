@@ -5,7 +5,7 @@ Converts the validated FP32 `best.onnx` (docs/02) into a TensorRT **FP32** engin
 Why FP32 before FP16/INT8: it separates two effects a "PyTorch vs FP16" comparison would tangle together — TensorRT's kernel optimisation, and precision reduction. V2 changes only the runtime, at identical precision.
 
 ```text
-V1  PyTorch FP32       docs/01
+V1  PyTorch FP32       docs/01 (model + accuracy), docs/07 (latency)
 V2  TensorRT FP32  <-  this stage: optimisation only, ZERO precision change
 V3  TensorRT FP16      docs/04: precision only, measured against V2
     INT8 / QAT         docs/05, docs/06

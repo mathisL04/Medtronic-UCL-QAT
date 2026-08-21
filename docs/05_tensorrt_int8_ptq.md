@@ -5,7 +5,7 @@ Post-training quantisation of the same `best.onnx` to INT8, calibrated on held-o
 **Status: concluded, not continued.** PTQ costs **−0.0300 mAP50-95** for a negligible batch=1 speed gain, and the loss is **localisation-dominated**. That finding is what motivates the QAT stage (docs/06) — it is a baseline to beat, not a dead end.
 
 ```text
-V1  PyTorch FP32       docs/01
+V1  PyTorch FP32       docs/01 (model + accuracy), docs/07 (latency)
 V2  TensorRT FP32      docs/03 -- runtime only, zero precision change
 V3  TensorRT FP16      docs/04 -- precision only, -0.0002 mAP50
 V4  TensorRT INT8  <-  this stage: PTQ, implicit quantisation + calibration
@@ -126,6 +126,27 @@ V3 FP16      0.9348     0.7572     989    -0.0002      -0.0000
 V4 INT8      0.9236     0.7272    1086    -0.0115      -0.0300
 ```
 
+### Accuracy resolved on the full val set (6,449 images, conf 0.001)
+
+The val100 table above is the stage's own controlled A/B: all three engines in one
+session on one 100-image subset, so it is internally comparable. It is **not** the
+resolved magnitude. That was measured later (see *Open items*, CLOSED 1):
+
+```text
+              mAP50    mAP50-95     Δ mAP50   Δ mAP50-95   (vs V2)
+V2 FP32      0.9325     0.7747      +0.0000      +0.0000
+V3 FP16      0.9327     0.7748      +0.0002      +0.0001
+V4 INT8      0.9282     0.7571      -0.0043      -0.0176
+```
+
+**val100 overstated the INT8 loss by roughly 1.7x** on mAP50-95 (-0.0300 there against
+-0.0176 here) and by 2.7x on mAP50. The direction and the localisation-dominated shape
+both hold, but the magnitude did not survive a properly sized evaluation set: on 237
+boxes it was inside the noise floor, exactly as the open item warned.
+
+**These full-set figures are the ones the precision ladder and every QAT comparison
+use.** Quote the val100 table only when discussing this stage's internal A/B.
+
 **The loss is localisation-dominated: mAP50-95 falls 2.6x harder than mAP50.**
 
 That split is the diagnostic. mAP50 measures whether the object was found; mAP50-95 measures how precisely it was boxed. INT8 is still finding the tools — it is boxing them less exactly. The parity data agrees independently: 92/100 frames failed on IoU or box count, with matched IoUs down to 0.9135.
@@ -158,19 +179,23 @@ A paired re-benchmark of all three in one session was attempted and **could not 
 
 ---
 
-## Open items — must be closed before QAT is judged against V4
+## Open items — the gaps that limited what QAT could claim against V4
 
-These are not rhetorical caveats. QAT is measured against the numbers in this
-document, so both gaps below directly limit what any QAT result can claim.
+These are not rhetorical caveats: QAT is measured against the numbers in this
+document. **One of the two has since been closed.** The first blocked the accuracy
+comparison outright and was resolved; the second is a mechanism question that remains
+inferred rather than measured, which the prose throughout this document reflects.
 
 ```text
-OPEN 1 -- FULL-6449 mAP ON V4 NEVER RAN.
-  The PTQ accuracy baseline is val100-only: 100 images, 237 boxes. A -0.0115
-  mAP50 delta is inside that set's noise floor, so the magnitude is an estimate,
-  not a measurement. Blocked by host commit-limit exhaustion (see Caveats).
-  ACTION: run MODE=engine on the full 6,449-image val split when the box frees,
-  so QAT compares against a resolved number rather than a 237-box estimate.
-  Until then, quote V4 accuracy as "val100-only".
+CLOSED 1 -- FULL-6449 mAP ON V4. Ran 2026-07-21, once the box freed.
+  6,449 images / 14,517 boxes, conf=0.001, pycocotools:
+      mAP50 0.9282   mAP50-95 0.7571   (vs FP32 0.9325 / 0.7747)
+  So the PTQ cost against FP32 is -0.0043 mAP50 and -0.0176 mAP50-95, measured
+  rather than estimated. These are the figures the precision ladder and every
+  QAT comparison now quote. Do NOT quote V4 accuracy as "val100-only" any more.
+  Sidecar: reports/3_engine_accuracy/3_int8_ptq/best_int8.engine.map_full.json.
+  The val100 discussion below is retained because it is what motivated the
+  full-set run, not because the number is still open.
 
 OPEN 2 -- MIN/MAX CALIBRATOR A/B NEVER RAN.
   "Entropy clipping box-coordinate activation tails" is the best-supported
@@ -181,6 +206,11 @@ OPEN 2 -- MIN/MAX CALIBRATOR A/B NEVER RAN.
   ACTION: optional. If left unrun, this document must continue to describe the
   mechanism as inferred rather than measured -- do not let it harden into a
   stated cause through repetition.
+  STILL OPEN as of the week-8 handover. NOTE: do not mistake
+  experiments/qat_iteration_2/ptq_baseline/best_int8_fp16_max.engine for this
+  test. That "max" is maximal QUANTIZATION EXTENT (more layers pushed off FP16),
+  not the min/max CALIBRATOR. It scored 0.7513 against entropy's 0.7564, i.e.
+  quantising harder cost accuracy -- which says nothing about calibrator choice.
 ```
 
 ## Caveats
