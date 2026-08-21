@@ -7,122 +7,473 @@ from datetime import datetime, timezone
 from time import perf_counter
 
 
-# -----------------------------
-# Settings
-# -----------------------------
-# Build a TensorRT INT8 engine from a Q/DQ (QuantizeLinear/DequantizeLinear) ONNX
-# produced by the QAT export (scripts/export/export_qat_onnx.py). This is EXPLICIT
-# quantization: the scales live in the Q/DQ nodes, so there is NO calibrator and
-# no calibration dataset -- TensorRT reads the scales straight from the graph.
-#
-# This is the QAT counterpart to build_tensorrt_engine.py's PTQ int8 path, which
-# uses an IInt8Calibrator to derive scales from unlabelled data. Do not confuse
-# them: PTQ = calibrator + FP32 ONNX; QAT = no calibrator + Q/DQ ONNX.
-REPO = Path("/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT")
-ONNX_PATH = Path(os.environ.get(
-    "ONNX_PATH", str(REPO / "models/yolo26n_sanoscience_full_left/qat/v6_final/best_qat.onnx")))
-ENGINE_PATH = Path(os.environ.get(
-    "ENGINE_PATH", str(REPO / "models/yolo26n_sanoscience_full_left/qat/v6_final/best_qat_int8.engine")))
-WORKSPACE_GB = float(os.environ.get("WORKSPACE_GB", 8))
+# ==========================================================
+# USER CONFIGURATION
+# Modify these values when changing the QAT model,
+# deployment location or target hardware.
+# ==========================================================
 
-# DEVICE has no default and the script aborts if unset -- same discipline as the
-# benchmarks. A build autotunes by timing kernels on the live GPU, so a
-# mis-attributed GPU corrupts the autotune just as it would a latency number.
+# Project root.
+# CHANGE if the repository is moved.
+REPO = Path(
+    "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT"
+)
+
+
+# QAT ONNX containing explicit QuantizeLinear /
+# DequantizeLinear nodes.
+# CHANGE when deploying another QAT-trained model.
+ONNX_PATH = Path(
+    os.environ.get(
+        "ONNX_PATH",
+        str(
+            REPO
+            / "models/yolo26n_sanoscience_full_left/"
+              "qat/v6_final/best_qat.onnx"
+        ),
+    )
+)
+
+
+# TensorRT engine output.
+# CHANGE when using another model/run/output directory.
+ENGINE_PATH = Path(
+    os.environ.get(
+        "ENGINE_PATH",
+        str(
+            REPO
+            / "models/yolo26n_sanoscience_full_left/"
+              "qat/v6_final/best_qat_int8.engine"
+        ),
+    )
+)
+
+
+# TensorRT builder workspace.
+# CHANGE according to model size and available GPU memory.
+WORKSPACE_GB = float(
+    os.environ.get(
+        "WORKSPACE_GB",
+        8,
+    )
+)
+
+
+# Explicit target GPU.
+# CHANGE according to available deployment/build hardware.
 DEVICE = os.environ.get("DEVICE")
+
 if DEVICE is None:
-    sys.exit("DEVICE is required (e.g. DEVICE=1). No GPU specified, no run.")
+    sys.exit(
+        "DEVICE is required "
+        "(e.g. DEVICE=0)."
+    )
+
 os.environ["CUDA_VISIBLE_DEVICES"] = DEVICE
 
-import tensorrt as trt                                    # noqa: E402
+
+import tensorrt as trt
 
 
 def sha256(path):
     h = hashlib.sha256()
+
     with open(path, "rb") as f:
-        for chunk in iter(lambda: f.read(1 << 20), b""):
+        for chunk in iter(
+            lambda: f.read(1 << 20),
+            b"",
+        ):
             h.update(chunk)
+
     return h.hexdigest()
 
 
+# ==========================================================
+# INPUT CHECK
+# ==========================================================
+
 print("=" * 60)
-print("TensorRT INT8 engine from Q/DQ ONNX (QAT, no calibrator)")
+print(
+    "TensorRT INT8 engine "
+    "from explicit Q/DQ ONNX"
+)
 print("=" * 60)
-print("tensorrt:", trt.__version__, " device:", DEVICE)
-print("onnx:   ", ONNX_PATH)
-print("engine: ", ENGINE_PATH)
+
+print(
+    "TensorRT:",
+    trt.__version__,
+)
+
+print(
+    "Device:",
+    DEVICE,
+)
+
+print(
+    "ONNX:",
+    ONNX_PATH,
+)
+
+print(
+    "Engine:",
+    ENGINE_PATH,
+)
+
+
 if not ONNX_PATH.exists():
-    sys.exit(f"ONNX not found: {ONNX_PATH}")
+    sys.exit(
+        f"ONNX not found: "
+        f"{ONNX_PATH}"
+    )
 
-logger = trt.Logger(trt.Logger.WARNING)
-builder = trt.Builder(logger)
-network = builder.create_network(0)
-parser = trt.OnnxParser(network, logger)
-with open(ONNX_PATH, "rb") as f:
-    if not parser.parse(f.read()):
-        for i in range(parser.num_errors):
-            print("PARSE ERROR:", parser.get_error(i))
-        sys.exit("ONNX parse failed")
-print(f"parsed: {network.num_layers} layers, "
-      f"{network.num_inputs} inputs, {network.num_outputs} outputs")
 
-config = builder.create_builder_config()
-config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, int(WORKSPACE_GB * (1 << 30)))
-# Explicit Q/DQ -> INT8. TensorRT reads per-tensor/per-channel scales from the
-# QuantizeLinear/DequantizeLinear nodes; layers without Q/DQ run in FP32.
-config.set_flag(trt.BuilderFlag.INT8)
-# Optional deployment-quality knobs (backward-compatible: default off = original behaviour).
-if os.environ.get("FP16", "0") == "1":              # non-INT8 layers fall back to FP16, not FP32
-    config.set_flag(trt.BuilderFlag.FP16)
-if os.environ.get("OPT_LEVEL"):                     # 5 = max fusion search
-    config.builder_optimization_level = int(os.environ["OPT_LEVEL"])
-if os.environ.get("DETAILED", "0") == "1":          # per-layer metadata for inspection
-    config.profiling_verbosity = trt.ProfilingVerbosity.DETAILED
+# ==========================================================
+# PARSE Q/DQ ONNX
+# ==========================================================
 
-print(f"building INT8 engine  (FP16={os.environ.get('FP16','0')} "
-      f"OPT_LEVEL={os.environ.get('OPT_LEVEL','default')} DETAILED={os.environ.get('DETAILED','0')}) ...")
-_t0 = perf_counter()
-serialized = builder.build_serialized_network(network, config)
-build_seconds = perf_counter() - _t0
+logger = trt.Logger(
+    trt.Logger.WARNING
+)
+
+builder = trt.Builder(
+    logger
+)
+
+network = builder.create_network(
+    0
+)
+
+parser = trt.OnnxParser(
+    network,
+    logger,
+)
+
+
+with open(
+    ONNX_PATH,
+    "rb",
+) as f:
+
+    if not parser.parse(
+        f.read()
+    ):
+
+        for i in range(
+            parser.num_errors
+        ):
+            print(
+                "PARSE ERROR:",
+                parser.get_error(i),
+            )
+
+        sys.exit(
+            "ONNX parse failed."
+        )
+
+
+print(
+    f"Parsed: "
+    f"{network.num_layers} layers, "
+    f"{network.num_inputs} inputs, "
+    f"{network.num_outputs} outputs"
+)
+
+
+# ==========================================================
+# TENSORRT CONFIGURATION
+# ==========================================================
+
+config = (
+    builder
+    .create_builder_config()
+)
+
+
+config.set_memory_pool_limit(
+    trt.MemoryPoolType.WORKSPACE,
+    int(
+        WORKSPACE_GB
+        * (1 << 30)
+    ),
+)
+
+
+# Explicit Q/DQ INT8 build.
+#
+# IMPORTANT:
+# No calibration dataset is required here.
+# Quantization scales are already encoded inside the
+# QuantizeLinear / DequantizeLinear nodes of the ONNX graph.
+config.set_flag(
+    trt.BuilderFlag.INT8
+)
+
+
+# ==========================================================
+# OPTIONAL DEPLOYMENT-QUALITY KNOBS
+#
+# All three default to OFF, so an unset environment reproduces
+# the original build exactly. The week-8 per-layer sweep built
+# every engine with OPT_LEVEL=3 and the other two unset.
+# ==========================================================
+
+# Layers with no Q/DQ fall back to FP16 rather than FP32.
+if os.environ.get("FP16", "0") == "1":
+    config.set_flag(
+        trt.BuilderFlag.FP16
+    )
+
+
+# Builder optimization level. 5 = widest fusion search.
+if os.environ.get("OPT_LEVEL"):
+    config.builder_optimization_level = int(
+        os.environ["OPT_LEVEL"]
+    )
+
+
+# Retain per-layer metadata so the engine can be inspected.
+if os.environ.get("DETAILED", "0") == "1":
+    config.profiling_verbosity = (
+        trt.ProfilingVerbosity.DETAILED
+    )
+
+
+# ==========================================================
+# BUILD ENGINE
+# ==========================================================
+
+print(
+    f"\nBuilding TensorRT INT8 engine "
+    f"from Q/DQ graph  "
+    f"(FP16={os.environ.get('FP16', '0')} "
+    f"OPT_LEVEL={os.environ.get('OPT_LEVEL', 'default')} "
+    f"DETAILED={os.environ.get('DETAILED', '0')})..."
+)
+
+
+build_start = perf_counter()
+
+
+serialized = (
+    builder
+    .build_serialized_network(
+        network,
+        config,
+    )
+)
+
+
+build_seconds = (
+    perf_counter()
+    - build_start
+)
+
+
 if serialized is None:
-    sys.exit("BUILD FAILED: builder returned None")
-data = bytes(serialized)
-ENGINE_PATH.parent.mkdir(parents=True, exist_ok=True)
-with open(ENGINE_PATH, "wb") as f:
-    f.write(data)
-print(f"engine built + saved: {ENGINE_PATH} ({len(data)/1e6:.1f} MB, {build_seconds:.1f} s)")
+    sys.exit(
+        "TensorRT build failed."
+    )
 
-# Deserialise to prove the engine is loadable, and report the I/O contract.
-runtime = trt.Runtime(logger)
-engine = runtime.deserialize_cuda_engine(data)
+
+data = bytes(
+    serialized
+)
+
+
+ENGINE_PATH.parent.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
+
+with open(
+    ENGINE_PATH,
+    "wb",
+) as f:
+    f.write(
+        data
+    )
+
+
+print(
+    f"Engine saved: "
+    f"{ENGINE_PATH}"
+)
+
+print(
+    f"Size: "
+    f"{len(data) / 1e6:.1f} MB"
+)
+
+print(
+    f"Build time: "
+    f"{build_seconds:.1f} s"
+)
+
+
+# ==========================================================
+# ENGINE VALIDITY / I-O CHECK
+# ==========================================================
+
+runtime = trt.Runtime(
+    logger
+)
+
+engine = (
+    runtime
+    .deserialize_cuda_engine(
+        data
+    )
+)
+
+
 if engine is None:
-    sys.exit("DESERIALIZE FAILED")
+    sys.exit(
+        "Engine deserialization failed."
+    )
+
+
 io = []
-print("deserialised OK. I/O tensors:")
-for i in range(engine.num_io_tensors):
-    n = engine.get_tensor_name(i)
-    mode = engine.get_tensor_mode(n).name
-    shape = list(engine.get_tensor_shape(n))
-    dtype = engine.get_tensor_dtype(n).name
-    print(f"  {mode:6} {n:10} {shape} {dtype}")
-    io.append({"name": n, "mode": mode, "shape": shape, "dtype": dtype})
+
+
+print(
+    "\nEngine I/O:"
+)
+
+
+for i in range(
+    engine.num_io_tensors
+):
+
+    name = (
+        engine
+        .get_tensor_name(i)
+    )
+
+    mode = (
+        engine
+        .get_tensor_mode(name)
+        .name
+    )
+
+    shape = list(
+        engine
+        .get_tensor_shape(name)
+    )
+
+    dtype = (
+        engine
+        .get_tensor_dtype(name)
+        .name
+    )
+
+
+    print(
+        f"  {mode:<6} "
+        f"{name:<12} "
+        f"{shape} "
+        f"{dtype}"
+    )
+
+
+    io.append(
+        {
+            "name": name,
+            "mode": mode,
+            "shape": shape,
+            "dtype": dtype,
+        }
+    )
+
+
+# ==========================================================
+# PROVENANCE
+# ==========================================================
 
 prov = {
-    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-    "stage": "tensorrt_int8_qdq_build",
-    "tensorrt_version": trt.__version__,
-    "device": DEVICE,
-    "onnx_path": str(ONNX_PATH),
-    "onnx_sha256": sha256(ONNX_PATH),
-    "engine_path": str(ENGINE_PATH),
-    "engine_sha256": sha256(ENGINE_PATH),
-    "engine_bytes": len(data),
-    "workspace_gb": WORKSPACE_GB,
-    "quantization": "explicit Q/DQ (no calibrator)",
-    "num_layers": network.num_layers,
-    "io": io,
-    "build_seconds": build_seconds,
+
+    "timestamp_utc":
+        datetime.now(
+            timezone.utc
+        ).isoformat(),
+
+    "stage":
+        "tensorrt_int8_qdq_build",
+
+    "tensorrt_version":
+        trt.__version__,
+
+    "device":
+        DEVICE,
+
+    "onnx_path":
+        str(
+            ONNX_PATH
+        ),
+
+    "onnx_sha256":
+        sha256(
+            ONNX_PATH
+        ),
+
+    "engine_path":
+        str(
+            ENGINE_PATH
+        ),
+
+    "engine_sha256":
+        sha256(
+            ENGINE_PATH
+        ),
+
+    "engine_bytes":
+        len(
+            data
+        ),
+
+    "workspace_gb":
+        WORKSPACE_GB,
+
+    "quantization":
+        "explicit Q/DQ",
+
+    "calibration":
+        "none",
+
+    "num_layers":
+        network.num_layers,
+
+    "io":
+        io,
+
+    "build_seconds":
+        build_seconds,
 }
-prov_path = Path(str(ENGINE_PATH) + ".provenance.json")
-prov_path.write_text(json.dumps(prov, indent=2))
-print(f"provenance: {prov_path}")
-print("DONE -- INT8 engine built from Q/DQ ONNX and deserialised cleanly.")
+
+
+prov_path = Path(
+    str(
+        ENGINE_PATH
+    )
+    + ".provenance.json"
+)
+
+
+prov_path.write_text(
+    json.dumps(
+        prov,
+        indent=2,
+    )
+)
+
+
+print(
+    "\nProvenance:",
+    prov_path,
+)
+
+
+print(
+    "\nDONE -- QAT Q/DQ ONNX "
+    "compiled to TensorRT INT8."
+)

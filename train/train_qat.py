@@ -10,496 +10,1032 @@ from datetime import datetime, timezone
 import torch
 
 
-# -----------------------------
-# Settings
-# -----------------------------
-# QAT fine-tune of the V1 baseline checkpoint (docs/06). This is the SMOKE-RUN
-# form: 1 epoch by default, to prove plumbing, not to produce accuracy.
-#
-# Invoked through scripts/train/qat_run.sh, which supplies PROJECT (local scratch, so
-# per-epoch checkpoint churn stays off the 50 GB NFS quota) and copies the final
-# artifacts back to NFS on exit.
-MODEL_PATH = Path(os.environ.get(
-    "MODEL_PATH",                              # override to QAT a different baseline (e.g. Week-8 frozen)
-    "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
-    "models/yolo26n_sanoscience_full_left/baseline/best.pt"))
-# Optional override for the split used by PER-EPOCH validation. The default is
-# unchanged, so every earlier run reproduces byte-for-byte.
-#
-# The week-8 layer sweep does NOT set this: pointing per-epoch validation at the
-# 100-image subset was proposed to shorten the sweep and then rejected, because
-# best-checkpoint selection is driven by that fitness signal and a noisier signal
-# perturbs the very layer ranking the sweep exists to produce. Every layer in
-# that sweep validates on the full 6,449-image val set. Reported accuracy is a
-# separate measurement anyway -- taken after training, through the TensorRT
-# engine, on full val at conf=0.001.
-DATA_YAML = Path(os.environ.get(
-    "DATA_YAML",
-    "/home/zcemml1/medtronic_qat_data/datasets/"
-    "sanoscience_yolo_full_nonexpert_stereo/sanoscience_yolo.yaml"
-))
+# ==========================================================
+# USER CONFIGURATION
+# Modify this section when changing the baseline model,
+# dataset, QAT calibration, training setup, or sweep settings.
+# ==========================================================
 
-# Warm-start frames for the INITIAL quantiser scales.
+# Baseline checkpoint used as the starting point for QAT.
+# Replace when quantizing a different model/checkpoint.
+MODEL_PATH = Path(
+    os.environ.get(
+        "MODEL_PATH",
+        "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/"
+        "models/yolo26n_sanoscience_full_left/baseline/best.pt",
+    )
+)
+
+# Dataset YAML used by the Ultralytics trainer.
+# Replace when changing training/validation data.
 #
-# WHY THIS EXISTS AT ALL. Calibration is usually a PTQ concept, and QAT does
-# learn its scales from labelled data during fine-tuning. But mtq.quantize()
-# inserts fake-quant nodes that need SOME initial range, and starting the
-# fine-tune from observed activations rather than uninitialised ones is step 1
-# of NVIDIA's documented QAT recipe. It is a warm start, not PTQ calibration:
-# training then adapts these scales over all 20,756 train frames.
+# Overridable, but the default is unchanged, so every earlier run
+# reproduces exactly.
 #
-# WHY NOT THE TRAINING DATALOADER. It does not exist yet. Ultralytics builds it
-# in _build_train_pipeline() at trainer.py:369, and quantisation has to happen
-# in get_model() at :292 to precede ModelEMA at :373. So the warm start needs an
-# independent image source.
-#
-# WHY NOT THE PTQ 500-FRAME SET. An earlier draft of this script reused it,
-# arguing it removed calibration data as a variable between V4 and V5. That
-# reasoning does not transfer: QAT adapts these scales across the whole train
-# split, so a 500-frame warm start barely constrains the result, and reusing
-# that set would add a dependency on data that is deleted and regenerable.
-# Sampling the train split directly is simpler and equally valid.
+# The week-8 layer sweep deliberately does NOT set this. Pointing
+# per-epoch validation at the 100-image subset was proposed to shorten
+# the sweep and rejected: best-checkpoint selection is driven by that
+# fitness signal, and a noisier signal perturbs the very layer ranking
+# the sweep exists to produce. Every layer in that sweep validates on
+# the full 6,449-image val set. Reported accuracy is a separate
+# measurement anyway -- taken after training, through the TensorRT
+# engine, on full val at conf=0.001.
+DATA_YAML = Path(
+    os.environ.get(
+        "DATA_YAML",
+        "/home/zcemml1/medtronic_qat_data/datasets/"
+        "sanoscience_yolo_full_nonexpert_stereo/"
+        "sanoscience_yolo.yaml",
+    )
+)
+
+# Training images used to initialise QAT quantizer ranges.
+# Replace when using another dataset or training split.
 TRAIN_IMAGES = Path(
     "/home/zcemml1/medtronic_qat_data/datasets/"
-    "sanoscience_yolo_full_nonexpert_stereo/images/train"
+    "sanoscience_yolo_full_nonexpert_stereo/"
+    "images/train"
 )
-N_CALIB = int(os.environ.get("N_CALIB", 128))
-CALIB_SEED = int(os.environ.get("CALIB_SEED", 42))
 
+# Number of representative frames used to warm-start quantizer ranges.
+N_CALIB = int(
+    os.environ.get("N_CALIB", 128)
+)
+
+# Seed controlling reproducible warm-start sampling.
+CALIB_SEED = int(
+    os.environ.get("CALIB_SEED", 42)
+)
+
+# GPU selection.
+# DEVICE is deliberately required rather than guessed.
 DEVICE = os.environ.get("DEVICE")
 if DEVICE is None:
-    sys.exit("DEVICE is required (e.g. DEVICE=1). No GPU specified, no run.")
+    sys.exit(
+        "DEVICE is required "
+        "(e.g. DEVICE=1)."
+    )
 
-EPOCHS = int(os.environ.get("EPOCHS", 1))
-# Early stopping (opt-in). 0 = OFF (default: run the full fixed EPOCHS -- unchanged,
-# backward-compatible). >0 = stop after PATIENCE epochs with no validation improvement.
-# In Ultralytics 8.4.90 the detection `fitness` weights are [0,0,0,1.0] = PURE mAP50-95
-# (DetMetrics.fitness -> Metric.fitness, verified in ultralytics/utils/metrics.py), so
-# BOTH this early-stopping and the save_best_qat checkpoint track mAP50-95 -- not the old
-# 0.1*mAP50+0.9*mAP50-95 blend, and not mAP50.
-PATIENCE = int(os.environ.get("PATIENCE", 0))
-RUN_NAME = os.environ.get("RUN_NAME", "qat_smoke")
-PROJECT = os.environ.get("PROJECT", "/tmp/zcemml1_qat")
-IMG_SIZE = int(os.environ.get("IMG_SIZE", 640))
-BATCH = int(os.environ.get("BATCH", 16))
+# Main training controls.
+EPOCHS = int(
+    os.environ.get("EPOCHS", 1)
+)
 
-# Dataloader worker processes. Ultralytics defaults to 8, spawned via os.fork().
-# Under this host's strict overcommit (vm.overcommit_memory=2), forking a
-# multi-GB training process 8 times demands 8x that much committed address space
-# at once, which fails as OSError [Errno 12] on a busy shared box -- independent
-# of how much RAM is actually free. Default low; raise only when the box is
-# quiet. workers=0 loads data in-process (slowest, but forks nothing).
-WORKERS = int(os.environ.get("WORKERS", 4))
-CACHE = os.environ.get("CACHE", "")               # 'ram'/'disk'/'' -> feed GPU without fork-workers (Geneva)
-# FREEZE_EXCEPT=L -> freeze the WHOLE network except model.L (per-layer QAT sensitivity sweep).
-# Unset -> default behaviour unchanged (no freeze). Ultralytics freeze accepts a list of indices.
-FREEZE_EXCEPT = os.environ.get("FREEZE_EXCEPT")
-N_LAYERS = int(os.environ.get("N_LAYERS", 24))    # model.0 .. model.23
+# 0 disables early stopping.
+# >0 stops after this many epochs without validation improvement.
+PATIENCE = int(
+    os.environ.get("PATIENCE", 0)
+)
 
-# Single-GPU, to match V1's training conditions. DDP would add a second variable
-# and would also wrap the model in a way the quantised modules have not been
-# checked against.
+RUN_NAME = os.environ.get(
+    "RUN_NAME",
+    "qat_smoke"
+)
+
+PROJECT = os.environ.get(
+    "PROJECT",
+    "/tmp/zcemml1_qat"
+)
+
+# Input resolution must remain compatible with the model
+# and later TensorRT engine input.
+IMG_SIZE = int(
+    os.environ.get("IMG_SIZE", 640)
+)
+
+# Adapt batch size to the model and available GPU memory.
+BATCH = int(
+    os.environ.get("BATCH", 16)
+)
+
+# Adapt worker count to the host/memory environment.
+WORKERS = int(
+    os.environ.get("WORKERS", 4)
+)
+
+# Ultralytics dataloader caching: "ram" | "disk" | "" (off).
+# Feeds the GPU without fork-based workers, which matters on hosts
+# under strict overcommit where forking a multi-GB training process
+# fails as OSError [Errno 12] regardless of free RAM.
+CACHE = os.environ.get(
+    "CACHE",
+    ""
+)
+
+# Per-layer QAT sensitivity sweep.
+# FREEZE_EXCEPT=L freezes the WHOLE network except model.L, so exactly
+# one layer trains. Unset -> no freeze, default behaviour unchanged.
+FREEZE_EXCEPT = os.environ.get(
+    "FREEZE_EXCEPT"
+)
+
+# Layer count used to build that freeze list: model.0 .. model.{N-1}.
+N_LAYERS = int(
+    os.environ.get("N_LAYERS", 24)
+)
+
+# Fine-tuning learning-rate parameters.
+LR0 = float(
+    os.environ.get("LR0", 1e-3)
+)
+
+LRF = float(
+    os.environ.get("LRF", 0.01)
+)
+
+# Quantization configuration knobs.
+# WEIGHT_AXIS:
+#   0    -> per-channel weight quantization
+#   None -> per-tensor weight quantization
+WEIGHT_AXIS = os.environ.get(
+    "WEIGHT_AXIS",
+    "0"
+)
+
+# Optional layer patterns to exclude from quantization.
+DISABLE_LAYERS = os.environ.get(
+    "DISABLE_LAYERS",
+    ""
+)
+
+# Initial range calibration method.
+# Supported:
+# max | entropy | mse | percentile
+CALIB_METHOD = os.environ.get(
+    "CALIB_METHOD",
+    "max"
+).lower()
+
+CALIB_PERCENTILE = float(
+    os.environ.get(
+        "CALIB_PERCENTILE",
+        "99.99"
+    )
+)
+
+CALIB_NUM_BINS = int(
+    os.environ.get(
+        "CALIB_NUM_BINS",
+        "2048"
+    )
+)
+
 os.environ["CUDA_VISIBLE_DEVICES"] = DEVICE
 
-import cv2                                              # noqa: E402
-import numpy as np                                      # noqa: E402
-from ultralytics import YOLO                            # noqa: E402
-from ultralytics.models.yolo.detect import DetectionTrainer   # noqa: E402
-import modelopt.torch.quantization as mtq               # noqa: E402
-import modelopt.torch.opt as mto                        # noqa: E402
-from modelopt.torch.quantization.nn import TensorQuantizer   # noqa: E402
+
+import cv2
+import numpy as np
+from ultralytics import YOLO
+from ultralytics.models.yolo.detect import DetectionTrainer
+
+import modelopt.torch.quantization as mtq
+import modelopt.torch.opt as mto
+from modelopt.torch.quantization.nn import TensorQuantizer
 
 
 def count_quantizers(model):
-    """Count the unit modelopt itself reports at insertion: TensorQuantizer
-    instances. NOT quantised modules -- a QuantConv2d holds several quantizers
-    (input, weight, ...), so a module count (e.g. 241) does not match the
-    quantizer count (608) and silently looks like a partial reload."""
-    total = sum(1 for m in model.modules() if isinstance(m, TensorQuantizer))
-    with_amax = sum(1 for m in model.modules()
-                    if isinstance(m, TensorQuantizer) and getattr(m, "_amax", None) is not None)
+    total = sum(
+        1
+        for m in model.modules()
+        if isinstance(m, TensorQuantizer)
+    )
+
+    with_amax = sum(
+        1
+        for m in model.modules()
+        if isinstance(m, TensorQuantizer)
+        and getattr(m, "_amax", None) is not None
+    )
+
     return total, with_amax
 
 
-# Number of TensorQuantizers inserted at quantise time, captured live so the
-# reload gate asserts against what THIS run actually inserted, never a literal.
 _inserted_quantizers = None
-# The composed quant config + active sweep knobs for THIS run (recorded in provenance).
 _quant_cfg = None
 _quant_knobs = {}
 
 
 def sha256(path):
     h = hashlib.sha256()
+
     with open(path, "rb") as f:
-        for chunk in iter(lambda: f.read(1 << 20), b""):
+        for chunk in iter(
+            lambda: f.read(1 << 20),
+            b"",
+        ):
             h.update(chunk)
+
     return h.hexdigest()
 
 
-# -----------------------------
-# Calibration forward loop
-# -----------------------------
-# Preprocessing copied verbatim from validate_engine_parity.py / int8_calibrator.py.
-# Duplicated rather than imported because those are flat scripts. If this drifts
-# from the inference path, the initial scales are computed on the wrong input
-# distribution -- the same silent-corruption risk as the PTQ calibrator.
 def letterbox(img, new_shape):
     h0, w0 = img.shape[:2]
-    r = min(new_shape / h0, new_shape / w0)
-    nw, nh = int(round(w0 * r)), int(round(h0 * r))
-    resized = cv2.resize(img, (nw, nh), interpolation=cv2.INTER_LINEAR)
-    canvas = np.full((new_shape, new_shape, 3), 114, dtype=np.uint8)
-    top, left = (new_shape - nh) // 2, (new_shape - nw) // 2
-    canvas[top:top + nh, left:left + nw] = resized
+
+    r = min(
+        new_shape / h0,
+        new_shape / w0,
+    )
+
+    nw = int(round(w0 * r))
+    nh = int(round(h0 * r))
+
+    resized = cv2.resize(
+        img,
+        (nw, nh),
+        interpolation=cv2.INTER_LINEAR,
+    )
+
+    canvas = np.full(
+        (new_shape, new_shape, 3),
+        114,
+        dtype=np.uint8,
+    )
+
+    top = (new_shape - nh) // 2
+    left = (new_shape - nw) // 2
+
+    canvas[
+        top:top + nh,
+        left:left + nw
+    ] = resized
+
     return canvas
 
 
 def preprocess(img_bgr, imgsz):
-    lb = letterbox(img_bgr, imgsz)
-    im = lb[:, :, ::-1].transpose(2, 0, 1)
-    return np.ascontiguousarray(im, dtype=np.float32)[None] / 255.0
+
+    # Modify if the replacement model uses a different
+    # input preprocessing convention.
+    lb = letterbox(
+        img_bgr,
+        imgsz,
+    )
+
+    im = lb[
+        :, :, ::-1
+    ].transpose(
+        2, 0, 1
+    )
+
+    return (
+        np.ascontiguousarray(
+            im,
+            dtype=np.float32,
+        )[None]
+        / 255.0
+    )
 
 
-def make_forward_loop(frames, device):
-    """Returns the callable mtq.quantize uses to observe activation ranges."""
+def make_forward_loop(
+    frames,
+    device,
+):
     def forward_loop(model):
         model.eval()
+
         with torch.no_grad():
             for i, fp in enumerate(frames):
-                img = cv2.imread(str(fp))
+
+                img = cv2.imread(
+                    str(fp)
+                )
+
                 if img is None:
-                    raise RuntimeError(f"Calibration frame unreadable: {fp}")
-                x = torch.from_numpy(preprocess(img, IMG_SIZE)).to(
-                    next(model.parameters()).device)   # follow the model's device (not a captured one)
+                    raise RuntimeError(
+                        f"Calibration frame unreadable: {fp}"
+                    )
+
+                x = torch.from_numpy(
+                    preprocess(
+                        img,
+                        IMG_SIZE,
+                    )
+                ).to(
+                    next(
+                        model.parameters()
+                    ).device
+                )
+
                 model(x)
-                if (i + 1) % 32 == 0:
-                    print(f"    calibrated {i + 1}/{len(frames)}", flush=True)
+
+                if (
+                    i + 1
+                ) % 32 == 0:
+                    print(
+                        f"calibrated "
+                        f"{i + 1}/"
+                        f"{len(frames)}",
+                        flush=True,
+                    )
+
         model.train()
+
     return forward_loop
 
 
-# -----------------------------
-# Sweep knobs: composable quant config + calibration-method hook
-# -----------------------------
-# All knobs default to INT8_DEFAULT_CFG's EXACT behaviour, so a default run == V6.
-# Built via copy.deepcopy(mtq.INT8_DEFAULT_CFG); modelopt's object is never mutated.
 def compose_quant_config():
-    """Config-level knobs. WEIGHT_AXIS (0 per-channel | None per-tensor);
-    DISABLE_LAYERS (comma-sep fnmatch patterns -> {'enable': False}).
-    Verified: default (both unset) is byte-identical to INT8_DEFAULT_CFG."""
-    cfg = copy.deepcopy(mtq.INT8_DEFAULT_CFG)
+
+    # Modify this function when changing:
+    # - quantization bit-width/configuration,
+    # - weight granularity,
+    # - selectively quantized layers,
+    # - custom ModelOpt quantization rules.
+
+    cfg = copy.deepcopy(
+        mtq.INT8_DEFAULT_CFG
+    )
+
     knobs = {}
-    waxis = os.environ.get("WEIGHT_AXIS") or "0"          # unset/empty -> per-channel default
+
+    waxis = (
+        WEIGHT_AXIS or "0"
+    )
+
     if str(waxis).lower() == "none":
-        cfg["quant_cfg"]["*weight_quantizer"]["axis"] = None
+        cfg[
+            "quant_cfg"
+        ][
+            "*weight_quantizer"
+        ][
+            "axis"
+        ] = None
+
         knobs["WEIGHT_AXIS"] = None
+
     elif str(waxis) != "0":
-        sys.exit(f"WEIGHT_AXIS must be 0|None (got {waxis})")
-    dis = os.environ.get("DISABLE_LAYERS", "").strip()
+        sys.exit(
+            "WEIGHT_AXIS must be "
+            "0 or None."
+        )
+
+    dis = DISABLE_LAYERS.strip()
+
     if dis:
-        pats = [p.strip() for p in dis.split(",") if p.strip()]
-        for p in pats:
-            cfg["quant_cfg"][p] = {"enable": False}
-        knobs["DISABLE_LAYERS"] = pats
+        patterns = [
+            p.strip()
+            for p in dis.split(",")
+            if p.strip()
+        ]
+
+        for pattern in patterns:
+            cfg[
+                "quant_cfg"
+            ][pattern] = {
+                "enable": False
+            }
+
+        knobs[
+            "DISABLE_LAYERS"
+        ] = patterns
+
     return cfg, knobs
 
 
-def _calibrate_qat(model, cfg, forward_loop):
-    """Calibration-method knob. CALIB_METHOD=max -> untouched default path (byte-identical to V6).
-    entropy|mse|percentile -> the VERIFIED per-quantizer histogram hook (smoke: 127 hist + 481 max,
-    0 fails): insert with algorithm=None, enable_stats_collection, run forward_loop, then
-    load_calib_amax on each ENABLED quantizer. Histogram methods hit the per-tensor *input_quantizer;
-    weights stay per-channel max."""
-    method = (os.environ.get("CALIB_METHOD") or "max").lower()
-    if method == "max":
-        return mtq.quantize(model, cfg, forward_loop)                # unchanged V6 path
-    if method not in ("entropy", "mse", "percentile"):
-        sys.exit(f"CALIB_METHOD must be max|entropy|mse|percentile (got {method})")
+def calibrate_qat(
+    model,
+    cfg,
+    forward_loop,
+):
 
-    from modelopt.torch.quantization.model_calib import enable_stats_collection
-    from modelopt.torch.quantization.calib.histogram import HistogramCalibrator
-    # HISTOGRAM CALIB MUST RUN ON GPU. In get_model the model is still on CPU, and CPU
-    # np.histogram over 128 frames x ~127 quantizers stalls (0% GPU, all cores maxed). On GPU
-    # it is ~0.2 s/frame. Move to GPU for calibration; Ultralytics keeps it there afterwards.
+    # Modify CALIB_METHOD and related parameters to compare
+    # different quantizer range-initialization strategies.
+
+    method = CALIB_METHOD
+
+    if method == "max":
+        return mtq.quantize(
+            model,
+            cfg,
+            forward_loop,
+        )
+
+    if method not in (
+        "entropy",
+        "mse",
+        "percentile",
+    ):
+        sys.exit(
+            "CALIB_METHOD must be "
+            "max, entropy, mse or percentile."
+        )
+
+    from modelopt.torch.quantization.model_calib import (
+        enable_stats_collection,
+    )
+    from modelopt.torch.quantization.calib.histogram import (
+        HistogramCalibrator,
+    )
+
     if torch.cuda.is_available():
         model.cuda()
+
     cfg = copy.deepcopy(cfg)
-    cfg["quant_cfg"]["*input_quantizer"]["calibrator"] = "histogram"
-    if os.environ.get("CALIB_NUM_BINS"):
-        cfg["quant_cfg"]["*input_quantizer"]["num_bins"] = int(os.environ["CALIB_NUM_BINS"])
-    cfg["algorithm"] = None                                          # _no_calibrate -> insert only
-    mtq.quantize(model, cfg, forward_loop=None)                      # 1) insert, no auto-calib
-    enable_stats_collection(model)                                  # 2) arm stats collection
-    forward_loop(model)                                             # 3) collect histograms + max
-    pct = float(os.environ.get("CALIB_PERCENTILE", "99.99"))
-    # 4) load amax AND switch each quantizer from calib mode back to quant mode. This mirrors
-    # modelopt's finish_stats_collection (enable_quant + disable_calib). WITHOUT the switch the
-    # quantizers stay in calibration mode -> training does NOT fake-quant (not real QAT) and the
-    # ONNX export emits 0 Q/DQ nodes. Iterate `not _disabled` (what enable_stats_collection armed).
+
+    cfg[
+        "quant_cfg"
+    ][
+        "*input_quantizer"
+    ][
+        "calibrator"
+    ] = "histogram"
+
+    cfg[
+        "quant_cfg"
+    ][
+        "*input_quantizer"
+    ][
+        "num_bins"
+    ] = CALIB_NUM_BINS
+
+    cfg["algorithm"] = None
+
+    mtq.quantize(
+        model,
+        cfg,
+        forward_loop=None,
+    )
+
+    enable_stats_collection(
+        model
+    )
+
+    forward_loop(
+        model
+    )
+
     for _, q in model.named_modules():
-        if not isinstance(q, TensorQuantizer) or q._disabled:
+
+        if (
+            not isinstance(
+                q,
+                TensorQuantizer,
+            )
+            or q._disabled
+        ):
             continue
-        cal = getattr(q, "_calibrator", None)
-        if cal is not None and not getattr(q, "_dynamic", False):
-            if isinstance(cal, HistogramCalibrator):
-                kw = {"percentile": pct} if method == "percentile" else {}
-                if cal.compute_amax(method, **kw) is not None:
-                    q.load_calib_amax(method=method, **kw)
-            elif cal.compute_amax() is not None:
+
+        cal = getattr(
+            q,
+            "_calibrator",
+            None,
+        )
+
+        if (
+            cal is not None
+            and not getattr(
+                q,
+                "_dynamic",
+                False,
+            )
+        ):
+
+            if isinstance(
+                cal,
+                HistogramCalibrator,
+            ):
+                kwargs = (
+                    {
+                        "percentile":
+                        CALIB_PERCENTILE
+                    }
+                    if method == "percentile"
+                    else {}
+                )
+
+                if (
+                    cal.compute_amax(
+                        method,
+                        **kwargs,
+                    )
+                    is not None
+                ):
+                    q.load_calib_amax(
+                        method=method,
+                        **kwargs,
+                    )
+
+            elif (
+                cal.compute_amax()
+                is not None
+            ):
                 q.load_calib_amax()
-        q.enable_quant()       # <-- calib mode -> quant mode (the missing switch)
+
+        q.enable_quant()
         q.disable_calib()
+
     return model
 
 
-# -----------------------------
-# HAZARD 1 -- quantise BEFORE ModelEMA snapshots the model
-# -----------------------------
-# Ultralytics' BaseTrainer._setup_train runs:
-#
-#     line 292:  ckpt = self.setup_model()      -> calls self.get_model()  (line 782)
-#     ...
-#     line 373:  self.ema = ModelEMA(self.model)
-#
-# get_model() is therefore 81 lines AHEAD of the EMA snapshot. Overriding it is
-# what makes quantisation-before-EMA structural rather than incidental. Quantising
-# from a callback such as on_pretrain_routine_end (line 384) would run AFTER line
-# 373, leaving EMA holding an un-quantised copy whose state_dict keys no longer
-# match the live model -- EMA.update() would then either KeyError or silently
-# average the wrong tensors.
-class QATTrainer(DetectionTrainer):
-    """DetectionTrainer that returns an already-quantised model.
+class QATTrainer(
+    DetectionTrainer
+):
 
-    Everything else in Ultralytics -- augmentation, loss, LR schedule, logging --
-    is inherited untouched. mtq.quantize() swaps modules in place and preserves
-    the module tree, so DetectionModel.loss() and .forward() still work.
-    """
+    def get_model(
+        self,
+        cfg=None,
+        weights=None,
+        verbose=True,
+    ):
+        model = super().get_model(
+            cfg=cfg,
+            weights=weights,
+            verbose=verbose,
+        )
 
-    def get_model(self, cfg=None, weights=None, verbose=True):
-        model = super().get_model(cfg=cfg, weights=weights, verbose=verbose)
+        # Dataset-specific grouping logic.
+        # Replace if filenames do not encode correlated
+        # sequences using "_left_".
+        all_train = sorted(
+            TRAIN_IMAGES.glob("*.jpg")
+        )
 
-        # Seeded, episode-diverse sample of the train split. One frame per
-        # episode where possible: frames within an episode are highly correlated
-        # (see CLAUDE.md), so N random frames would span far fewer episodes and
-        # observe a narrower activation range than the count suggests.
-        all_train = sorted(TRAIN_IMAGES.glob("*.jpg"))
         if not all_train:
-            sys.exit(f"No training images found at {TRAIN_IMAGES}")
-        by_episode = {}
-        for p in all_train:
-            by_episode.setdefault(p.name.split("_left_")[0], []).append(p)
-        rng = random.Random(CALIB_SEED)
-        episodes = sorted(by_episode)
-        chosen = rng.sample(episodes, min(N_CALIB, len(episodes)))
-        frames = [rng.choice(by_episode[e]) for e in sorted(chosen)]
+            sys.exit(
+                f"No training images found at "
+                f"{TRAIN_IMAGES}"
+            )
 
-        device = next(model.parameters()).device
-        print(f"\n[QAT] warm-starting quantiser ranges from {len(frames)} train "
-              f"frames across {len(chosen)} episodes (seed {CALIB_SEED})", flush=True)
-        print("[QAT] quantising BEFORE ModelEMA (get_model :292 vs ModelEMA :373)", flush=True)
-        global _quant_cfg, _quant_knobs
-        _quant_cfg, _quant_knobs = compose_quant_config()
-        _calib_method = os.environ.get("CALIB_METHOD") or "max"
-        print(f"[QAT] knobs: {_quant_knobs or '(config defaults)'}  "
-              f"CALIB_METHOD={_calib_method}", flush=True)
-        model = _calibrate_qat(model, _quant_cfg, make_forward_loop(frames, device))
-        mtq.print_quant_summary(model)
+        by_group = {}
+
+        for p in all_train:
+
+            group = p.name.split(
+                "_left_"
+            )[0]
+
+            by_group.setdefault(
+                group,
+                [],
+            ).append(p)
+
+        rng = random.Random(
+            CALIB_SEED
+        )
+
+        groups = sorted(
+            by_group
+        )
+
+        chosen = rng.sample(
+            groups,
+            min(
+                N_CALIB,
+                len(groups),
+            ),
+        )
+
+        frames = [
+            rng.choice(
+                by_group[g]
+            )
+            for g in sorted(chosen)
+        ]
+
+        device = next(
+            model.parameters()
+        ).device
+
+        global _quant_cfg
+        global _quant_knobs
+
+        (
+            _quant_cfg,
+            _quant_knobs,
+        ) = compose_quant_config()
+
+        model = calibrate_qat(
+            model,
+            _quant_cfg,
+            make_forward_loop(
+                frames,
+                device,
+            ),
+        )
+
+        mtq.print_quant_summary(
+            model
+        )
 
         global _inserted_quantizers
-        _inserted_quantizers, with_amax = count_quantizers(model)
-        print(f"[QAT] inserted {_inserted_quantizers} TensorQuantizers "
-              f"({with_amax} with scales) -- this is the reload gate target",
-              flush=True)
+
+        (
+            _inserted_quantizers,
+            with_amax,
+        ) = count_quantizers(
+            model
+        )
+
+        print(
+            f"[QAT] inserted "
+            f"{_inserted_quantizers} "
+            f"TensorQuantizers "
+            f"({with_amax} with scales)",
+            flush=True,
+        )
+
         return model
 
     def save_model(self):
-        # Ultralytics' save_model() torch.save's the live module, which pickles
-        # modelopt's dynamically-generated QuantConv2d by class reference and
-        # fails. The `save=False` override is NOT enough on its own: the trainer
-        # calls save_model() unconditionally on the final epoch
-        # (`if (self.args.save or final_epoch) and self.save_model()`, :563), so
-        # the last epoch always tried to save and always crashed.
-        #
-        # We skip Ultralytics' checkpoint entirely and write the durable artifact
-        # with mto.save() in the post-training block. NOTE: this also removes
-        # Ultralytics' best-epoch tracking, so a MULTI-epoch fine-tune keeps only
-        # the FINAL EMA, not the best. A real fine-tune needs an mto-based
-        # checkpoint callback for best-tracking -- flagged in docs/06.
         return None
 
 
-# -----------------------------
-# HAZARD 3 -- prove the quantised structure can be rebuilt on load
-# -----------------------------
-# Ultralytics pickles the EMA MODULE OBJECT into the checkpoint ("ema": ema,
-# with "model": None), so YOLO(path) reconstructs a DetectionModel its own way
-# and does not know how to re-create modelopt's quantised modules. mto.save
-# records the modelopt state alongside the weights; mto.restore replays it onto
-# a freshly-built model, rebuilding the same structure before weights load.
-def save_qat_state(model, out_dir):
-    out_dir.mkdir(parents=True, exist_ok=True)
-    p = out_dir / "qat_modelopt_state.pt"
-    mto.save(model, p)
-    print(f"[QAT] modelopt state saved: {p} ({p.stat().st_size / 1e6:.1f} MB)")
+def save_qat_state(
+    model,
+    out_dir,
+):
+    out_dir.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    p = (
+        out_dir
+        / "qat_modelopt_state.pt"
+    )
+
+    mto.save(
+        model,
+        p,
+    )
+
+    print(
+        f"[QAT] state saved: {p}"
+    )
+
     return p
 
 
-def verify_reload(state_path):
-    """Rebuild from the ORIGINAL baseline, replay modelopt state, ASSERT parity.
+def verify_reload(
+    state_path,
+):
+    fresh = YOLO(
+        str(MODEL_PATH)
+    ).model
 
-    The gate is an assertion, not a print: the restored TensorQuantizer count
-    must equal what quantise() inserted THIS run, or the script exits non-zero.
-    That is what makes save->restore a real check -- a wrong count fails the run
-    rather than scrolling past as a smaller-but-plausible number.
-    """
-    print("\n[QAT] verifying reload symmetry")
-    fresh = YOLO(str(MODEL_PATH)).model
-    restored = mto.restore(fresh, state_path)
-    n_quant, with_amax = count_quantizers(restored)
-    print(f"  restored TensorQuantizers: {n_quant} ({with_amax} with scales)")
-    print(f"  inserted at quantise time: {_inserted_quantizers}")
+    restored = mto.restore(
+        fresh,
+        state_path,
+    )
+
+    (
+        n_quant,
+        with_amax,
+    ) = count_quantizers(
+        restored
+    )
 
     if _inserted_quantizers is None:
-        sys.exit("[QAT] reload gate: inserted count unknown -- cannot verify.")
-    if n_quant != _inserted_quantizers:
         sys.exit(
-            f"[QAT] RELOAD GATE FAILED: restored {n_quant} quantizers but "
-            f"{_inserted_quantizers} were inserted. Structure did not round-trip."
+            "Inserted quantizer count unavailable."
         )
+
+    if (
+        n_quant
+        != _inserted_quantizers
+    ):
+        sys.exit(
+            f"Reload failed: "
+            f"{n_quant} restored vs "
+            f"{_inserted_quantizers} inserted."
+        )
+
     if with_amax == 0:
-        sys.exit("[QAT] RELOAD GATE FAILED: no restored quantizer has a scale "
-                 "(amax) -- the trained scales did not survive save/restore.")
-    print(f"  [QAT] reload gate PASSED: {n_quant} quantizers, scales intact")
-    return n_quant, with_amax
+        sys.exit(
+            "Reload failed: "
+            "no quantization scales restored."
+        )
+
+    print(
+        f"[QAT] reload gate PASSED: "
+        f"{n_quant} quantizers"
+    )
+
+    return (
+        n_quant,
+        with_amax,
+    )
 
 
-# -----------------------------
-# Best-epoch checkpoint (multi-epoch fine-tune)
-# -----------------------------
-# save_model() is disabled (it cannot pickle modelopt's dynamic QuantConv2d), so
-# Ultralytics keeps NO best.pt -- without this a multi-epoch run would retain only
-# the FINAL EMA. This callback snapshots the modelopt state whenever validation
-# fitness improves, giving a best-epoch artifact alongside the final one. For a
-# 1-epoch smoke the best IS the final, so nothing changes there.
-_best_fitness = float("-inf")
-
-
-def save_best_qat(trainer):
-    global _best_fitness
-    fit = getattr(trainer, "fitness", None)
-    if fit is None or fit <= _best_fitness:
-        return
-    _best_fitness = fit
-    model = trainer.ema.ema if getattr(trainer, "ema", None) else trainer.model
-    out = Path(PROJECT) / RUN_NAME / "qat_modelopt_state_best.pt"
-    mto.save(model, out)
-    print(f"[QAT] best fitness {fit:.5f} @ epoch {getattr(trainer, 'epoch', '?')} "
-          f"-> saved {out.name}", flush=True)
-
-
-# -----------------------------
-# Run
-# -----------------------------
-print("=" * 60)
-print(f"QAT fine-tune (smoke form)  run={RUN_NAME}  epochs={EPOCHS}")
-print("=" * 60)
-print("Model:   ", MODEL_PATH)
-print("Data:    ", DATA_YAML)
-print("Device:  ", DEVICE, "(single-GPU, matching V1)")
-print("Project: ", PROJECT, "(local scratch -- churn stays off the NFS quota)")
-print("Warm-start:", TRAIN_IMAGES, f"({N_CALIB} train frames, seed {CALIB_SEED})")
-
-if not MODEL_PATH.exists():
-    sys.exit(f"Baseline checkpoint not found: {MODEL_PATH}")
-if not DATA_YAML.exists():
-    sys.exit(f"Dataset YAML not found: {DATA_YAML}")
-
-# -----------------------------
-# HAZARD 2 -- amp=False, a DOCUMENTED deviation from V1's recipe
-# -----------------------------
-# Ultralytics enables AMP by default (trainer.py:453, `with autocast(self.amp)`).
-# Fake-quantisation inserts explicit quantise/dequantise ops whose scales are
-# FP32; running them inside an FP16 autocast region mixes dtypes at the quantiser
-# boundary and is a known source of wrong scales and dtype errors.
-#
-# V1 trained WITH amp. So QAT differs from the baseline recipe in this one
-# respect, and it must be stated in docs/06 rather than buried: any V5-vs-V1
-# comparison carries "amp=False" as a known, deliberate difference.
-overrides = dict(
-    model=str(MODEL_PATH),
-    data=str(DATA_YAML),
-    epochs=EPOCHS,
-    patience=PATIENCE,    # 0 -> Ultralytics disables (patience or inf); >0 -> early-stop on mAP50-95 plateau
-    imgsz=IMG_SIZE,
-    batch=BATCH,
-    workers=WORKERS,
-    device=int(DEVICE) if DEVICE.isdigit() else DEVICE,
-    project=PROJECT,
-    name=RUN_NAME,
-    exist_ok=True,
-    amp=False,            # <-- hazard 2
-    val=True,
-    plots=False,
-    # HAZARD 3 -- Ultralytics' save_model() (trainer.py:682) does
-    # torch.save({"ema": ema, ...}), pickling the live module. modelopt generates
-    # QuantConv2d as a DYNAMIC class at runtime, which pickle cannot resolve by
-    # attribute lookup -> PicklingError at end of every epoch. So Ultralytics'
-    # native checkpointing is disabled; the durable checkpoint is written by
-    # mto.save() in the post-training block instead, which stores the modelopt
-    # recipe + state_dict and is reloadable via mto.restore (NOT YOLO(path)).
-    save=False,
-    # QAT fine-tune LR: the baseline is already converged, so start LOW (~1% of
-    # V1's lr0=0.01) and let Ultralytics' scheduler decay it (lrf = decay tail).
-    lr0=float(os.environ.get("LR0", 1e-3)),
-    lrf=float(os.environ.get("LRF", 0.01)),
-    cache=(CACHE if CACHE else False),   # RAM/disk cache -> feed GPU without fork-based dataloader workers
+_best_fitness = float(
+    "-inf"
 )
 
-# Per-layer sweep: freeze all layers EXCEPT model.FREEZE_EXCEPT (train only that one).
+
+def save_best_qat(
+    trainer,
+):
+    global _best_fitness
+
+    fit = getattr(
+        trainer,
+        "fitness",
+        None,
+    )
+
+    if (
+        fit is None
+        or fit <= _best_fitness
+    ):
+        return
+
+    _best_fitness = fit
+
+    model = (
+        trainer.ema.ema
+        if getattr(
+            trainer,
+            "ema",
+            None,
+        )
+        else trainer.model
+    )
+
+    out = (
+        Path(PROJECT)
+        / RUN_NAME
+        / "qat_modelopt_state_best.pt"
+    )
+
+    mto.save(
+        model,
+        out,
+    )
+
+    print(
+        f"[QAT] best fitness "
+        f"{fit:.5f} "
+        f"@ epoch "
+        f"{getattr(trainer, 'epoch', '?')} "
+        f"-> {out.name}",
+        flush=True,
+    )
+
+
+print("=" * 60)
+print(
+    f"QAT fine-tune: "
+    f"{RUN_NAME}"
+)
+print("=" * 60)
+
+print(
+    "Model:",
+    MODEL_PATH,
+)
+
+print(
+    "Dataset:",
+    DATA_YAML,
+)
+
+print(
+    "Device:",
+    DEVICE,
+)
+
+print(
+    "Epochs:",
+    EPOCHS,
+)
+
+print(
+    "Patience:",
+    PATIENCE,
+)
+
+print(
+    "Batch:",
+    BATCH,
+)
+
+print(
+    "Calibration:",
+    N_CALIB,
+    CALIB_METHOD,
+)
+
+
+if not MODEL_PATH.exists():
+    sys.exit(
+        f"Baseline checkpoint not found: "
+        f"{MODEL_PATH}"
+    )
+
+if not DATA_YAML.exists():
+    sys.exit(
+        f"Dataset YAML not found: "
+        f"{DATA_YAML}"
+    )
+
+
+overrides = dict(
+
+    model=str(
+        MODEL_PATH
+    ),
+
+    data=str(
+        DATA_YAML
+    ),
+
+    epochs=EPOCHS,
+
+    # Modify for fixed-duration vs early-stopping experiments.
+    patience=PATIENCE,
+
+    imgsz=IMG_SIZE,
+
+    batch=BATCH,
+
+    workers=WORKERS,
+
+    device=(
+        int(DEVICE)
+        if DEVICE.isdigit()
+        else DEVICE
+    ),
+
+    project=PROJECT,
+
+    name=RUN_NAME,
+
+    exist_ok=True,
+
+    # Keep disabled for the reference ModelOpt QAT configuration.
+    # Change only after validating compatibility with the chosen QAT method.
+    amp=False,
+
+    val=True,
+
+    plots=False,
+
+    # ModelOpt states are saved through mto.save() instead.
+    save=False,
+
+    # Main QAT fine-tuning hyperparameters.
+    lr0=LR0,
+    lrf=LRF,
+
+    # RAM/disk cache -> feed the GPU without fork-based workers.
+    cache=(
+        CACHE
+        if CACHE
+        else False
+    ),
+)
+
+
+# Per-layer sweep: freeze every layer EXCEPT model.FREEZE_EXCEPT.
 if FREEZE_EXCEPT is not None:
     _keep = int(FREEZE_EXCEPT)
-    overrides["freeze"] = [i for i in range(N_LAYERS) if i != _keep]
-    print(f"[QAT] FREEZE_EXCEPT={_keep}: freezing all layers except model.{_keep} "
-          f"(freeze list len {len(overrides['freeze'])})")
 
-print("\n[QAT] amp=False (deviation from V1 -- see docs/06)")
-trainer = QATTrainer(overrides=overrides)
-trainer.add_callback("on_fit_epoch_end", save_best_qat)
-trainer.train()                                                        # calls theentire training loop - optimiser, backprogration, LR & scheduling => BaseTrainer.train()
+    overrides["freeze"] = [
+        i
+        for i in range(N_LAYERS)
+        if i != _keep
+    ]
 
-# -----------------------------
-# Post-run: save + verify
-# -----------------------------
-run_dir = Path(PROJECT) / RUN_NAME
-model = trainer.ema.ema if getattr(trainer, "ema", None) else trainer.model
-state_path = save_qat_state(model, run_dir)
-n_quant, n_scales = verify_reload(state_path)
+    print(
+        f"[QAT] FREEZE_EXCEPT={_keep}: "
+        f"freezing all layers except model.{_keep} "
+        f"(freeze list len "
+        f"{len(overrides['freeze'])})"
+    )
+
+
+trainer = QATTrainer(
+    overrides=overrides
+)
+
+trainer.add_callback(
+    "on_fit_epoch_end",
+    save_best_qat,
+)
+
+trainer.train()
+
+
+run_dir = (
+    Path(PROJECT)
+    / RUN_NAME
+)
+
+model = (
+    trainer.ema.ema
+    if getattr(
+        trainer,
+        "ema",
+        None,
+    )
+    else trainer.model
+)
+
+state_path = save_qat_state(
+    model,
+    run_dir,
+)
+
+n_quant, n_scales = (
+    verify_reload(
+        state_path
+    )
+)
+
 
 prov = {
-    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-    "run_name": RUN_NAME,
-    "epochs": EPOCHS,
-    "device": DEVICE,
-    "amp": False,
-    "source_checkpoint": str(MODEL_PATH),
-    "source_sha256": sha256(MODEL_PATH),
-    "quant_config": "INT8_DEFAULT_CFG(composed)",
-    "quant_config_knobs": _quant_knobs,
-    "calib_method": os.environ.get("CALIB_METHOD") or "max",
-    "calib_percentile": float(os.environ.get("CALIB_PERCENTILE", "99.99")),
-    "calib_num_bins": int(os.environ.get("CALIB_NUM_BINS", "2048")),
-    "quant_config_resolved": json.loads(json.dumps(_quant_cfg, default=str)),
-    "n_calib_frames": N_CALIB,
-    "warm_start_source": str(TRAIN_IMAGES),
-    "warm_start_seed": CALIB_SEED,
-    "quantizers_inserted": _inserted_quantizers,
-    "quantizers_after_restore": n_quant,
-    "quantizers_with_scales_after_restore": n_scales,
-    "reload_gate": "PASSED",       # verify_reload exits non-zero otherwise
-    "torch": torch.__version__,
-    "single_gpu": True,
+    "timestamp_utc":
+        datetime.now(
+            timezone.utc
+        ).isoformat(),
+
+    "run_name":
+        RUN_NAME,
+
+    "epochs":
+        EPOCHS,
+
+    "patience":
+        PATIENCE,
+
+    "device":
+        DEVICE,
+
+    "amp":
+        False,
+
+    "source_checkpoint":
+        str(MODEL_PATH),
+
+    "source_sha256":
+        sha256(MODEL_PATH),
+
+    "quant_config":
+        "INT8_DEFAULT_CFG(composed)",
+
+    "quant_config_knobs":
+        _quant_knobs,
+
+    "calib_method":
+        CALIB_METHOD,
+
+    "calib_percentile":
+        CALIB_PERCENTILE,
+
+    "calib_num_bins":
+        CALIB_NUM_BINS,
+
+    "quant_config_resolved":
+        json.loads(
+            json.dumps(
+                _quant_cfg,
+                default=str,
+            )
+        ),
+
+    "n_calib_frames":
+        N_CALIB,
+
+    "warm_start_source":
+        str(TRAIN_IMAGES),
+
+    "warm_start_seed":
+        CALIB_SEED,
+
+    "quantizers_inserted":
+        _inserted_quantizers,
+
+    "quantizers_after_restore":
+        n_quant,
+
+    "quantizers_with_scales_after_restore":
+        n_scales,
+
+    "reload_gate":
+        "PASSED",
+
+    "torch":
+        torch.__version__,
+
+    "single_gpu":
+        True,
 }
-(run_dir / "qat_provenance.json").write_text(json.dumps(prov, indent=2))
-print(f"\n[QAT] provenance: {run_dir / 'qat_provenance.json'}")
-print("[QAT] DONE -- plumbing run. Not an accuracy result.")
+
+
+(
+    run_dir
+    / "qat_provenance.json"
+).write_text(
+    json.dumps(
+        prov,
+        indent=2,
+    )
+)
+
+print(
+    f"\n[QAT] provenance: "
+    f"{run_dir / 'qat_provenance.json'}"
+)
+
+print(
+    "[QAT] DONE"
+)
