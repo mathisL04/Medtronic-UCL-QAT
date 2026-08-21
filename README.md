@@ -397,6 +397,12 @@ slightly confound layer-vs-layer comparison.
 Full write-up: **`experiments/week8_layer_sweep/RECAP.md`**. Source of every number:
 `results_master_malmo_h100.csv`.
 
+**Plots: `notebooks/week8_layer_sweep_plots.ipynb`** — accuracy per layer against the V0 /
+V1 / FP16 / FP32 references, the flat CUDA-graph latency axis, and the two against each
+other. Figures are also written to `reports/week8_layer_sweep/` as PNGs.
+
+![accuracy by layer](reports/week8_layer_sweep/fig1_accuracy_by_layer.png)
+
 ---
 
 ## 7. Where this leaves the project
@@ -442,7 +448,7 @@ models/       checkpoints, model cards, provenance sidecars
 experiments/  fusion_demo, fusion_fix, qat_iteration_2, week8_frozen_qat, week8_layer_sweep
 docs/         stage-by-stage documentation
 reports/      training metrics, plots, latency summaries
-notebooks/    kernel-comparison analysis + figures
+notebooks/    kernel-comparison analysis + week-8 sweep plots
 Per_kernel_json_file/   trtexec per-kernel profiles (FP16 / PTQ / QAT)
 ```
 
