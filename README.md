@@ -115,7 +115,7 @@ statistic   median of per-iteration GPU time
 gating      EXCLUSIVE, verified-idle GPU
 ```
 
-`--noDataTransfers` is what makes it *pure compute* — H2D/D2H are excluded, so the
+`--noDataTransfers` is what makes it *pure compute*: H2D/D2H are excluded, so the
 number reflects the model and the engine, not the PCIe path or the host.
 
 **Idle-gating is compute-only.** These boxes always have Xorg holding a graphics
@@ -154,7 +154,7 @@ All accuracy on the harness in §2. Latency is kernel-median, batch=1, exclusive
 > a session; the table above is the primary session. This is why the Week-8 sweep timed
 > all 18 engines in one window.
 
-Read the two axes separately — they tell opposite stories.
+Read the two axes separately: they tell opposite stories.
 
 **Accuracy: QAT works.** PTQ costs −0.0176 mAP50-95 against FP32. QAT recovers most of
 it (V6, −0.0103), and the Iteration-2 sweep overtakes FP32 outright (0.7801 vs 0.7747).
@@ -214,7 +214,7 @@ validation fitness — keeps the selected checkpoint at the actual peak.
 The TensorRT INT8 build is **calibrator-free**: explicit Q/DQ, `set_flag(INT8)`, scales
 read directly from the `QuantizeLinear`/`DequantizeLinear` nodes.
 
-### Iteration 2 — OFAT sweep
+### Iteration 2: OFAT sweep
 
 Eleven one-factor-at-a-time runs over `lr0`, `lrf`, `batch`, `n_calib` and attention
 quantisation, each verified clean against its ground-truth `args.yaml`.
@@ -300,7 +300,7 @@ Both recoveries are build/runtime changes. Neither required retraining.
 
 ---
 
-## 6. Week 8 — per-layer QAT sensitivity sweep
+## 6. Week 8: per-layer QAT sensitivity sweep
 
 ### Why
 
