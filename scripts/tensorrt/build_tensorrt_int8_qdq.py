@@ -210,12 +210,44 @@ config.set_flag(
 
 
 # ==========================================================
+# OPTIONAL DEPLOYMENT-QUALITY KNOBS
+#
+# All three default to OFF, so an unset environment reproduces
+# the original build exactly. The week-8 per-layer sweep built
+# every engine with OPT_LEVEL=3 and the other two unset.
+# ==========================================================
+
+# Layers with no Q/DQ fall back to FP16 rather than FP32.
+if os.environ.get("FP16", "0") == "1":
+    config.set_flag(
+        trt.BuilderFlag.FP16
+    )
+
+
+# Builder optimization level. 5 = widest fusion search.
+if os.environ.get("OPT_LEVEL"):
+    config.builder_optimization_level = int(
+        os.environ["OPT_LEVEL"]
+    )
+
+
+# Retain per-layer metadata so the engine can be inspected.
+if os.environ.get("DETAILED", "0") == "1":
+    config.profiling_verbosity = (
+        trt.ProfilingVerbosity.DETAILED
+    )
+
+
+# ==========================================================
 # BUILD ENGINE
 # ==========================================================
 
 print(
-    "\nBuilding TensorRT INT8 engine "
-    "from Q/DQ graph..."
+    f"\nBuilding TensorRT INT8 engine "
+    f"from Q/DQ graph  "
+    f"(FP16={os.environ.get('FP16', '0')} "
+    f"OPT_LEVEL={os.environ.get('OPT_LEVEL', 'default')} "
+    f"DETAILED={os.environ.get('DETAILED', '0')})..."
 )
 
 

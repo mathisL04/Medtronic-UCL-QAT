@@ -1,0 +1,3 @@
+[04:34:46] === layer 18  phase=deploy epochs=6 patience=3 workers=4 gpu=1 opt=3 (malmo/H100) ===
+[04:34:46] model.18 has 0 trainable parameters (Upsample/Concat) -- nothing to fine-tune
+[metrics] layer 18: status=no_trainable_params mAP50-95=None lat_ng=None lat_g=None kernels=None epochs=None

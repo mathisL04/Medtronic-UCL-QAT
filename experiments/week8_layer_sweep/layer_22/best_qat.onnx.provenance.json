@@ -1,0 +1,22 @@
+{
+  "timestamp_utc": "2026-08-21T03:48:16.584600+00:00",
+  "stage": "qat_onnx_export",
+  "modelopt": "0.33.1",
+  "torch": "2.7.0+cu128",
+  "base_model": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/runs_week8/week8_frozen_head/weights/best.pt",
+  "qat_state": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/week8_layer_sweep/layer_22/qat_modelopt_state_best.pt",
+  "qat_state_sha256": "5ffb05a56db4d54befb05f007d04a83b3e54e8d9fd622c2d95ff8606ee32c0d5",
+  "out_onnx": "/home/zcemml1/medtronic_qat/Medtronics-UCL-QAT/experiments/week8_layer_sweep/layer_22/best_qat.onnx",
+  "out_onnx_sha256": "ca94bc1f21905455f36e25456b5a7e31dfe33501f55d3b34329a54825ceaf1fe",
+  "imgsz": 640,
+  "batch": 1,
+  "opset": 17,
+  "device": "cpu",
+  "quantizers_restored": 608,
+  "quantizers_with_scales": 253,
+  "onnx_nodes_total": 1477,
+  "quantize_linear_nodes": 207,
+  "dequantize_linear_nodes": 207,
+  "num_outputs": 1,
+  "export_seconds": 3.3429707237519324
+}

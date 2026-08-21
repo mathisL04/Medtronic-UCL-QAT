@@ -28,10 +28,25 @@ MODEL_PATH = Path(
 
 # Dataset YAML used by the Ultralytics trainer.
 # Replace when changing training/validation data.
+#
+# Overridable, but the default is unchanged, so every earlier run
+# reproduces exactly.
+#
+# The week-8 layer sweep deliberately does NOT set this. Pointing
+# per-epoch validation at the 100-image subset was proposed to shorten
+# the sweep and rejected: best-checkpoint selection is driven by that
+# fitness signal, and a noisier signal perturbs the very layer ranking
+# the sweep exists to produce. Every layer in that sweep validates on
+# the full 6,449-image val set. Reported accuracy is a separate
+# measurement anyway -- taken after training, through the TensorRT
+# engine, on full val at conf=0.001.
 DATA_YAML = Path(
-    "/home/zcemml1/medtronic_qat_data/datasets/"
-    "sanoscience_yolo_full_nonexpert_stereo/"
-    "sanoscience_yolo.yaml"
+    os.environ.get(
+        "DATA_YAML",
+        "/home/zcemml1/medtronic_qat_data/datasets/"
+        "sanoscience_yolo_full_nonexpert_stereo/"
+        "sanoscience_yolo.yaml",
+    )
 )
 
 # Training images used to initialise QAT quantizer ranges.
@@ -96,6 +111,27 @@ BATCH = int(
 # Adapt worker count to the host/memory environment.
 WORKERS = int(
     os.environ.get("WORKERS", 4)
+)
+
+# Ultralytics dataloader caching: "ram" | "disk" | "" (off).
+# Feeds the GPU without fork-based workers, which matters on hosts
+# under strict overcommit where forking a multi-GB training process
+# fails as OSError [Errno 12] regardless of free RAM.
+CACHE = os.environ.get(
+    "CACHE",
+    ""
+)
+
+# Per-layer QAT sensitivity sweep.
+# FREEZE_EXCEPT=L freezes the WHOLE network except model.L, so exactly
+# one layer trains. Unset -> no freeze, default behaviour unchanged.
+FREEZE_EXCEPT = os.environ.get(
+    "FREEZE_EXCEPT"
+)
+
+# Layer count used to build that freeze list: model.0 .. model.{N-1}.
+N_LAYERS = int(
+    os.environ.get("N_LAYERS", 24)
 )
 
 # Fine-tuning learning-rate parameters.
@@ -839,7 +875,32 @@ overrides = dict(
     # Main QAT fine-tuning hyperparameters.
     lr0=LR0,
     lrf=LRF,
+
+    # RAM/disk cache -> feed the GPU without fork-based workers.
+    cache=(
+        CACHE
+        if CACHE
+        else False
+    ),
 )
+
+
+# Per-layer sweep: freeze every layer EXCEPT model.FREEZE_EXCEPT.
+if FREEZE_EXCEPT is not None:
+    _keep = int(FREEZE_EXCEPT)
+
+    overrides["freeze"] = [
+        i
+        for i in range(N_LAYERS)
+        if i != _keep
+    ]
+
+    print(
+        f"[QAT] FREEZE_EXCEPT={_keep}: "
+        f"freezing all layers except model.{_keep} "
+        f"(freeze list len "
+        f"{len(overrides['freeze'])})"
+    )
 
 
 trainer = QATTrainer(
