@@ -11,7 +11,7 @@ Open-H Sanoscience videos → segmentation-based auto-labelling → YOLO26n trai
 → ONNX export → TensorRT FP16 → TensorRT INT8/PTQ → QAT → accuracy/latency comparison
 ```
 
-Stages 1–2 are done (baseline `models/yolo26n_sanoscience_full_left/best.pt`, mAP50 0.934 / mAP50-95 0.782). Everything from ONNX export onward is unwritten — `docs/02`–`docs/05` are placeholders listing planned content, not records of work done. Do not describe those stages as complete.
+Stages 1–2 are done (baseline `models/yolo26n_sanoscience_full_left/baseline/best.pt`, mAP50 0.934 / mAP50-95 0.782). Everything from ONNX export onward is unwritten — `docs/02`–`docs/05` are placeholders listing planned content, not records of work done. Do not describe those stages as complete.
 
 ## Scripts are configured by editing constants, with env-var overrides for run-time knobs
 
@@ -80,9 +80,9 @@ Train/val split is by episode (first 80% of episodes train), not by frame — th
 
 Generated datasets, `runs*/`, HF caches, and all weight/export formats (`*.pt`, `*.onnx`, `*.engine`, `*.trt`) are gitignored. The ~4 GB YOLO dataset lives only on Cork at `/home/zcemml1/medtronic_qat_data/datasets/sanoscience_yolo_full_nonexpert_stereo`.
 
-Two files are deliberate exceptions, force-added past the ignore rules: `models/yolo26n_sanoscience_full_left/best.pt` (the baseline checkpoint, hand-copied from the Cork run) and `yolo26n.pt` (pretrained init). Committing any other checkpoint needs `git add -f` and probably shouldn't happen.
+Two files are deliberate exceptions, force-added past the ignore rules: `models/yolo26n_sanoscience_full_left/baseline/best.pt` (the baseline checkpoint, hand-copied from the Cork run) and `yolo26n.pt` (pretrained init). Committing any other checkpoint needs `git add -f` and probably shouldn't happen.
 
-`reports/` holds curated metrics copied out of a run; `runs_sanoscience/` and `runs_utenn/` are raw untracked Ultralytics output. `scripts/archive/` holds superseded work — `utenn/` is an earlier abandoned dataset, `prototypes/` and `exploration/` are dead ends kept for reference. Don't build on archived scripts.
+`reports/` holds curated metrics copied out of a run; `runs_sanoscience/` and `runs_utenn/` are raw untracked Ultralytics output. Superseded work is **not on `main`** — it lives on the **`archive/legacy-scripts`** branch: the old `scripts/archive/` (`utenn/` abandoned dataset, `prototypes/`/`exploration/` dead ends, old benchmarks) plus the superseded QAT versions (`models/.../qat/smoke_1ep`, `qat/v5_10ep`). `git checkout archive/legacy-scripts` to see them. Don't build on archived work.
 
 ## Documentation convention
 
