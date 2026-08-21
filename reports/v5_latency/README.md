@@ -1,6 +1,7 @@
 # V5 latency — final distributions (compute level, CUDA-event)
 
-Same model (`models/yolo26n_sanoscience_full_left/qat/v5_10ep/qat_modelopt_state_best.pt`, 10-epoch QAT best state),
+Same model (`models/yolo26n_sanoscience_full_left/qat/v5_10ep/qat_modelopt_state_best.pt`, 10-epoch QAT best
+state -- V5 was superseded by V6 and now lives on the `archive/legacy-scripts` branch),
 batch=1, val100, N=1000 (10x100), **GPU 2, idle/exclusive for the whole run**
 (`exclusive_gpu: true`). Both measured at the **pure-GPU compute level** (CUDA
 events, no H2D/D2H), so they are comparable as compute cost.
@@ -28,5 +29,5 @@ Notes:
   number (0.6% std); the TRT kernel is tighter absolutely (+-0.033 ms) but noisier
   as a fraction (2.4% std, worst case +20%) since at ~1.4 ms small jitter is a
   larger percentage. Both means ~= medians -> near-symmetric, no heavy skew.
-- Scripts: `scripts/benchmark_latency_pytorch_qat.py` (PyTorch forward CUDA-event),
-  `scripts/benchmark_latency_trt.py` (TRT kernel CUDA-event).
+- Scripts: `scripts/benchmark_latency_pytorch_qat.py` (on the `archive/legacy-scripts` branch) (PyTorch forward CUDA-event),
+  `scripts/benchmark/benchmark_latency_trt.py` (TRT kernel CUDA-event).
