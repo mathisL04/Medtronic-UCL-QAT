@@ -9,7 +9,7 @@ trained) behave differently under QAT than the fully-trained baseline?
    (1 class). → export ONNX → TensorRT → latency + accuracy.
    `train_frozen_baseline.py`  (Ultralytics `freeze=23`).
 2. **QAT on the frozen baseline** — standard QAT (patience early-stop, same
-   framework as `train/train_qat.py`) starting from step-1's `best.pt`.
+   framework as `scripts/train/train_qat.py`) starting from step-1's `best.pt`.
    → TensorRT → latency + accuracy.
 3. **Compare** QAT vs the frozen baseline (accuracy + latency).
 

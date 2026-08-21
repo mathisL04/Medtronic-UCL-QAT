@@ -99,7 +99,7 @@ if [ "$PHASE" = "train" ] || [ "$PHASE" = "all" ]; then
     MODEL_PATH=$FROZEN FREEZE_EXCEPT=$L DEVICE=$GPU EPOCHS=$EPOCHS PATIENCE=$PATIENCE \
       BATCH=$BATCH LR0=0.01 IMG_SIZE=640 CACHE= WORKERS=$1 N_CALIB=128 \
       RUN_NAME=layer_$LL PROJECT=$SCRATCH \
-      $PY311 -u "$REPO/train/train_qat.py" >> "$LOG" 2>&1
+      $PY311 -u "$REPO/scripts/train/train_qat.py" >> "$LOG" 2>&1
   }
   find_state(){
     local s

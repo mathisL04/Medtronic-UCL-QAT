@@ -435,8 +435,8 @@ Its value is the ordering, and the ordering is clean enough to act on:
 ## 8. Repository layout
 
 ```text
-scripts/      TensorRT / export / eval / benchmark tooling (shared across all precisions)
-train/        training entry points (train_qat.py, qat_run.sh)
+scripts/      tooling: train/ (train_qat.py), tensorrt/, export/, evaluate/, benchmark/, data/
+train/        training launchers (qat_run.sh) + week8_freeze_qat, full-dataset trainers
 configs/      YAML configuration
 models/       checkpoints, model cards, provenance sidecars
 experiments/  fusion_demo, fusion_fix, qat_iteration_2, week8_frozen_qat, week8_layer_sweep
